@@ -1,0 +1,11 @@
+{
+  "id": "1001",
+  "title": "Lower thresholds for SCR-WIRE-CROSSBORDER",
+  "description": "Reduce alert thresholds on the cross-border wire scenario rule to increase sensitivity after typology review.",
+  "application": "TM-Core",
+  "changeType": "rule_threshold",
+  "owner": "Alex Rivera (TM Product Owner)",
+  "status": "pending_approval",
+  "plannedReleaseId": "REL-2026-09",
+  "requestedAt": "2026-09-01"
+}

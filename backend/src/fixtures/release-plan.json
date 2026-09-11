@@ -1,0 +1,9 @@
+{
+  "id": "REL-2026-09",
+  "name": "September TM release",
+  "windowStart": "2026-09-18",
+  "windowEnd": "2026-09-20",
+  "freezeActive": false,
+  "auditPeriodActive": true,
+  "changeIds": ["1001", "1002"]
+}

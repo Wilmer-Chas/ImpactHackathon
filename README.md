@@ -1,28 +1,29 @@
 # ImpactHackathon
 
-TypeScript monorepo with a Node.js backend and a React frontend.
+Rule-based **Management of Change (MOC)** memo for an AML Transaction Monitoring portfolio Product Owner.
+
+Demo focus: one change request (**Change #1001**) assessed from mock data — no Jira/ServiceNow, no AI risk scoring.
+
+## Domain
+
+See [docs/domain.md](docs/domain.md).
 
 ## Structure
 
 ```
-Impact/
-├── backend/   # Express + TypeScript API
-└── frontend/  # Vite + React + TypeScript
+backend/src/   routes → controllers → services → domain/models/fixtures
+frontend/src/  pages, components, services, types
+docs/          domain glossary and sample story
 ```
 
 ## Getting started
 
 ```bash
 npm install
-```
-
-Run both (from separate terminals):
-
-```bash
 npm run dev:backend
 npm run dev:frontend
 ```
 
 - Frontend: http://localhost:5173
-- Backend: http://localhost:3001
-- Health check: http://localhost:3001/api/health
+- Backend health: http://localhost:3001/api/health
+- MOC report API: http://localhost:3001/api/reports/1001
