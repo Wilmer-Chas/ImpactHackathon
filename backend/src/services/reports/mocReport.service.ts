@@ -11,10 +11,10 @@ import type {
 import { toChangeRequest } from "../../models/change/changeRequest.model.js";
 import { toIncident } from "../../models/incident/incident.model.js";
 import { loadFixture } from "../../utils/fixtures/loadFixture.js";
-import { buildCaveats, evaluateFindings, rollupRecommendation } from "./riskRules.service.js";
+import { concludeFromEvidence } from "../ai/mocIntelligence.service.js";
 
 export class MocReportService {
-  getByChangeId(changeId: string): MocReport | null {
+  async getByChangeId(changeId: string): Promise<MocReport | null> {
     const changeRaw = loadFixture<ChangeRequest>("changes/change-1001.json");
     if (changeRaw.id !== changeId) {
       return null;
@@ -36,31 +36,24 @@ export class MocReportService {
     const releaseForChange = release.changeIds.includes(change.id) ? release : null;
     const dataQuality = loadFixture<DataQualityIssue[]>("quality/data-quality.json");
 
-    const findings = evaluateFindings({
-      change,
+    const evidence = {
       incidents,
       processMetrics,
       performanceMetrics,
       riskRecord,
       release: releaseForChange,
       dataQuality,
-    });
-    const { recommendation, rationale } = rollupRecommendation(findings);
+    };
+
+    const conclusion = await concludeFromEvidence(change, evidence);
 
     return {
       change,
-      recommendation,
-      rationale,
-      findings,
-      evidence: {
-        incidents,
-        processMetrics,
-        performanceMetrics,
-        riskRecord,
-        release: releaseForChange,
-        dataQuality,
-      },
-      caveats: buildCaveats(dataQuality, findings),
+      recommendation: conclusion.recommendation,
+      rationale: conclusion.rationale,
+      findings: conclusion.findings,
+      evidence,
+      caveats: conclusion.caveats,
       generatedAt: new Date().toISOString(),
     };
   }

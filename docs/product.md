@@ -15,8 +15,8 @@ It supports Management of Change (MOC) review; portfolio-wide operational alerts
 
 1. Takes a **change ticket** as the starting point (for example Change #1001).
 2. Collects related evidence for that change and its target application.
-3. Runs **transparent if/then checks** (not AI risk scoring).
-4. Produces a **MOC-style decision memo** with recommendation, findings, evidence, and caveats.
+3. Runs a **local intelligence engine** (Ollama / Mistral) that reads that evidence and draws a structured conclusion — not invented numeric risk scores.
+4. Produces a **MOC-style decision memo** with recommendation, findings, evidence, and caveats in plain language.
 5. Lets the product owner accept, tighten conditions, or hold the change before production.
 
 ## Outputs
@@ -62,7 +62,7 @@ These are the kinds of information the product needs. In production they would c
 
 - Not a replacement for Jira, ServiceNow, or monitoring tools
 - Not an automated deployer — it recommends; people decide
-- Not an AI that invents risk scores
+- Not an AI that invents numeric risk scores or unsupported evidence
 - Not a full organization dashboard in the current demo
 
 ## Related docs

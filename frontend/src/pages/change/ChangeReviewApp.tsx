@@ -41,7 +41,8 @@ export function ChangeReviewApp() {
 
       {loading && (
         <div className="page">
-          <p className="muted">Loading review for Change #{CHANGE_ID}…</p>
+          <p className="muted">Analyzing Change #{CHANGE_ID}…</p>
+          <p className="muted">This may take a moment while the local intelligence engine reads the evidence.</p>
         </div>
       )}
 
@@ -52,7 +53,8 @@ export function ChangeReviewApp() {
           </button>
           <p className="error-text">{error}</p>
           <p className="muted">
-            Start the backend with `npm run dev:backend` from the repo root, then try again.
+            Ensure the backend is running (`npm run dev:backend`) and Ollama is up with the{" "}
+            <code>mistral</code> model (`ollama serve`, then try again).
           </p>
           <button type="button" className="btn btn-primary" onClick={openChange}>
             Try again

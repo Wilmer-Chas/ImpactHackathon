@@ -6,13 +6,17 @@ Ticket-first demo: help a Transaction Monitoring product owner decide whether **
 
 1. Open **Change #1001**
 2. Review the recommendation: **Go ahead**, **Go ahead with conditions**, or **Wait**
-3. See why, using sample incidents, workload, health, risk, and release evidence
+3. See why, using sample incidents, workload, health, risk, and release evidence concluded by local Ollama (Mistral)
 
 Portfolio-wide alerts / org dashboards are out of scope for this demo.
 
 ## Domain
 
-See [docs/domain.md](docs/domain.md).
+See [docs/domain.md](../docs/domain.md).
+
+## Prerequisites
+
+Ollama must be running with `mistral` available (`ollama serve`, `ollama pull mistral`). See the root [README](../README.md).
 
 ## Run
 

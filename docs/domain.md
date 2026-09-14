@@ -22,7 +22,7 @@ Accountable for portfolio application performance. Works with application manage
 - **MOC (Management of Change)** — Decision memo used before a change hits TM production: evidence + recommendation (Go / Go with conditions / Defer).
 - **Change request** — Ticket describing what will change (rules, models, thresholds, platform, feeds). Demo ID: **Change #1001**.
 - **TM** — Transaction Monitoring: rules and AI models that flag suspicious transactions for AML.
-- **Finding** — A risk flag produced by a plain if/then rule, always tied to evidence.
+- **Finding** — A risk flag from the intelligence engine, always tied to evidence.
 - **Residual risk** — Risk left after known controls for a class of change.
 - **Alert backlog** — Unworked TM alerts waiting for investigation.
 - **Release window** — Planned time to deploy; may conflict with freeze or audit periods.
@@ -62,15 +62,24 @@ In the demo fixtures, Change #1001 is designed to surface real tension (open sev
 4. Evidence — incidents, volumes/delays, performance, risk class, release fit, data quality  
 5. Caveats — what is incomplete  
 
-## How risk is flagged (no AI)
+## How conclusions are produced
 
-Transparent rules only, for example:
+The backend assembles an evidence pack (change, incidents, process/performance metrics, risk class, release window, data quality) from demo fixtures, then asks a **local Ollama model** (default `mistral`) to return a structured MOC conclusion:
+
+- **recommendation** — `go` / `go_with_conditions` / `defer`
+- **rationale** — one clear sentence for the product owner
+- **findings** — plain-language risks tied to evidence IDs from the pack
+- **caveats** — what is incomplete or uncertain
+
+The model must not invent evidence IDs or numeric risk scores. If Ollama is unreachable or returns invalid structure, the report API fails (no silent fallback).
+
+Signals the engine is expected to weigh include:
 
 - Open high-severity incident on the same TM app → stability risk  
-- Alert backlog or processing delay above threshold → operational load risk  
+- Alert backlog or processing delay → operational load risk  
 - Change type with high residual risk in the risk table → change-class risk  
 - Release overlaps freeze/audit → timing risk  
-- Missing key fields above a % → evidence confidence warning  
+- Missing key fields → evidence confidence caveat  
 
 ## Demo scope (current)
 
@@ -82,6 +91,6 @@ Portfolio-wide alerts and an organization dashboard are later work, not part of 
 
 - No Jira / ServiceNow integrations  
 - No standalone real-time alerts product  
-- No AI-generated risk scores or narratives  
+- No invented numeric risk scores or unsupported evidence  
 - Not claims settlement or generic insurance ops  
 - Not a portfolio / org-wide ops console (yet)  
