@@ -72,9 +72,16 @@ Transparent rules only, for example:
 - Release overlaps freeze/audit → timing risk  
 - Missing key fields above a % → evidence confidence warning  
 
+## Demo scope (current)
+
+The UI is **ticket-first**: open Change #1001 → see Go / Wait / Go with conditions → read why.
+
+Portfolio-wide alerts and an organization dashboard are later work, not part of this demo.
+
 ## Non-goals (v1)
 
 - No Jira / ServiceNow integrations  
 - No standalone real-time alerts product  
 - No AI-generated risk scores or narratives  
 - Not claims settlement or generic insurance ops  
+- Not a portfolio / org-wide ops console (yet)  

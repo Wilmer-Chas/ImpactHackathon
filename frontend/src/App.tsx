@@ -1,7 +1,7 @@
-import { PipelineApp } from "./pages/PipelineApp";
+import { ChangeReviewApp } from "./pages/ChangeReviewApp";
 
 function App() {
-  return <PipelineApp />;
+  return <ChangeReviewApp />;
 }
 
 export default App;

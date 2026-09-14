@@ -1,29 +1,25 @@
 # ImpactHackathon
 
-Rule-based **Management of Change (MOC)** memo for an AML Transaction Monitoring portfolio Product Owner.
+Ticket-first demo: help a Transaction Monitoring product owner decide whether one change should go to production.
 
-Demo focus: one change request (**Change #1001**) assessed from mock data — no Jira/ServiceNow, no AI risk scoring.
+## What the demo does
+
+1. Open Change #1001
+2. Review the recommendation: Go ahead, Go ahead with conditions, or Wait
+3. See why, using sample incidents, workload, health, risk, and release evidence
+
+Portfolio-wide alerts and org dashboards are out of scope for this demo.
 
 ## Domain
 
-See [docs/domain.md](docs/domain.md).
+- Product overview: [docs/product.md](docs/product.md)
+- Domain language: [docs/domain.md](docs/domain.md)
 
-## Structure
+## Run
 
-```
-backend/src/   routes → controllers → services → domain/models/fixtures
-frontend/src/  pages, components, services, types
-docs/          domain glossary and sample story
-```
-
-## Getting started
-
-```bash
 npm install
 npm run dev:backend
 npm run dev:frontend
-```
 
-- Frontend: http://localhost:5173
-- Backend health: http://localhost:3001/api/health
-- MOC report API: http://localhost:3001/api/reports/1001
+- App: http://localhost:5173
+- Report API: http://localhost:3001/api/reports/1001

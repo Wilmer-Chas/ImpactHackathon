@@ -1,32 +1,26 @@
-# React + TypeScript + Vite
+# ImpactHackathon
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Ticket-first demo: help a Transaction Monitoring product owner decide whether **one change** should go to production.
 
-Currently, two official plugins are available:
+## What the demo does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Open **Change #1001**
+2. Review the recommendation: **Go ahead**, **Go ahead with conditions**, or **Wait**
+3. See why, using sample incidents, workload, health, risk, and release evidence
 
-## React Compiler
+Portfolio-wide alerts / org dashboards are out of scope for this demo.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Domain
 
-## Expanding the Oxlint configuration
+See [docs/domain.md](docs/domain.md).
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Run
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev:backend
+npm run dev:frontend
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+- App: http://localhost:5173
+- Report API: http://localhost:3001/api/reports/1001
