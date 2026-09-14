@@ -1,4 +1,4 @@
-import type { MocReport } from "../types/mocReport";
+import type { MocReport } from "../../types/change/mocReport";
 
 export async function fetchMocReport(changeId: string): Promise<MocReport> {
   const response = await fetch(`/api/reports/${changeId}`);

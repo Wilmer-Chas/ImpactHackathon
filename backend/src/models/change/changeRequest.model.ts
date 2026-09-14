@@ -1,4 +1,4 @@
-import type { ChangeRequest } from "../domain/changeRequest.js";
+import type { ChangeRequest } from "../../domain/change/changeRequest.js";
 
 export type ChangeRequestModel = ChangeRequest;
 

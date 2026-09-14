@@ -1,4 +1,4 @@
-import type { Incident } from "../domain/incident.js";
+import type { Incident } from "../../domain/incident/incident.js";
 
 export type IncidentModel = Incident;
 

@@ -1,4 +1,4 @@
-import { ChangeReviewApp } from "./pages/ChangeReviewApp";
+import { ChangeReviewApp } from "./pages/change/ChangeReviewApp";
 
 function App() {
   return <ChangeReviewApp />;

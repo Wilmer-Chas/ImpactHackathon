@@ -1,6 +1,6 @@
 import cors from "cors";
 import express from "express";
-import { reportsRouter } from "./routes/reports.routes.js";
+import { reportsRouter } from "./routes/reports/reports.routes.js";
 
 export function createApp() {
   const app = express();

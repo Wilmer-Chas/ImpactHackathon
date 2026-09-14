@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { mocReportService } from "../services/mocReport.service.js";
+import { mocReportService } from "../../services/reports/mocReport.service.js";
 
 export function getReportByChangeId(req: Request, res: Response): void {
   const changeId = req.params.changeId;

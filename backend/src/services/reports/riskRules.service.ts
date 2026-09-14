@@ -1,11 +1,14 @@
-import type { ChangeRequest } from "../domain/changeRequest.js";
-import type { DataQualityIssue } from "../domain/dataQuality.js";
-import type { Finding } from "../domain/finding.js";
-import type { Incident } from "../domain/incident.js";
-import type { PerformanceMetric, ProcessMetric } from "../domain/metrics.js";
-import type { Recommendation } from "../domain/mocReport.js";
-import type { ReleasePlan } from "../domain/release.js";
-import type { RiskRecord } from "../domain/risk.js";
+import type {
+  ChangeRequest,
+  DataQualityIssue,
+  Finding,
+  Incident,
+  PerformanceMetric,
+  ProcessMetric,
+  Recommendation,
+  ReleasePlan,
+  RiskRecord,
+} from "../../domain/index.js";
 
 const BACKLOG_THRESHOLD = 500;
 const DELAY_HOURS_THRESHOLD = 24;

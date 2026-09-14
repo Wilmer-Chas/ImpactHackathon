@@ -1,4 +1,4 @@
-import type { ChangeType } from "./changeRequest.js";
+import type { ChangeType } from "../change/changeRequest.js";
 
 export type ResidualRisk = "low" | "medium" | "high";
 

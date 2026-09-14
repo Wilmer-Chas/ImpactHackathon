@@ -1,4 +1,4 @@
-import type { MocReport } from "../types/mocReport";
+import type { MocReport } from "../../types/change/mocReport";
 
 const recommendationLabel = {
   go: "Go ahead",

@@ -1,8 +1,8 @@
-export type { ChangeRequest, ChangeType } from "./changeRequest.js";
-export type { Incident, IncidentSeverity, IncidentStatus } from "./incident.js";
-export type { ProcessMetric, PerformanceMetric } from "./metrics.js";
-export type { RiskRecord, ResidualRisk } from "./risk.js";
-export type { ReleasePlan } from "./release.js";
-export type { DataQualityIssue } from "./dataQuality.js";
-export type { Finding, FindingSeverity } from "./finding.js";
-export type { MocReport, Recommendation } from "./mocReport.js";
+export type { ChangeRequest, ChangeType } from "./change/changeRequest.js";
+export type { Incident, IncidentSeverity, IncidentStatus } from "./incident/incident.js";
+export type { ProcessMetric, PerformanceMetric } from "./ops/metrics.js";
+export type { ReleasePlan } from "./ops/release.js";
+export type { DataQualityIssue } from "./ops/dataQuality.js";
+export type { RiskRecord, ResidualRisk } from "./risk/risk.js";
+export type { Finding, FindingSeverity } from "./moc/finding.js";
+export type { MocReport, Recommendation } from "./moc/mocReport.js";

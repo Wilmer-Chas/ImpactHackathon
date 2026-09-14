@@ -10,6 +10,27 @@ Ticket-first demo: help a Transaction Monitoring product owner decide whether on
 
 Portfolio-wide alerts and org dashboards are out of scope for this demo.
 
+## Structure
+
+```
+backend/src/
+  controllers/<feature>/
+  routes/<feature>/
+  services/<feature>/
+  domain/<topic>/
+  models/<topic>/
+  fixtures/<topic>/
+  utils/...
+
+frontend/src/
+  components/<area>/
+  pages/<feature>/
+  services/api/
+  types/<feature>/
+  styles/
+  assets/
+```
+
 ## Domain
 
 - Product overview: [docs/product.md](docs/product.md)
@@ -17,9 +38,11 @@ Portfolio-wide alerts and org dashboards are out of scope for this demo.
 
 ## Run
 
+```bash
 npm install
 npm run dev:backend
 npm run dev:frontend
+```
 
 - App: http://localhost:5173
 - Report API: http://localhost:3001/api/reports/1001

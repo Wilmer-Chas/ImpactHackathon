@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { AppShell } from "../components/AppShell";
-import { fetchMocReport } from "../services/reports.api";
-import type { MocReport } from "../types/mocReport";
+import { AppShell } from "../../components/layout/AppShell";
+import { fetchMocReport } from "../../services/api/reports.api";
+import type { MocReport } from "../../types/change/mocReport";
 import { ChangeListPage } from "./ChangeListPage";
 import { ChangeReviewPage } from "./ChangeReviewPage";
-import "../styles/app.css";
+import "../../styles/app.css";
 
 const CHANGE_ID = "1001";
 
