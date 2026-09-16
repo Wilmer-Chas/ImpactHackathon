@@ -10,7 +10,7 @@ export function AppShell({ children }: Props) {
       <header className="app-topbar">
         <div className="app-brand">
           <span className="app-brand-mark">Impact</span>
-          <span className="app-brand-sub">Change review</span>
+          <span className="app-brand-sub">Management Oversight</span>
         </div>
       </header>
       <main className="app-main">{children}</main>

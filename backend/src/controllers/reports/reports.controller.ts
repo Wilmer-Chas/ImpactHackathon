@@ -18,7 +18,7 @@ export async function getReportByChangeId(req: Request, res: Response): Promise<
   try {
     const report = await mocReportService.getByChangeId(changeId);
     if (!report) {
-      res.status(404).json({ error: `No MOC report for change ${changeId}` });
+      res.status(404).json({ error: `No decision brief for change ${changeId}` });
       return;
     }
 

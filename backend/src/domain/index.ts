@@ -6,3 +6,11 @@ export type { DataQualityIssue } from "./ops/dataQuality.js";
 export type { RiskRecord, ResidualRisk } from "./risk/risk.js";
 export type { Finding, FindingSeverity } from "./moc/finding.js";
 export type { MocReport, Recommendation } from "./moc/mocReport.js";
+export type {
+  AgendaItem,
+  BriefingNarrative,
+  MocBriefing,
+  MocMeeting,
+  OrgRiskPosture,
+  PostureSignal,
+} from "./moc/briefing.js";

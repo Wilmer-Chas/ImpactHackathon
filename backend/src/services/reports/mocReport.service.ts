@@ -1,3 +1,6 @@
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import type {
   ChangeRequest,
   DataQualityIssue,
@@ -13,14 +16,28 @@ import { toIncident } from "../../models/incident/incident.model.js";
 import { loadFixture } from "../../utils/fixtures/loadFixture.js";
 import { concludeFromEvidence } from "../ai/mocIntelligence.service.js";
 
+const fixturesDir = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "fixtures");
+
+function loadChangeById(changeId: string): ChangeRequest | null {
+  const relative = `changes/change-${changeId}.json`;
+  const absolute = join(fixturesDir, relative);
+  if (!existsSync(absolute)) {
+    return null;
+  }
+  const raw = loadFixture<ChangeRequest>(relative);
+  if (raw.id !== changeId) {
+    return null;
+  }
+  return toChangeRequest(raw);
+}
+
 export class MocReportService {
   async getByChangeId(changeId: string): Promise<MocReport | null> {
-    const changeRaw = loadFixture<ChangeRequest>("changes/change-1001.json");
-    if (changeRaw.id !== changeId) {
+    const change = loadChangeById(changeId);
+    if (!change) {
       return null;
     }
 
-    const change = toChangeRequest(changeRaw);
     const incidents = loadFixture<Incident[]>("incidents/incidents.json")
       .map(toIncident)
       .filter((i) => i.application === change.application);

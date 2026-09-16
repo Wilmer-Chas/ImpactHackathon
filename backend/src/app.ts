@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import { mocRouter } from "./routes/moc/moc.routes.js";
 import { reportsRouter } from "./routes/reports/reports.routes.js";
 
 export function createApp() {
@@ -12,6 +13,7 @@ export function createApp() {
     res.json({ status: "ok" });
   });
 
+  app.use("/api/moc", mocRouter);
   app.use("/api/reports", reportsRouter);
 
   return app;

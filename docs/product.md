@@ -1,38 +1,44 @@
 # Impact — Product
 
-Impact helps a Transaction Monitoring product owner decide whether a specific change should go to production.
-It gathers evidence from change, incident, risk, workload, performance, release, and data-quality signals.
-It returns a clear recommendation — go ahead, go ahead with conditions, or wait — with plain-language reasons.
-It supports Management of Change (MOC) review; portfolio-wide operational alerts come later.
+Impact helps a Transaction Monitoring product owner prepare **Management Oversight Committee (MOC)** material for upper organization.
+It gathers evidence from change requests, incidents, risk, workload, performance, release, and data-quality signals.
+It returns a clear oversight recommendation — authorize, authorize with conditions, or hold — with plain-language reasons.
+It supports org-wide MOC briefing packs; portfolio-wide operational alerts come later.
+
+> **Note:** Earlier drafts used “MOC” to mean Management of Change (a single-ticket memo). That wording confused the product-owner role. In Impact, **MOC means Management Oversight Committee**.
 
 ## Who it is for
 
 **Primary user:** Product Owner of a rule- and AI-model based Transaction Monitoring (TM) application portfolio (banking / AML).
 
-**Secondary readers:** application managers, incident drivers, technical experts, and compliance/audit stakeholders who need the same evidence pack.
+The PO prepares briefing material that responds to upper organization — not a personal ticket inbox.
+
+**Secondary readers:** application managers, incident drivers, technical experts, compliance/audit stakeholders, and MOC attendees who need the same evidence pack.
 
 ## What the product does
 
-1. Takes a **change ticket** as the starting point (for example Change #1001).
-2. Collects related evidence for that change and its target application.
-3. Runs a **local intelligence engine** (Ollama / Mistral) that reads that evidence and draws a structured conclusion — not invented numeric risk scores.
-4. Produces a **MOC-style decision memo** with recommendation, findings, evidence, and caveats in plain language.
-5. Lets the product owner accept, tighten conditions, or hold the change before production.
+1. Assembles a **portfolio evidence pack** from change, incident, risk, workload, performance, release, and data-quality signals (fixtures today; Jira / ServiceNow / etc. later).
+2. Runs a **local intelligence engine** (Ollama / Mistral) that authors the **MOC briefing presentation** — what matters for upper org, risk flags with citations — not a raw dump of source fields.
+3. For each agenda item, runs the same engine on that item’s evidence to produce a **decision brief** (Authorize / with conditions / Hold).
+4. Lets the product owner walk the committee through the deck before production.
+
+The model must not invent evidence IDs or numeric risk scores. Slide copy comes from the LLM; numbers and IDs must come from the evidence pack.
 
 ## Outputs
 
 | Output | Purpose | Status |
 | --- | --- | --- |
-| **MOC / change report** | Decide if this change should ship | In current demo |
+| **MOC briefing pack** | Org risk posture + agenda for the committee | In current demo |
+| **Decision brief (per agenda item)** | Decide if this change should ship | In current demo |
 | **Operational / improvement alerts** | Flag ongoing portfolio or process problems | Planned later |
 
 ## Inputs (evidence types)
 
 These are the kinds of information the product needs. In production they would come from existing systems; in the demo they are sample files.
 
-**For the MOC report (today’s focus):**
+**For the MOC briefing and decision briefs (today’s focus):**
 
-- Change request (what is changing, which app, when)
+- Change request / CRQ (what is changing, which app, when)
 - Risk matrix / historical risk for that change type
 - Incident data on the affected application
 - Process / delay / backlog data
@@ -54,9 +60,11 @@ These are the kinds of information the product needs. In production they would c
 
 | Recommendation | Meaning |
 | --- | --- |
-| **Go ahead** | No major blockers in the checks; the change looks ready to proceed |
-| **Go ahead, with conditions** | Proceed only with stated safeguards (for example closer monitoring or a rollback plan) |
-| **Wait** | Do not send this change to production yet; clear the blocking issue first, then review again |
+| **Authorize** | No major blockers in the checks; the change looks ready to proceed |
+| **Authorize, with conditions** | Proceed only with stated safeguards (for example closer monitoring or a rollback plan) |
+| **Hold** | Do not send this change to production yet; clear the blocking issue first, then review again |
+
+API values remain `go` / `go_with_conditions` / `defer`.
 
 ## What Impact is not
 
@@ -64,6 +72,7 @@ These are the kinds of information the product needs. In production they would c
 - Not an automated deployer — it recommends; people decide
 - Not an AI that invents numeric risk scores or unsupported evidence
 - Not a full organization dashboard in the current demo
+- Not a multi-approver voting system (committee decisions are recorded outside this demo)
 
 ## Related docs
 

@@ -1,0 +1,11 @@
+{
+  "id": "1002",
+  "title": "Deploy updated wire-scoring model v3.2",
+  "description": "Replace the production wire-scoring model with v3.2 after shadow comparison on TM-Core.",
+  "application": "TM-Core",
+  "changeType": "model_deploy",
+  "owner": "Alex Rivera (TM Product Owner)",
+  "status": "pending_approval",
+  "plannedReleaseId": "REL-2026-09",
+  "requestedAt": "2026-09-03"
+}

@@ -1,7 +1,7 @@
-import { ChangeReviewApp } from "./pages/change/ChangeReviewApp";
+import { OversightApp } from "./pages/moc/OversightApp";
 
 function App() {
-  return <ChangeReviewApp />;
+  return <OversightApp />;
 }
 
 export default App;

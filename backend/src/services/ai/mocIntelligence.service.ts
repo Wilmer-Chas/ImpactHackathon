@@ -40,19 +40,19 @@ export type IntelligenceConclusion = {
 const RECOMMENDATIONS = new Set<Recommendation>(["go", "go_with_conditions", "defer"]);
 const SEVERITIES = new Set<FindingSeverity>(["info", "warning", "critical"]);
 
-const SYSTEM_PROMPT = `You are the intelligence engine for Impact, a Management of Change (MOC) assistant for a Transaction Monitoring (TM / AML) product owner.
+const SYSTEM_PROMPT = `You are the intelligence engine for Impact. You prepare Management Oversight Committee (MOC) decision briefs for a Transaction Monitoring (TM / AML) product owner who reports to upper organization.
 
 Your job:
 - Read ONLY the evidence provided in the user message.
-- Conclude whether the change should ship: "go", "go_with_conditions", or "defer".
-- Explain the conclusion in plain, short, audit-friendly language a product manager can act on.
+- Conclude whether the committee should authorize the change: "go", "go_with_conditions", or "defer".
+- Explain the conclusion in plain, short, audit-friendly language suitable for MOC / upper-org readers.
 - Produce structured findings tied to real evidence IDs from the payload. Never invent IDs, metrics, or incidents.
 - Do not invent numeric risk scores. Decide from the evidence.
 
-Decision guidance:
-- defer — serious open issues on the same app, unsafe timing (freeze), or evidence too weak to defend.
-- go_with_conditions — proceed only with clear safeguards (monitoring, rollback, wait for an issue to close, limit scope).
-- go — no major blockers; evidence supports proceeding.
+Decision guidance (API values → committee stance):
+- defer (Hold) — serious open issues on the same app, unsafe timing (freeze), or evidence too weak to defend.
+- go_with_conditions (Authorize with conditions) — proceed only with clear safeguards (monitoring, rollback, wait for an issue to close, limit scope).
+- go (Authorize) — no major blockers; evidence supports proceeding.
 
 Output MUST be a single JSON object with this exact shape:
 {
@@ -79,7 +79,7 @@ Rules for findings:
 - Prefer severity "critical" for blockers, "warning" for conditions, "info" for confidence notes.
 - evidenceRefs must cite real IDs from the pack.
 - caveats may be an empty array only if the evidence pack looks complete.
-- rationale: one short decision line for the PO, not a multi-sentence essay.`;
+- rationale: one short decision line for the PO and MOC, not a multi-sentence essay.`;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -165,7 +165,7 @@ export async function concludeFromEvidence(
   evidence: EvidencePack,
 ): Promise<IntelligenceConclusion> {
   const userPayload = {
-    task: "Produce a structured MOC decision memo for this change.",
+    task: "Produce a structured MOC decision brief for this agenda item, for upper-organization oversight.",
     change,
     evidence,
   };
