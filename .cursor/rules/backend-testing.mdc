@@ -1,0 +1,49 @@
+---
+description: Backend changes must include Vitest coverage; mock AI and use temp SQLite
+globs: backend/**/*
+alwaysApply: false
+---
+
+# Backend testing
+
+When adding or changing backend behavior, **include or update tests** in the same change. Do not ship backend-only work without coverage for the affected path.
+
+## Tooling
+
+- Runner: Vitest (`npm run test` from repo root or `npm run test -w backend`).
+- Put all tests under `backend/src/test/` with subfolders by area (`app/`, `ai/`, `repository/`, `evidence/`, `reports/`, …).
+- Shared helpers live in `backend/src/test/helpers/` (e.g. `testDb.ts`).
+- Always `closeDb()` between tests (helper `afterEach` handles this when using `testDb`).
+
+## What to test
+
+| Change area | Expect tests for |
+| --- | --- |
+| routes/controllers/app | HTTP status + body (Supertest) under `test/app/` |
+| `repository/` / db | Query + row mapping under `test/repository/` |
+| RAG retrieve | Pack shape + anchors under `test/evidence/`; **mock** `embedTexts` |
+| AI intelligence services | Validation/parsing under `test/ai/`; mock `chatJson` / network |
+| report/briefing services | Assembly under `test/reports/` (or `test/moc/`) with mocked LLM |
+| layer boundaries | Keep/extend `test/architecture/layering.test.ts` when changing imports |
+
+## Mock external AI
+
+```typescript
+// ✅ GOOD — no live OpenRouter/Ollama in unit tests
+vi.mock("../../services/ai/embeddings.client.js", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../services/ai/embeddings.client.js")>();
+  return { ...actual, embedTexts: vi.fn(async (texts: string[]) => texts.map(() => [1, 0, 0])) };
+});
+```
+
+```typescript
+// ❌ BAD — real network / real API keys in unit tests
+await embedTexts(["live call"]);
+```
+
+## Habits
+
+- Prefer deterministic fixtures over the full `seed:mock` pipeline in unit tests.
+- Assert evidence IDs and recommendation/pack shape, not flaky free-text from a live model.
+- If you add a new backend service or endpoint, add at least one happy-path and one failure/empty-path test under `src/test/`.
+- Do not colocate `*.test.ts` next to production source files.

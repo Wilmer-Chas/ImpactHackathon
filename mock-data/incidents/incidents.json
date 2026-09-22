@@ -1,0 +1,32 @@
+[
+  {
+    "id": "INC-4402",
+    "application": "TM-Core",
+    "title": "Batch scoring job stalled overnight",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Downstream queue backpressure",
+    "openedAt": "2026-09-08",
+    "resolvedAt": null
+  },
+  {
+    "id": "INC-4388",
+    "application": "TM-Core",
+    "title": "Alert export delay to case system",
+    "severity": "medium",
+    "status": "resolved",
+    "rootCause": null,
+    "openedAt": "2026-08-20",
+    "resolvedAt": "2026-08-22"
+  },
+  {
+    "id": "INC-4371",
+    "application": "TM-Analytics",
+    "title": "Dashboard refresh failure",
+    "severity": "low",
+    "status": "resolved",
+    "rootCause": "Cache misconfig",
+    "openedAt": "2026-08-10",
+    "resolvedAt": "2026-08-10"
+  }
+]

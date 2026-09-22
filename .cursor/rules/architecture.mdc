@@ -1,0 +1,49 @@
+---
+description: Impact overall architecture — mock-data, SQLite RAG, layered backend, frontend split
+alwaysApply: true
+---
+
+# Impact architecture
+
+## Layout
+
+- `mock-data/` — canonical demo JSON only (seed source). Not read at request time.
+- `backend/` — Express API, SQLite, hybrid RAG, LLM intelligence.
+- `frontend/` — Vite/React UI consuming backend APIs.
+- `docs/` — domain and product language.
+
+## Backend layers (keep boundaries clean)
+
+```
+routes → controllers → services → repository → db
+                         ↘ domain types
+```
+
+- **routes/controllers** — HTTP only; no SQL, no prompt building.
+- **services/** — business assembly (MOC briefing, reports, RAG orchestration, AI).
+- **services/evidence/** — hybrid RAG retrieval (uses repository; no SQL).
+- **services/ai/** — chat/embeddings clients and structured LLM prompts.
+- **repository/** — sole place that queries SQLite and maps rows → domain types (split by domain topic).
+- **db/** — schema, client singleton, idempotent `seed:mock` (infrastructure, not query API).
+- **domain/** — shared types only; no SQL.
+
+## Evidence + RAG
+
+1. Seed upserts from `mock-data/` by natural key; re-embed only when chunk `content_hash` changes.
+2. Request path: embed query → top-K chunks → load structured rows via **repository** → evidence pack → LLM.
+3. Always keep critical anchors (change, matching risk/release) even if similarity ranks them low.
+4. Never invent evidence IDs or numeric risk scores; citations must resolve to real rows.
+
+## AI providers
+
+- Chat: OpenRouter (`Authorization: Bearer`) or local Ollama via `AI_PROVIDER`.
+- Embeddings for seed/RAG: OpenRouter embeddings API (required for RAG path).
+
+## Do not
+
+- Load JSON fixtures at request time.
+- Put LLM prompts or SQL in controllers or services (SQL belongs in `repository/`).
+- Let repositories import services (or controllers/routes).
+- Commit `.env`, `backend/data/*.db`, or API keys.
+
+Layering is enforced by Vitest under `backend/src/test/architecture/`.
