@@ -1,0 +1,83 @@
+[
+  {
+    "id": "RSK-0015",
+    "name": "Targeted Phishing (Payments)",
+    "category": "Cyber",
+    "likelihood": "High",
+    "impact": "High",
+    "owner": "InfoSec",
+    "description": "Highly sophisticated phishing campaigns bypassing tier-1 email filters, specifically targeting staff with payment authorization limits."
+  },
+  {
+    "id": "RSK-0021",
+    "name": "Ransomware threat via Vendor",
+    "category": "Cyber",
+    "likelihood": "Med",
+    "impact": "High",
+    "owner": "InfoSec",
+    "description": "Recent breach at 3rd party vendor increases lateral movement risk."
+  },
+  {
+    "id": "RSK-0033",
+    "name": "Unpatched VPN Gateway",
+    "category": "Cyber",
+    "likelihood": "Low",
+    "impact": "High",
+    "owner": "NetSec",
+    "description": "Zero-day vulnerability announced; patching scheduled for this weekend."
+  },
+  {
+    "id": "RSK-0009",
+    "name": "Manual reconciliation risk (Automated)",
+    "category": "Operational",
+    "likelihood": "Low",
+    "impact": "Med",
+    "owner": "Retail",
+    "description": "Was manual, now successfully automated and closed."
+  },
+  {
+    "id": "RSK-0016",
+    "name": "Vendor SLA breach risk",
+    "category": "Operational",
+    "likelihood": "Med",
+    "impact": "Med",
+    "owner": "Compliance",
+    "description": "Fraud detection service missing 99.9% uptime targets."
+  },
+  {
+    "id": "RSK-0011",
+    "name": "Reporting single-approver dependency",
+    "category": "Regulatory",
+    "likelihood": "Low",
+    "impact": "High",
+    "owner": "Compliance",
+    "description": "Mitigated by cross-training and dual-auth requirement."
+  },
+  {
+    "id": "RSK-0044",
+    "name": "GDPR Data Subject Request backlog",
+    "category": "Regulatory",
+    "likelihood": "High",
+    "impact": "Med",
+    "owner": "Privacy",
+    "description": "Volume of requests exceeding 30-day SLA."
+  },
+  {
+    "id": "RSK-0017",
+    "name": "Mobile App Failover Gap",
+    "category": "IT",
+    "likelihood": "Med",
+    "impact": "High",
+    "owner": "Engineering",
+    "description": "Secondary active-active database cluster under-provisioned."
+  },
+  {
+    "id": "RSK-0050",
+    "name": "Legacy Mainframe End-of-Life",
+    "category": "IT",
+    "likelihood": "High",
+    "impact": "High",
+    "owner": "Architecture",
+    "description": "Hardware support expiring in 6 months, migration delayed."
+  }
+]

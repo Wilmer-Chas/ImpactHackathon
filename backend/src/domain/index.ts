@@ -3,7 +3,17 @@ export type { Incident, IncidentSeverity, IncidentStatus } from "./incident/inci
 export type { ProcessMetric, PerformanceMetric } from "./ops/metrics.js";
 export type { ReleasePlan } from "./ops/release.js";
 export type { DataQualityIssue } from "./ops/dataQuality.js";
+export type { OpsAlert, OpsAlertSeverity, OpsAlertStatus } from "./ops/opsAlert.js";
+export type {
+  CustomerNote,
+  CustomerNoteChannel,
+} from "./ops/customerNote.js";
 export type { RiskRecord, ResidualRisk } from "./risk/risk.js";
+export type {
+  RiskSignal,
+  RiskSignalSeverity,
+  RiskSignalSourceType,
+} from "./risk/riskSignal.js";
 export type { Finding, FindingSeverity } from "./moc/finding.js";
 export type { MocReport, Recommendation } from "./moc/mocReport.js";
 export type {
@@ -37,3 +47,10 @@ export type {
   MonthlyReportNarrative,
   MonthlyReportRiskColumns,
 } from "./ops/monthlyReport.js";
+export type {
+  EnterpriseRiskItem,
+  EnterpriseRiskLevel,
+  RiskAnalysisPeriod,
+  RiskAnalysisReport,
+  RiskCategorySlice,
+} from "./ops/riskAnalysis.js";

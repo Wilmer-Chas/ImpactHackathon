@@ -10,7 +10,20 @@ type IncidentRow = {
   root_cause: string | null;
   opened_at: string;
   resolved_at: string | null;
+  theme: string | null;
+  tags_json: string | null;
+  category: string | null;
 };
+
+function parseTags(raw: string | null): string[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed) ? parsed.filter((t): t is string => typeof t === "string") : [];
+  } catch {
+    return [];
+  }
+}
 
 function mapIncident(row: IncidentRow): Incident {
   return {
@@ -22,6 +35,9 @@ function mapIncident(row: IncidentRow): Incident {
     rootCause: row.root_cause,
     openedAt: row.opened_at,
     resolvedAt: row.resolved_at,
+    theme: row.theme,
+    tags: parseTags(row.tags_json),
+    category: row.category,
   };
 }
 

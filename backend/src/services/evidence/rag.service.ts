@@ -443,6 +443,26 @@ export async function retrieveEvidenceContextForQuery(
         }
         break;
       }
+      case "ops_alert": {
+        const alert = evidenceRepo.getOpsAlertById(ref.entityId);
+        if (alert) {
+          lines.push(
+            `[${citation}] Ops alert ${alert.id}: ${alert.title} (${alert.severity}, ${alert.status}, ${alert.sourceSystem})`,
+          );
+        }
+        break;
+      }
+      case "customer_note": {
+        const note = evidenceRepo.getCustomerNoteById(ref.entityId);
+        if (note) {
+          const preview =
+            note.body.length > 160 ? `${note.body.slice(0, 157)}...` : note.body;
+          lines.push(
+            `[${citation}] Customer note ${note.id} (${note.customerId}, ${note.channel}): ${preview}`,
+          );
+        }
+        break;
+      }
       default:
         break;
     }

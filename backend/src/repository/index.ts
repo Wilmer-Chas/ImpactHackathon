@@ -26,6 +26,14 @@ export {
   listAllRiskRecords,
 } from "./risk.repository.js";
 
+export { listEnterpriseRisks } from "./enterpriseRisk.repository.js";
+
+export {
+  getRiskAnalysisReport,
+  periodKey,
+  upsertRiskAnalysisReport,
+} from "./riskAnalysisReport.repository.js";
+
 export {
   getPrimaryRelease,
   getReleaseById,
@@ -37,6 +45,13 @@ export {
   listAllDataQuality,
 } from "./dataQuality.repository.js";
 
+export { getOpsAlertById, listAllOpsAlerts } from "./opsAlert.repository.js";
+
+export {
+  getCustomerNoteById,
+  listAllCustomerNotes,
+} from "./customerNote.repository.js";
+
 export { listEmbeddedChunks } from "./evidenceChunk.repository.js";
 
 export {
@@ -45,15 +60,6 @@ export {
   getChatSession,
   listChatSessions,
 } from "./chat.repository.js";
-
-export {
-  applyPiiFlagAction,
-  getAdminKpis,
-  getPiiFlagById,
-  listAiModels,
-  listPendingPiiFlags,
-  listPipelineRuns,
-} from "./admin.repository.js";
 
 export {
   listAnomalyPerformancePoints,

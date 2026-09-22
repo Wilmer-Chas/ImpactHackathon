@@ -1,32 +1,1873 @@
 [
   {
-    "id": "INC-4402",
+    "id": "INC-4300",
+    "application": "TM-Core",
+    "title": "Phishing click on payment approver mailbox",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-06-01",
+    "resolvedAt": "2026-06-03",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4301",
+    "application": "Payments-Portal",
+    "title": "Credential harvest attempt on treasury staff",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-04",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4302",
+    "application": "TM-Core",
+    "title": "Spoofed vendor invoice email reported",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-07",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4303",
+    "application": "Payments-Portal",
+    "title": "MFA fatigue push on payments admin",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-10",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4304",
+    "application": "TM-Core",
+    "title": "Suspicious OAuth consent for payment tool",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-06-13",
+    "resolvedAt": "2026-06-19",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4305",
+    "application": "Payments-Portal",
+    "title": "Phishing click on payment approver mailbox #6",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-06-16",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4306",
+    "application": "TM-Core",
+    "title": "Credential harvest attempt on treasury staff #7",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-19",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4307",
+    "application": "Payments-Portal",
+    "title": "Spoofed vendor invoice email reported #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-22",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4308",
+    "application": "TM-Core",
+    "title": "MFA fatigue push on payments admin #9",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-06-25",
+    "resolvedAt": "2026-06-30",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4309",
+    "application": "Payments-Portal",
+    "title": "Suspicious OAuth consent for payment tool #10",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-28",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk",
+      "customer-impact"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4310",
+    "application": "TM-Core",
+    "title": "Phishing click on payment approver mailbox #11",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-07-01",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4311",
+    "application": "Payments-Portal",
+    "title": "Credential harvest attempt on treasury staff #12",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-04",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4312",
+    "application": "TM-Core",
+    "title": "Spoofed vendor invoice email reported #13",
+    "severity": "low",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-07",
+    "resolvedAt": "2026-07-11",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4313",
+    "application": "Payments-Portal",
+    "title": "MFA fatigue push on payments admin #14",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-10",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "needs-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4314",
+    "application": "TM-Core",
+    "title": "Suspicious OAuth consent for payment tool #15",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-13",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4315",
+    "application": "Payments-Portal",
+    "title": "Phishing click on payment approver mailbox #16",
+    "severity": "low",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-07-16",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4316",
+    "application": "TM-Core",
+    "title": "Credential harvest attempt on treasury staff #17",
+    "severity": "medium",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-19",
+    "resolvedAt": "2026-07-22",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4317",
+    "application": "Payments-Portal",
+    "title": "Spoofed vendor invoice email reported #18",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-22",
+    "resolvedAt": null,
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4318",
+    "application": "TM-Core",
+    "title": "Model scoring latency spike",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-06-12",
+    "resolvedAt": "2026-06-14",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4319",
+    "application": "TM-Analytics",
+    "title": "Feature store cold start after deploy",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-15",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4320",
     "application": "TM-Core",
     "title": "Batch scoring job stalled overnight",
     "severity": "high",
     "status": "open",
-    "rootCause": "Downstream queue backpressure",
-    "openedAt": "2026-09-08",
-    "resolvedAt": null
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-18",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4321",
+    "application": "TM-Analytics",
+    "title": "p95 latency breached SLA",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-21",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4322",
+    "application": "TM-Core",
+    "title": "Embedding service timeout cascade",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-06-24",
+    "resolvedAt": "2026-06-30",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4323",
+    "application": "TM-Analytics",
+    "title": "Model scoring latency spike #6",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-06-27",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4324",
+    "application": "TM-Core",
+    "title": "Feature store cold start after deploy #7",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-30",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4325",
+    "application": "TM-Analytics",
+    "title": "Batch scoring job stalled overnight #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-03",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4326",
+    "application": "TM-Core",
+    "title": "p95 latency breached SLA #9",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-06",
+    "resolvedAt": "2026-07-11",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4327",
+    "application": "TM-Analytics",
+    "title": "Embedding service timeout cascade #10",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-09",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "customer-impact"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4328",
+    "application": "TM-Core",
+    "title": "Model scoring latency spike #11",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-07-12",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4329",
+    "application": "TM-Analytics",
+    "title": "Feature store cold start after deploy #12",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-15",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4330",
+    "application": "TM-Core",
+    "title": "Batch scoring job stalled overnight #13",
+    "severity": "low",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-18",
+    "resolvedAt": "2026-07-22",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4331",
+    "application": "TM-Analytics",
+    "title": "p95 latency breached SLA #14",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-21",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "needs-review"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4332",
+    "application": "TM-Core",
+    "title": "Embedding service timeout cascade #15",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-24",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4333",
+    "application": "TM-Analytics",
+    "title": "Model scoring latency spike #16",
+    "severity": "low",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-07-27",
+    "resolvedAt": null,
+    "theme": "model-latency",
+    "tags": [
+      "model-latency"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4334",
+    "application": "TM-Core",
+    "title": "Fraud vendor API timeout storm",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-06-23",
+    "resolvedAt": "2026-06-25",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4335",
+    "application": "Fraud-Gateway",
+    "title": "Vendor SLA breach on case sync",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-26",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4336",
+    "application": "TM-Core",
+    "title": "Third-party enrichment delayed",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-29",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4337",
+    "application": "Fraud-Gateway",
+    "title": "Vendor maintenance window overrun",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-02",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4338",
+    "application": "TM-Core",
+    "title": "Partner webhook delivery failures",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-05",
+    "resolvedAt": "2026-07-11",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4339",
+    "application": "Fraud-Gateway",
+    "title": "Fraud vendor API timeout storm #6",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-07-08",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4340",
+    "application": "TM-Core",
+    "title": "Vendor SLA breach on case sync #7",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-11",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4341",
+    "application": "Fraud-Gateway",
+    "title": "Third-party enrichment delayed #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-14",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4342",
+    "application": "TM-Core",
+    "title": "Vendor maintenance window overrun #9",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-17",
+    "resolvedAt": "2026-07-22",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4343",
+    "application": "Fraud-Gateway",
+    "title": "Partner webhook delivery failures #10",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-20",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "customer-impact"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4344",
+    "application": "TM-Core",
+    "title": "Fraud vendor API timeout storm #11",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-07-23",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4345",
+    "application": "Fraud-Gateway",
+    "title": "Vendor SLA breach on case sync #12",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-26",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4346",
+    "application": "TM-Core",
+    "title": "Third-party enrichment delayed #13",
+    "severity": "low",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-29",
+    "resolvedAt": "2026-08-02",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4347",
+    "application": "Fraud-Gateway",
+    "title": "Vendor maintenance window overrun #14",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-01",
+    "resolvedAt": null,
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "needs-review"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4348",
+    "application": "TM-Core",
+    "title": "Missing beneficiary country on wires",
+    "severity": "low",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-04",
+    "resolvedAt": "2026-07-06",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4349",
+    "application": "TM-Analytics",
+    "title": "Null account_type in feed",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-07",
+    "resolvedAt": null,
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4350",
+    "application": "TM-Core",
+    "title": "Incomplete KYC fields in batch",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-10",
+    "resolvedAt": null,
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4351",
+    "application": "TM-Analytics",
+    "title": "Stale customer risk score blanks",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-13",
+    "resolvedAt": null,
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4352",
+    "application": "TM-Core",
+    "title": "Truncated narrative on SAR export",
+    "severity": "medium",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-16",
+    "resolvedAt": "2026-07-22",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4353",
+    "application": "TM-Analytics",
+    "title": "Missing beneficiary country on wires #6",
+    "severity": "high",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-07-19",
+    "resolvedAt": null,
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4354",
+    "application": "TM-Core",
+    "title": "Null account_type in feed #7",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-22",
+    "resolvedAt": null,
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4355",
+    "application": "TM-Analytics",
+    "title": "Incomplete KYC fields in batch #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-25",
+    "resolvedAt": null,
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4356",
+    "application": "TM-Core",
+    "title": "Stale customer risk score blanks #9",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-28",
+    "resolvedAt": "2026-08-02",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4357",
+    "application": "TM-Analytics",
+    "title": "Truncated narrative on SAR export #10",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-31",
+    "resolvedAt": null,
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness",
+      "customer-impact"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4358",
+    "application": "TM-Core",
+    "title": "Missing beneficiary country on wires #11",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-08-03",
+    "resolvedAt": null,
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4359",
+    "application": "TM-Analytics",
+    "title": "Null account_type in feed #12",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-06",
+    "resolvedAt": null,
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4360",
+    "application": "TM-Core",
+    "title": "DR failover drill failed secondary",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-15",
+    "resolvedAt": "2026-07-17",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4361",
+    "application": "Mobile-Banking",
+    "title": "Legacy standby DB lag",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-18",
+    "resolvedAt": null,
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4362",
+    "application": "TM-Core",
+    "title": "Region B health check flapping",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-21",
+    "resolvedAt": null,
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4363",
+    "application": "Mobile-Banking",
+    "title": "Cold standby never promoted",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-24",
+    "resolvedAt": null,
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4364",
+    "application": "TM-Core",
+    "title": "DNS cutover dry-run incomplete",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-27",
+    "resolvedAt": "2026-08-02",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4365",
+    "application": "Mobile-Banking",
+    "title": "DR failover drill failed secondary #6",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-07-30",
+    "resolvedAt": null,
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4366",
+    "application": "TM-Core",
+    "title": "Legacy standby DB lag #7",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-02",
+    "resolvedAt": null,
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4367",
+    "application": "Mobile-Banking",
+    "title": "Region B health check flapping #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-05",
+    "resolvedAt": null,
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4368",
+    "application": "TM-Core",
+    "title": "Cold standby never promoted #9",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-08-08",
+    "resolvedAt": "2026-08-13",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4369",
+    "application": "Mobile-Banking",
+    "title": "DNS cutover dry-run incomplete #10",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-11",
+    "resolvedAt": null,
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "customer-impact"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4370",
+    "application": "TM-Core",
+    "title": "DR failover drill failed secondary #11",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-08-14",
+    "resolvedAt": null,
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4371",
+    "application": "Mobile-Banking",
+    "title": "Legacy standby DB lag #12",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-17",
+    "resolvedAt": null,
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps"
+    ],
+    "category": "IT"
+  },
+  {
+    "id": "INC-4372",
+    "application": "TM-Analytics",
+    "title": "CTR filing window near miss",
+    "severity": "low",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-07-26",
+    "resolvedAt": "2026-07-28",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4373",
+    "application": "Compliance-Hub",
+    "title": "SAR export delay to regulator portal",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-07-29",
+    "resolvedAt": null,
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4374",
+    "application": "TM-Analytics",
+    "title": "Monthly AML report dependency outage",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-01",
+    "resolvedAt": null,
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4375",
+    "application": "Compliance-Hub",
+    "title": "Audit evidence pack incomplete",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-04",
+    "resolvedAt": null,
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4376",
+    "application": "TM-Analytics",
+    "title": "Filing ID sequence gap",
+    "severity": "medium",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-08-07",
+    "resolvedAt": "2026-08-13",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4377",
+    "application": "Compliance-Hub",
+    "title": "CTR filing window near miss #6",
+    "severity": "high",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-08-10",
+    "resolvedAt": null,
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4378",
+    "application": "TM-Analytics",
+    "title": "SAR export delay to regulator portal #7",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-13",
+    "resolvedAt": null,
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4379",
+    "application": "Compliance-Hub",
+    "title": "Monthly AML report dependency outage #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-16",
+    "resolvedAt": null,
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4380",
+    "application": "TM-Analytics",
+    "title": "Audit evidence pack incomplete #9",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-08-19",
+    "resolvedAt": "2026-08-24",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4381",
+    "application": "Compliance-Hub",
+    "title": "Filing ID sequence gap #10",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-22",
+    "resolvedAt": null,
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing",
+      "customer-impact"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "id": "INC-4382",
+    "application": "TM-Core",
+    "title": "Investigation queue backlog surge",
+    "severity": "low",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-08-06",
+    "resolvedAt": "2026-08-08",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4383",
+    "application": "TM-Core",
+    "title": "Aging alerts over 48h",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-09",
+    "resolvedAt": null,
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4384",
+    "application": "TM-Core",
+    "title": "Case assignment bottleneck",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-12",
+    "resolvedAt": null,
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4385",
+    "application": "TM-Core",
+    "title": "Weekend backlog not cleared",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-15",
+    "resolvedAt": null,
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4386",
+    "application": "TM-Core",
+    "title": "Analyst capacity shortfall",
+    "severity": "medium",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-08-18",
+    "resolvedAt": "2026-08-24",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4387",
+    "application": "TM-Core",
+    "title": "Investigation queue backlog surge #6",
+    "severity": "high",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-08-21",
+    "resolvedAt": null,
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
   },
   {
     "id": "INC-4388",
     "application": "TM-Core",
-    "title": "Alert export delay to case system",
-    "severity": "medium",
-    "status": "resolved",
-    "rootCause": null,
-    "openedAt": "2026-08-20",
-    "resolvedAt": "2026-08-22"
+    "title": "Aging alerts over 48h #7",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-24",
+    "resolvedAt": null,
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
   },
   {
-    "id": "INC-4371",
-    "application": "TM-Analytics",
-    "title": "Dashboard refresh failure",
+    "id": "INC-4389",
+    "application": "TM-Core",
+    "title": "Case assignment bottleneck #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-27",
+    "resolvedAt": null,
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4390",
+    "application": "TM-Core",
+    "title": "Weekend backlog not cleared #9",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-08-30",
+    "resolvedAt": "2026-09-04",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4391",
+    "application": "TM-Core",
+    "title": "Analyst capacity shortfall #10",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-09-02",
+    "resolvedAt": null,
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog",
+      "customer-impact"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4392",
+    "application": "TM-Core",
+    "title": "Investigation queue backlog surge #11",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-09-05",
+    "resolvedAt": null,
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4393",
+    "application": "TM-Core",
+    "title": "Aging alerts over 48h #12",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-09-08",
+    "resolvedAt": null,
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4394",
+    "application": "Fraud-Gateway",
+    "title": "Vendor ransomware advisory",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-08-17",
+    "resolvedAt": "2026-08-19",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4395",
+    "application": "TM-Core",
+    "title": "Lateral movement concern from MSP",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-20",
+    "resolvedAt": null,
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4396",
+    "application": "Fraud-Gateway",
+    "title": "Encrypted share on vendor VPN",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-23",
+    "resolvedAt": null,
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4397",
+    "application": "TM-Core",
+    "title": "Vendor SOC alert shared",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-26",
+    "resolvedAt": null,
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4398",
+    "application": "Fraud-Gateway",
+    "title": "Compromised vendor credential reuse",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-08-29",
+    "resolvedAt": "2026-09-04",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4399",
+    "application": "TM-Core",
+    "title": "Vendor ransomware advisory #6",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-09-01",
+    "resolvedAt": null,
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4400",
+    "application": "Fraud-Gateway",
+    "title": "Lateral movement concern from MSP #7",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-09-04",
+    "resolvedAt": null,
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4401",
+    "application": "TM-Core",
+    "title": "Encrypted share on vendor VPN #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-09-07",
+    "resolvedAt": null,
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4402",
+    "application": "Fraud-Gateway",
+    "title": "Vendor SOC alert shared #9",
+    "severity": "high",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-06-02",
+    "resolvedAt": "2026-06-07",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4403",
+    "application": "TM-Core",
+    "title": "Compromised vendor credential reuse #10",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-05",
+    "resolvedAt": null,
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "customer-impact"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4404",
+    "application": "TM-Core",
+    "title": "Threshold tweak caused FP spike",
     "severity": "low",
     "status": "resolved",
-    "rootCause": "Cache misconfig",
-    "openedAt": "2026-08-10",
-    "resolvedAt": "2026-08-10"
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-08-28",
+    "resolvedAt": "2026-08-30",
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4405",
+    "application": "TM-Core",
+    "title": "Shadow rule still firing",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-08-31",
+    "resolvedAt": null,
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4406",
+    "application": "TM-Core",
+    "title": "Duplicate alert signatures",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-09-03",
+    "resolvedAt": null,
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4407",
+    "application": "TM-Core",
+    "title": "Tuning change without rollback plan",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-09-06",
+    "resolvedAt": null,
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4408",
+    "application": "TM-Core",
+    "title": "Noise from seasonal pattern",
+    "severity": "medium",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-06-01",
+    "resolvedAt": "2026-06-07",
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4409",
+    "application": "TM-Core",
+    "title": "Threshold tweak caused FP spike #6",
+    "severity": "high",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-06-04",
+    "resolvedAt": null,
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4410",
+    "application": "TM-Core",
+    "title": "Shadow rule still firing #7",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-07",
+    "resolvedAt": null,
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4411",
+    "application": "TM-Core",
+    "title": "Duplicate alert signatures #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-10",
+    "resolvedAt": null,
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "id": "INC-4412",
+    "application": "TM-Core",
+    "title": "Privileged access review overdue",
+    "severity": "low",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-09-08",
+    "resolvedAt": "2026-09-10",
+    "theme": "access-review",
+    "tags": [
+      "access-review",
+      "customer-impact",
+      "needs-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4413",
+    "application": "Admin-Console",
+    "title": "Orphaned admin role found",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-03",
+    "resolvedAt": null,
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4414",
+    "application": "TM-Core",
+    "title": "Break-glass account unused audit",
+    "severity": "high",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-06",
+    "resolvedAt": null,
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4415",
+    "application": "Admin-Console",
+    "title": "SoD conflict on TM config role",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-09",
+    "resolvedAt": null,
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4416",
+    "application": "TM-Core",
+    "title": "Quarterly access cert delayed",
+    "severity": "medium",
+    "status": "resolved",
+    "rootCause": "Mitigated in follow-up change",
+    "openedAt": "2026-06-12",
+    "resolvedAt": "2026-06-18",
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4417",
+    "application": "Admin-Console",
+    "title": "Privileged access review overdue #6",
+    "severity": "high",
+    "status": "open",
+    "rootCause": null,
+    "openedAt": "2026-06-15",
+    "resolvedAt": null,
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4418",
+    "application": "TM-Core",
+    "title": "Orphaned admin role found #7",
+    "severity": "low",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-18",
+    "resolvedAt": null,
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "id": "INC-4419",
+    "application": "Admin-Console",
+    "title": "Break-glass account unused audit #8",
+    "severity": "medium",
+    "status": "open",
+    "rootCause": "Under investigation",
+    "openedAt": "2026-06-21",
+    "resolvedAt": null,
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
   }
 ]

@@ -19,8 +19,19 @@ export type ChatSession = ChatSessionSummary & {
   messages: ChatMessage[];
 };
 
+export type ChatAppFilters = {
+  from?: string;
+  to?: string;
+  wording?: string;
+};
+
+export type ChatFilterAction =
+  | { type: "set_filters"; filters: ChatAppFilters }
+  | { type: "clear_filters" };
+
 export type ChatReply = {
   sessionId: string;
   reply: string;
   citations: string[];
+  filterAction?: ChatFilterAction;
 };

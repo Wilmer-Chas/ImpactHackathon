@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import { ChatIntelligenceValidationError } from "../../services/ai/chatIntelligence.service.js";
 import {
   AiResponseError,
   AiUnavailableError,
@@ -39,7 +40,7 @@ export async function postChatMessage(req: Request, res: Response): Promise<void
       res.status(503).json({ error: err.message });
       return;
     }
-    if (err instanceof AiResponseError) {
+    if (err instanceof AiResponseError || err instanceof ChatIntelligenceValidationError) {
       res.status(502).json({ error: err.message });
       return;
     }

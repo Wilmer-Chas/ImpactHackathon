@@ -1,12 +1,12 @@
 # ImpactHackathon
 
-Presentation Generator demo for a Transaction Monitoring product owner: evidence-grounded assistant chat, admin governance (usage + PII review), and monthly compliance decks — all backed by SQLite seed data and hybrid RAG.
+Presentation Generator demo for a Transaction Monitoring product owner: evidence-grounded assistant chat, monthly compliance decks, and interactive enterprise risk analysis — all backed by SQLite seed data and hybrid RAG.
 
 ## What the demo does
 
-1. **Employee Home** — chat with a RAG-grounded assistant; persist session history; quick actions for monthly reports, trend watch, and schedules
-2. **Admin Dashboard** — KPIs, pipeline runs chart, model usage, and Approve / Redact / Reject on seeded PII flags
-3. **Report View** — generate a monthly Fraud Detection deck from performance series + risk MoM snapshots + LLM narrative
+1. **Employee Home** — chat with a RAG-grounded assistant; persist session history; quick actions for monthly reports, risk analysis, and trend watch; optional file chips → Generate Deck
+2. **Fraud Report** — generate a monthly Fraud Detection deck from performance series + risk MoM snapshots + LLM narrative
+3. **Risk Report** — AI rollup for a selected timeframe; flags issues still open at period end; changing from/to compiles a new report
 4. Legacy MOC APIs remain available (`GET /api/moc/briefing`, `GET /api/reports/:changeId`) for decision briefs
 
 If the AI provider is down or returns invalid structured output, chat / monthly-report / MOC narrative APIs fail (no template fallback for LLM copy). Chart numbers and IDs always come from SQLite.
@@ -94,8 +94,8 @@ npm run dev:frontend
 - App: http://localhost:5173
 - Health: http://localhost:3001/api/health
 - Chat: `POST /api/chat`
-- Admin: `GET /api/admin/overview`
 - Monthly report: `POST /api/reports/monthly` · `GET /api/reports/monthly/:period`
+- Risk analysis: `GET /api/reports/risk`
 - Trends: `GET /api/ops/trends`
-- Schedules: `GET/POST /api/schedules`
+- Schedules: `GET/POST /api/schedules` (API retained; not in current UI)
 - Backend tests: `npm run test`

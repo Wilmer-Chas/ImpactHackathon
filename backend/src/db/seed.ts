@@ -8,11 +8,14 @@ import type { ChangeRequest } from "../domain/change/changeRequest.js";
 import type { Incident } from "../domain/incident/incident.js";
 import type { DataQualityIssue } from "../domain/ops/dataQuality.js";
 import type { PerformanceMetric, ProcessMetric } from "../domain/ops/metrics.js";
+import type { OpsAlert } from "../domain/ops/opsAlert.js";
+import type { CustomerNote } from "../domain/ops/customerNote.js";
 import type { ReleasePlan } from "../domain/ops/release.js";
 import type { RiskRecord } from "../domain/risk/risk.js";
 import type { AiModel, PipelineRun, PiiFlag } from "../domain/admin/admin.js";
 import type { ReportSchedule } from "../domain/ops/schedule.js";
 import type { PerformanceSeriesPoint, RiskSnapshot } from "../domain/ops/trends.js";
+import type { EnterpriseRiskItem } from "../domain/ops/riskAnalysis.js";
 import { readFileSync, readdirSync } from "node:fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -78,6 +81,9 @@ function chunkTextForIncident(i: Incident): string {
     `rootCause: ${i.rootCause ?? "unknown"}`,
     `openedAt: ${i.openedAt}`,
     `resolvedAt: ${i.resolvedAt ?? "open"}`,
+    `theme: ${i.theme ?? ""}`,
+    `tags: ${(i.tags ?? []).join(", ")}`,
+    `category: ${i.category ?? ""}`,
   ].join("\n");
 }
 
@@ -137,6 +143,35 @@ function chunkTextForDataQuality(issue: DataQualityIssue): string {
     `missingRate: ${issue.missingRate}`,
     `severity: ${issue.severity}`,
     `notes: ${issue.notes}`,
+    `theme: ${issue.theme ?? ""}`,
+    `tags: ${(issue.tags ?? []).join(", ")}`,
+    `category: ${issue.category ?? ""}`,
+  ].join("\n");
+}
+
+function chunkTextForOpsAlert(alert: OpsAlert): string {
+  return [
+    `Ops alert ${alert.id}`,
+    `title: ${alert.title}`,
+    `application: ${alert.application}`,
+    `severity: ${alert.severity}`,
+    `status: ${alert.status}`,
+    `theme: ${alert.theme}`,
+    `tags: ${alert.tags.join(", ")}`,
+    `category: ${alert.category}`,
+    `openedAt: ${alert.openedAt}`,
+    `sourceSystem: ${alert.sourceSystem}`,
+  ].join("\n");
+}
+
+function chunkTextForCustomerNote(note: CustomerNote): string {
+  return [
+    `Customer note ${note.id}`,
+    `customerId: ${note.customerId}`,
+    `channel: ${note.channel}`,
+    `recordedAt: ${note.recordedAt}`,
+    `author: ${note.author ?? "unknown"}`,
+    `body: ${note.body}`,
   ].join("\n");
 }
 
@@ -193,15 +228,18 @@ function upsertChange(change: ChangeRequest, stats: SeedStats): void {
 
 function upsertIncident(incident: Incident, stats: SeedStats): void {
   const db = getDb();
+  const tagsJson = JSON.stringify(incident.tags ?? []);
   const existing = db.prepare("SELECT id FROM incidents WHERE id = ?").get(incident.id) as
     | { id: string }
     | undefined;
   const result = db
     .prepare(
       `INSERT INTO incidents (
-         id, application, title, severity, status, root_cause, opened_at, resolved_at
+         id, application, title, severity, status, root_cause, opened_at, resolved_at,
+         theme, tags_json, category
        ) VALUES (
-         @id, @application, @title, @severity, @status, @rootCause, @openedAt, @resolvedAt
+         @id, @application, @title, @severity, @status, @rootCause, @openedAt, @resolvedAt,
+         @theme, @tagsJson, @category
        )
        ON CONFLICT(id) DO UPDATE SET
          application = excluded.application,
@@ -210,14 +248,20 @@ function upsertIncident(incident: Incident, stats: SeedStats): void {
          status = excluded.status,
          root_cause = excluded.root_cause,
          opened_at = excluded.opened_at,
-         resolved_at = excluded.resolved_at
+         resolved_at = excluded.resolved_at,
+         theme = excluded.theme,
+         tags_json = excluded.tags_json,
+         category = excluded.category
        WHERE incidents.application IS NOT excluded.application
           OR incidents.title IS NOT excluded.title
           OR incidents.severity IS NOT excluded.severity
           OR incidents.status IS NOT excluded.status
           OR incidents.root_cause IS NOT excluded.root_cause
           OR incidents.opened_at IS NOT excluded.opened_at
-          OR incidents.resolved_at IS NOT excluded.resolved_at`,
+          OR incidents.resolved_at IS NOT excluded.resolved_at
+          OR incidents.theme IS NOT excluded.theme
+          OR incidents.tags_json IS NOT excluded.tags_json
+          OR incidents.category IS NOT excluded.category`,
     )
     .run({
       id: incident.id,
@@ -228,6 +272,9 @@ function upsertIncident(incident: Incident, stats: SeedStats): void {
       rootCause: incident.rootCause,
       openedAt: incident.openedAt,
       resolvedAt: incident.resolvedAt,
+      theme: incident.theme ?? null,
+      tagsJson,
+      category: incident.category ?? null,
     });
 
   if (!existing) {
@@ -436,20 +483,31 @@ function upsertRelease(release: ReleasePlan, stats: SeedStats): void {
 
 function upsertDataQuality(issue: DataQualityIssue, stats: SeedStats): void {
   const db = getDb();
+  const tagsJson = JSON.stringify(issue.tags ?? []);
   const existing = db
     .prepare("SELECT 1 AS ok FROM data_quality WHERE source = ? AND field = ?")
     .get(issue.source, issue.field) as { ok: number } | undefined;
   const result = db
     .prepare(
-      `INSERT INTO data_quality (source, field, missing_rate, severity, notes)
-       VALUES (@source, @field, @missingRate, @severity, @notes)
+      `INSERT INTO data_quality (
+         source, field, missing_rate, severity, notes, theme, tags_json, category
+       )
+       VALUES (
+         @source, @field, @missingRate, @severity, @notes, @theme, @tagsJson, @category
+       )
        ON CONFLICT(source, field) DO UPDATE SET
          missing_rate = excluded.missing_rate,
          severity = excluded.severity,
-         notes = excluded.notes
+         notes = excluded.notes,
+         theme = excluded.theme,
+         tags_json = excluded.tags_json,
+         category = excluded.category
        WHERE data_quality.missing_rate IS NOT excluded.missing_rate
           OR data_quality.severity IS NOT excluded.severity
-          OR data_quality.notes IS NOT excluded.notes`,
+          OR data_quality.notes IS NOT excluded.notes
+          OR data_quality.theme IS NOT excluded.theme
+          OR data_quality.tags_json IS NOT excluded.tags_json
+          OR data_quality.category IS NOT excluded.category`,
     )
     .run({
       source: issue.source,
@@ -457,6 +515,108 @@ function upsertDataQuality(issue: DataQualityIssue, stats: SeedStats): void {
       missingRate: issue.missingRate,
       severity: issue.severity,
       notes: issue.notes,
+      theme: issue.theme ?? null,
+      tagsJson,
+      category: issue.category ?? null,
+    });
+
+  if (!existing) {
+    stats.entitiesUpserted += 1;
+  } else if (result.changes > 0) {
+    stats.entitiesUpserted += 1;
+  } else {
+    stats.entitiesUnchanged += 1;
+  }
+}
+
+function upsertOpsAlert(alert: OpsAlert, stats: SeedStats): void {
+  const db = getDb();
+  const tagsJson = JSON.stringify(alert.tags ?? []);
+  const existing = db.prepare("SELECT id FROM ops_alerts WHERE id = ?").get(alert.id) as
+    | { id: string }
+    | undefined;
+  const result = db
+    .prepare(
+      `INSERT INTO ops_alerts (
+         id, application, title, severity, status, theme, tags_json, category,
+         opened_at, source_system
+       ) VALUES (
+         @id, @application, @title, @severity, @status, @theme, @tagsJson, @category,
+         @openedAt, @sourceSystem
+       )
+       ON CONFLICT(id) DO UPDATE SET
+         application = excluded.application,
+         title = excluded.title,
+         severity = excluded.severity,
+         status = excluded.status,
+         theme = excluded.theme,
+         tags_json = excluded.tags_json,
+         category = excluded.category,
+         opened_at = excluded.opened_at,
+         source_system = excluded.source_system
+       WHERE ops_alerts.application IS NOT excluded.application
+          OR ops_alerts.title IS NOT excluded.title
+          OR ops_alerts.severity IS NOT excluded.severity
+          OR ops_alerts.status IS NOT excluded.status
+          OR ops_alerts.theme IS NOT excluded.theme
+          OR ops_alerts.tags_json IS NOT excluded.tags_json
+          OR ops_alerts.category IS NOT excluded.category
+          OR ops_alerts.opened_at IS NOT excluded.opened_at
+          OR ops_alerts.source_system IS NOT excluded.source_system`,
+    )
+    .run({
+      id: alert.id,
+      application: alert.application,
+      title: alert.title,
+      severity: alert.severity,
+      status: alert.status,
+      theme: alert.theme,
+      tagsJson,
+      category: alert.category,
+      openedAt: alert.openedAt,
+      sourceSystem: alert.sourceSystem,
+    });
+
+  if (!existing) {
+    stats.entitiesUpserted += 1;
+  } else if (result.changes > 0) {
+    stats.entitiesUpserted += 1;
+  } else {
+    stats.entitiesUnchanged += 1;
+  }
+}
+
+function upsertCustomerNote(note: CustomerNote, stats: SeedStats): void {
+  const db = getDb();
+  const existing = db.prepare("SELECT id FROM customer_notes WHERE id = ?").get(note.id) as
+    | { id: string }
+    | undefined;
+  const result = db
+    .prepare(
+      `INSERT INTO customer_notes (
+         id, customer_id, channel, recorded_at, author, body
+       ) VALUES (
+         @id, @customerId, @channel, @recordedAt, @author, @body
+       )
+       ON CONFLICT(id) DO UPDATE SET
+         customer_id = excluded.customer_id,
+         channel = excluded.channel,
+         recorded_at = excluded.recorded_at,
+         author = excluded.author,
+         body = excluded.body
+       WHERE customer_notes.customer_id IS NOT excluded.customer_id
+          OR customer_notes.channel IS NOT excluded.channel
+          OR customer_notes.recorded_at IS NOT excluded.recorded_at
+          OR customer_notes.author IS NOT excluded.author
+          OR customer_notes.body IS NOT excluded.body`,
+    )
+    .run({
+      id: note.id,
+      customerId: note.customerId,
+      channel: note.channel,
+      recordedAt: note.recordedAt,
+      author: note.author,
+      body: note.body,
     });
 
   if (!existing) {
@@ -598,6 +758,33 @@ function upsertRiskSnapshot(snapshot: RiskSnapshot, stats: SeedStats): void {
           OR risk_snapshots.state IS NOT excluded.state`,
     )
     .run(snapshot);
+  bumpStats(Boolean(existing), result.changes > 0, stats);
+}
+
+function upsertEnterpriseRisk(item: EnterpriseRiskItem, stats: SeedStats): void {
+  const db = getDb();
+  const existing = db.prepare("SELECT 1 AS ok FROM enterprise_risks WHERE id = ?").get(item.id) as
+    | { ok: number }
+    | undefined;
+  const result = db
+    .prepare(
+      `INSERT INTO enterprise_risks (id, name, category, likelihood, impact, owner, description)
+       VALUES (@id, @name, @category, @likelihood, @impact, @owner, @description)
+       ON CONFLICT(id) DO UPDATE SET
+         name = excluded.name,
+         category = excluded.category,
+         likelihood = excluded.likelihood,
+         impact = excluded.impact,
+         owner = excluded.owner,
+         description = excluded.description
+       WHERE enterprise_risks.name IS NOT excluded.name
+          OR enterprise_risks.category IS NOT excluded.category
+          OR enterprise_risks.likelihood IS NOT excluded.likelihood
+          OR enterprise_risks.impact IS NOT excluded.impact
+          OR enterprise_risks.owner IS NOT excluded.owner
+          OR enterprise_risks.description IS NOT excluded.description`,
+    )
+    .run(item);
   bumpStats(Boolean(existing), result.changes > 0, stats);
 }
 
@@ -790,6 +977,10 @@ export async function seedMockData(): Promise<SeedStats> {
   const dataQuality = loadJson<DataQualityIssue[]>(
     path.join(mockDir, "quality", "data-quality.json"),
   );
+  const opsAlerts = loadJson<OpsAlert[]>(path.join(mockDir, "ops", "alerts.json"));
+  const customerNotes = loadJson<CustomerNote[]>(
+    path.join(mockDir, "customers", "notes.json"),
+  );
 
   const pendingChunks: PendingChunk[] = [];
 
@@ -854,6 +1045,24 @@ export async function seedMockData(): Promise<SeedStats> {
     });
   }
 
+  for (const alert of opsAlerts) {
+    upsertOpsAlert(alert, stats);
+    pendingChunks.push({
+      entityType: "ops_alert",
+      entityId: alert.id,
+      text: chunkTextForOpsAlert(alert),
+    });
+  }
+
+  for (const note of customerNotes) {
+    upsertCustomerNote(note, stats);
+    pendingChunks.push({
+      entityType: "customer_note",
+      entityId: note.id,
+      text: chunkTextForCustomerNote(note),
+    });
+  }
+
   const pipelineRuns = loadJson<PipelineRun[]>(path.join(mockDir, "admin", "pipeline-runs.json"));
   const aiModels = loadJson<AiModel[]>(path.join(mockDir, "admin", "ai-models.json"));
   const piiFlags = loadJson<PiiFlag[]>(path.join(mockDir, "admin", "pii-flags.json"));
@@ -862,6 +1071,9 @@ export async function seedMockData(): Promise<SeedStats> {
     path.join(mockDir, "ops", "performance-series.json"),
   );
   const riskSnapshots = loadJson<RiskSnapshot[]>(path.join(mockDir, "risk", "risk-snapshots.json"));
+  const enterpriseRisks = loadJson<EnterpriseRiskItem[]>(
+    path.join(mockDir, "risk", "enterprise-risks.json"),
+  );
   const schedules = loadJson<ReportSchedule[]>(path.join(mockDir, "ops", "report-schedules.json"));
   const chatSeeds = loadJson<
     Array<{
@@ -890,6 +1102,9 @@ export async function seedMockData(): Promise<SeedStats> {
   }
   for (const snapshot of riskSnapshots) {
     upsertRiskSnapshot(snapshot, stats);
+  }
+  for (const risk of enterpriseRisks) {
+    upsertEnterpriseRisk(risk, stats);
   }
   for (const schedule of schedules) {
     upsertReportSchedule(schedule, stats);

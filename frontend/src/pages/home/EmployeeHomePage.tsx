@@ -1,30 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  CalendarClock,
   FileText,
   LayoutTemplate,
   MessageSquare,
+  Paperclip,
   Send,
   TrendingUp,
   X,
 } from "lucide-react";
+import { useAppFilters } from "../../context/AppFilterContext";
+import { filterByAppFilters, isFilterActive } from "../../lib/applyFilters";
+import { FilterStatusBanner } from "../../components/filters/FilterStatusBanner";
 import {
   createChatSession,
   getChatSession,
   listChatSessions,
   sendChatMessage,
 } from "../../services/api/chat.api";
-import {
-  createSchedule,
-  deleteSchedule,
-  fetchTrends,
-  generateMonthlyReport,
-  listSchedules,
-  patchSchedule,
-} from "../../services/api/ops.api";
+import { fetchTrends, generateMonthlyReport } from "../../services/api/ops.api";
 import type { ChatMessage, ChatSessionSummary } from "../../types/chat";
-import type { ReportSchedule, TrendsResponse } from "../../types/ops";
+import type { TrendsResponse } from "../../types/ops";
 
 function formatTime(iso: string): string {
   try {
@@ -36,18 +32,19 @@ function formatTime(iso: string): string {
 
 export function EmployeeHomePage() {
   const navigate = useNavigate();
+  const { filters, setFilters, clearFilters } = useAppFilters();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const [prompt, setPrompt] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [activeChat, setActiveChat] = useState<ChatMessage[]>([]);
   const [chatHistory, setChatHistory] = useState<ChatSessionSummary[]>([]);
   const [trends, setTrends] = useState<TrendsResponse | null>(null);
-  const [trendOpen, setTrendOpen] = useState(false);
-  const [schedulesOpen, setSchedulesOpen] = useState(false);
-  const [schedules, setSchedules] = useState<ReportSchedule[]>([]);
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   async function refreshSessions() {
     const sessions = await listChatSessions();
@@ -63,10 +60,42 @@ export function EmployeeHomePage() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [activeChat, isTyping]);
+  }, [activeChat, isTyping, uploadedFiles]);
+
+  function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files.length > 0) {
+      setUploadedFiles((prev) => [...prev, ...Array.from(e.target.files!)]);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
+
+  function removeFile(indexToRemove: number) {
+    setUploadedFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
+  }
+
+  async function generateDeck() {
+    if (uploadedFiles.length === 0) return;
+    setIsUploading(true);
+    setActionError(null);
+    const fileName = uploadedFiles[0].name.toLowerCase();
+
+    try {
+      if (fileName.includes("risk")) {
+        await new Promise((r) => setTimeout(r, 800));
+        navigate("/report/risk");
+        return;
+      }
+      const report = await generateMonthlyReport();
+      navigate(`/report/${report.period}`);
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Could not generate deck");
+    } finally {
+      setIsUploading(false);
+    }
+  }
 
   async function handleSend() {
-    if (!prompt.trim() || isTyping) return;
+    if (!prompt.trim() || isTyping || isUploading) return;
     const userText = prompt.trim();
     setPrompt("");
     setIsTyping(true);
@@ -87,6 +116,11 @@ export function EmployeeHomePage() {
         sessionId: sessionId ?? undefined,
       });
       setSessionId(result.sessionId);
+      if (result.filterAction?.type === "set_filters") {
+        setFilters(result.filterAction.filters);
+      } else if (result.filterAction?.type === "clear_filters") {
+        clearFilters();
+      }
       const session = await getChatSession(result.sessionId);
       setActiveChat(session.messages);
       await refreshSessions();
@@ -144,42 +178,27 @@ export function EmployeeHomePage() {
     }
   }
 
-  async function openSchedules() {
-    setSchedulesOpen(true);
-    setActionError(null);
-    try {
-      setSchedules(await listSchedules());
-    } catch (err) {
-      setActionError(err instanceof Error ? err.message : "Could not load schedules");
-    }
-  }
-
-  async function toggleSchedule(schedule: ReportSchedule) {
-    const updated = await patchSchedule(schedule.id, { enabled: !schedule.enabled });
-    setSchedules((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
-  }
-
-  async function addSchedule() {
-    const created = await createSchedule({
-      name: "Custom monthly report",
-      cadence: "monthly",
-      nextRun: new Date().toISOString().slice(0, 10),
-      enabled: true,
-    });
-    setSchedules((prev) => [...prev, created]);
-  }
-
-  async function removeSchedule(id: string) {
-    await deleteSchedule(id);
-    setSchedules((prev) => prev.filter((s) => s.id !== id));
-  }
+  const totalAnomalies = trends?.anomalies.length ?? 0;
+  const filteredAnomalies = filterByAppFilters(
+    trends?.anomalies ?? [],
+    filters,
+    (a) => a.period,
+    (a) => [a.title, a.detail, ...a.evidenceRefs],
+  );
+  const anomalyCount = filteredAnomalies.length;
 
   return (
     <div className="max-w-6xl mx-auto p-8 flex gap-8 h-full">
       <div className="flex-1 flex flex-col h-full">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Good afternoon</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Good afternoon, Kaif</h1>
           <p className="text-gray-500 mb-6">Here&apos;s what you can do today.</p>
+
+          <FilterStatusBanner
+            noun="anomalies"
+            shown={anomalyCount}
+            total={totalAnomalies}
+          />
 
           {actionError && (
             <p className="mb-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
@@ -191,40 +210,40 @@ export function EmployeeHomePage() {
             <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
               Quick Actions
             </h2>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <button
                 type="button"
                 onClick={() => void handleNewMonthlyReport()}
                 disabled={busyAction === "report"}
-                className="text-left bg-brand-blue rounded-xl p-4 text-white shadow-sm hover:bg-indigo-700 transition disabled:opacity-60"
+                className="text-left bg-brand-blue rounded-xl p-4 text-white shadow-sm cursor-pointer hover:bg-indigo-700 transition disabled:opacity-60"
               >
                 <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mb-6">
                   <FileText size={18} />
                 </div>
                 <h3 className="font-semibold text-sm">New Monthly Report</h3>
                 <p className="text-xs text-white/70 mt-1">
-                  {busyAction === "report" ? "Generating…" : "Generate this period's deck"}
+                  {busyAction === "report" ? "Generating…" : "Generate standard performance deck"}
                 </p>
               </button>
 
               <button
                 type="button"
-                onClick={() => navigate("/report")}
-                className="text-left bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition"
+                onClick={() => navigate("/report/risk")}
+                className="text-left bg-white rounded-xl p-4 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition"
               >
                 <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mb-6 text-gray-600">
                   <LayoutTemplate size={18} />
                 </div>
-                <h3 className="font-semibold text-sm text-gray-800">Open a Deck</h3>
-                <p className="text-xs text-gray-500 mt-1">Open the latest monthly report</p>
+                <h3 className="font-semibold text-sm text-gray-800">Risk Analysis</h3>
+                <p className="text-xs text-gray-500 mt-1">Drill-down interactive risk report</p>
               </button>
 
               <button
                 type="button"
-                onClick={() => setTrendOpen(true)}
-                className="text-left bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition relative"
+                onClick={() => navigate("/report")}
+                className="text-left bg-white rounded-xl p-4 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition relative"
               >
-                {(trends?.anomalyCount ?? 0) > 0 && (
+                {anomalyCount > 0 && (
                   <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-red-500" />
                 )}
                 <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center mb-6 text-teal-600">
@@ -232,23 +251,49 @@ export function EmployeeHomePage() {
                 </div>
                 <h3 className="font-semibold text-sm text-gray-800">Trend Watch</h3>
                 <p className="text-xs text-gray-500 mt-1">
-                  {trends?.anomalyCount ?? 0} anomal
-                  {(trends?.anomalyCount ?? 0) === 1 ? "y" : "ies"} flagged
+                  {isFilterActive(filters)
+                    ? `${anomalyCount} of ${totalAnomalies} anomalies match filters`
+                    : `${anomalyCount} anomal${anomalyCount === 1 ? "y" : "ies"} flagged`}
                 </p>
               </button>
-
-              <button
-                type="button"
-                onClick={() => void openSchedules()}
-                className="text-left bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition"
-              >
-                <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center mb-6 text-orange-500">
-                  <CalendarClock size={18} />
-                </div>
-                <h3 className="font-semibold text-sm text-gray-800">Scheduled Reports</h3>
-                <p className="text-xs text-gray-500 mt-1">Manage upcoming monthly reports</p>
-              </button>
             </div>
+          </div>
+
+          <div className="mb-6 bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-sm font-semibold text-gray-800">Trend Watch signals</h2>
+              <span className="text-xs text-gray-400">
+                {isFilterActive(filters)
+                  ? `Filtered view · ${anomalyCount}/${totalAnomalies}`
+                  : `${totalAnomalies} total`}
+              </span>
+            </div>
+            {filteredAnomalies.length === 0 ? (
+              <p className="text-sm text-gray-500">
+                {totalAnomalies === 0
+                  ? "No anomalies loaded yet."
+                  : "No anomalies match the active filters. Try Clear all or a different preset above."}
+              </p>
+            ) : (
+              <ul className="space-y-3">
+                {filteredAnomalies.map((a) => (
+                  <li
+                    key={a.id}
+                    className="border border-gray-100 rounded-lg px-3 py-2.5 bg-gray-50/80"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{a.title}</p>
+                        <p className="text-xs text-gray-600 mt-0.5">{a.detail}</p>
+                      </div>
+                      <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wider text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded">
+                        {a.period}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
 
@@ -260,7 +305,8 @@ export function EmployeeHomePage() {
             <div>
               <h3 className="font-semibold text-sm text-gray-800">General Assistant</h3>
               <p className="text-xs text-gray-500">
-                Grounded in portfolio evidence — ask about changes, incidents, or risk.
+                Ask about evidence, or say “filter to phishing” — filters also work from the bar above
+                without chat.
               </p>
             </div>
           </div>
@@ -298,28 +344,78 @@ export function EmployeeHomePage() {
           </div>
 
           <div className="p-4 bg-white border-t">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Message the assistant..."
-                className="w-full bg-gray-100 border-transparent rounded-full py-3 pl-4 pr-12 text-sm focus:bg-white focus:ring-2 focus:ring-brand-blue focus:border-transparent outline-none transition"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && void handleSend()}
-                disabled={isTyping}
-              />
-              <button
-                type="button"
-                onClick={() => void handleSend()}
-                disabled={isTyping || !prompt.trim()}
-                className={`absolute right-2 top-1.5 w-8 h-8 rounded-full flex items-center justify-center transition ${
-                  isTyping || !prompt.trim()
-                    ? "bg-gray-300 text-white cursor-not-allowed"
-                    : "bg-brand-blue text-white hover:bg-indigo-700"
-                }`}
-              >
-                <Send size={14} className="ml-0.5" />
-              </button>
+            {uploadedFiles.length > 0 && (
+              <div className="mb-3 flex flex-wrap gap-2">
+                {uploadedFiles.map((file, idx) => (
+                  <div
+                    key={`${file.name}-${idx}`}
+                    className="flex items-center gap-2 bg-blue-50 text-brand-blue px-3 py-1.5 rounded-full text-xs font-medium border border-blue-100"
+                  >
+                    <FileText size={12} />
+                    <span className="truncate max-w-[150px]">{file.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeFile(idx)}
+                      className="hover:bg-blue-200 rounded-full p-0.5 transition"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="relative flex items-center gap-2">
+              <div className="relative flex items-center flex-1">
+                <input
+                  type="file"
+                  accept=".csv,.xlsx"
+                  multiple
+                  hidden
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                />
+                <button
+                  type="button"
+                  onClick={() => !isUploading && fileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="absolute left-2 w-8 h-8 rounded-full text-gray-500 hover:bg-gray-100 flex items-center justify-center transition"
+                >
+                  <Paperclip size={18} />
+                </button>
+                <input
+                  type="text"
+                  placeholder={
+                    isUploading ? "Scanning files..." : "Message the assistant or upload data..."
+                  }
+                  className="w-full bg-gray-100 border-transparent rounded-full py-3 pl-12 pr-12 text-sm focus:bg-white focus:ring-2 focus:ring-brand-blue focus:border-transparent outline-none transition"
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && void handleSend()}
+                  disabled={isTyping || isUploading}
+                />
+                <button
+                  type="button"
+                  onClick={() => void handleSend()}
+                  disabled={isTyping || (!prompt.trim() && uploadedFiles.length === 0)}
+                  className={`absolute right-2 w-8 h-8 rounded-full flex items-center justify-center transition ${
+                    isTyping || (!prompt.trim() && uploadedFiles.length === 0)
+                      ? "bg-gray-300 text-white cursor-not-allowed"
+                      : "bg-brand-blue text-white hover:bg-indigo-700"
+                  }`}
+                >
+                  <Send size={14} className="ml-0.5" />
+                </button>
+              </div>
+              {uploadedFiles.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => void generateDeck()}
+                  disabled={isUploading}
+                  className="bg-brand-blue text-white px-4 py-3 rounded-full text-sm font-semibold hover:bg-indigo-700 transition flex items-center whitespace-nowrap shadow-sm disabled:opacity-60"
+                >
+                  {isUploading ? "Scanning..." : "Generate Deck"}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -338,7 +434,7 @@ export function EmployeeHomePage() {
         </div>
         <div className="p-4 flex-1 overflow-y-auto">
           <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-            Sessions
+            Today
           </h4>
           <div className="space-y-1 mb-6">
             {chatHistory.map((chat) => (
@@ -368,96 +464,6 @@ export function EmployeeHomePage() {
           </div>
         </div>
       </div>
-
-      {trendOpen && (
-        <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-lg max-w-lg w-full p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-gray-900">Trend Watch</h3>
-              <button type="button" onClick={() => setTrendOpen(false)}>
-                <X size={18} className="text-gray-400" />
-              </button>
-            </div>
-            <div className="space-y-3 max-h-80 overflow-y-auto">
-              {(trends?.anomalies ?? []).map((a) => (
-                <div key={a.id} className="border border-gray-100 rounded-lg p-3">
-                  <p className="text-sm font-medium text-gray-800">{a.title}</p>
-                  <p className="text-xs text-gray-500 mt-1">{a.detail}</p>
-                </div>
-              ))}
-              {(trends?.anomalies.length ?? 0) === 0 && (
-                <p className="text-sm text-gray-500">No anomalies flagged.</p>
-              )}
-            </div>
-            <button
-              type="button"
-              className="mt-4 text-sm text-brand-blue hover:underline"
-              onClick={() => {
-                setTrendOpen(false);
-                const period = trends?.anomalies[0]?.period;
-                navigate(period ? `/report/${period}` : "/report");
-              }}
-            >
-              Open related report →
-            </button>
-          </div>
-        </div>
-      )}
-
-      {schedulesOpen && (
-        <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-lg max-w-lg w-full p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-gray-900">Scheduled Reports</h3>
-              <button type="button" onClick={() => setSchedulesOpen(false)}>
-                <X size={18} className="text-gray-400" />
-              </button>
-            </div>
-            <div className="space-y-3 max-h-80 overflow-y-auto mb-4">
-              {schedules.map((s) => (
-                <div
-                  key={s.id}
-                  className="flex items-center justify-between border border-gray-100 rounded-lg p-3"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">{s.name}</p>
-                    <p className="text-xs text-gray-500">
-                      {s.cadence} · next {s.nextRun}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      className={`text-xs px-2 py-1 rounded ${
-                        s.enabled
-                          ? "bg-green-50 text-green-700 border border-green-200"
-                          : "bg-gray-50 text-gray-600 border border-gray-200"
-                      }`}
-                      onClick={() => void toggleSchedule(s)}
-                    >
-                      {s.enabled ? "Enabled" : "Disabled"}
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs px-2 py-1 rounded bg-red-50 text-red-600 border border-red-100"
-                      onClick={() => void removeSchedule(s.id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button
-              type="button"
-              className="text-sm bg-brand-blue text-white px-3 py-2 rounded-lg"
-              onClick={() => void addSchedule()}
-            >
-              + Add schedule
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

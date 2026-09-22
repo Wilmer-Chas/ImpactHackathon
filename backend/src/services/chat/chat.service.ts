@@ -1,6 +1,9 @@
 import type { ChatSession, ChatSessionSummary } from "../../domain/chat/chat.js";
 import type { AiChatMessage } from "../ai/ollama.client.js";
-import { answerWithEvidence } from "../ai/chatIntelligence.service.js";
+import {
+  answerWithEvidence,
+  type ChatFilterAction,
+} from "../ai/chatIntelligence.service.js";
 import { retrieveEvidenceContextForQuery } from "../evidence/rag.service.js";
 import * as chatRepo from "../../repository/chat.repository.js";
 
@@ -8,6 +11,7 @@ export type ChatReply = {
   sessionId: string;
   reply: string;
   citations: string[];
+  filterAction?: ChatFilterAction;
 };
 
 export const chatService = {
@@ -47,13 +51,14 @@ export const chatService = {
       }));
 
     const evidence = await retrieveEvidenceContextForQuery(message);
-    const reply = await answerWithEvidence(message, history, evidence);
-    chatRepo.appendChatMessage(sessionId, "assistant", reply);
+    const answer = await answerWithEvidence(message, history, evidence);
+    chatRepo.appendChatMessage(sessionId, "assistant", answer.reply);
 
     return {
       sessionId,
-      reply,
+      reply: answer.reply,
       citations: evidence.citations,
+      ...(answer.filterAction ? { filterAction: answer.filterAction } : {}),
     };
   },
 };

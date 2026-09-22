@@ -1,0 +1,867 @@
+[
+  {
+    "id": "ALT-1000",
+    "application": "TM-Core",
+    "title": "SIEM: suspicious login from payment cohort",
+    "severity": "high",
+    "status": "resolved",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-07-01",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1001",
+    "application": "Payments-Portal",
+    "title": "Email gateway: high-risk phish score",
+    "severity": "high",
+    "status": "open",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-07-03",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1002",
+    "application": "TM-Core",
+    "title": "DLP: outbound payment credentials",
+    "severity": "high",
+    "status": "open",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-07-05",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1003",
+    "application": "Payments-Portal",
+    "title": "SIEM: suspicious login from payment cohort #4",
+    "severity": "high",
+    "status": "open",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-07-07",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1004",
+    "application": "TM-Core",
+    "title": "Email gateway: high-risk phish score #5",
+    "severity": "low",
+    "status": "open",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-07-09",
+    "sourceSystem": "Jira"
+  },
+  {
+    "id": "ALT-1005",
+    "application": "Payments-Portal",
+    "title": "DLP: outbound payment credentials #6",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "customer-impact"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-07-11",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1006",
+    "application": "TM-Core",
+    "title": "SIEM: suspicious login from payment cohort #7",
+    "severity": "medium",
+    "status": "open",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-07-13",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1007",
+    "application": "Payments-Portal",
+    "title": "Email gateway: high-risk phish score #8",
+    "severity": "low",
+    "status": "open",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-07-15",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1008",
+    "application": "TM-Core",
+    "title": "Prometheus: scoring_p95 > SLA",
+    "severity": "high",
+    "status": "resolved",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-08",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1009",
+    "application": "TM-Analytics",
+    "title": "PagerDuty: batch scorer stalled",
+    "severity": "high",
+    "status": "open",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-10",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1010",
+    "application": "TM-Core",
+    "title": "APM: feature-store latency",
+    "severity": "high",
+    "status": "open",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-12",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1011",
+    "application": "TM-Analytics",
+    "title": "Prometheus: scoring_p95 > SLA #4",
+    "severity": "high",
+    "status": "open",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-14",
+    "sourceSystem": "Jira"
+  },
+  {
+    "id": "ALT-1012",
+    "application": "TM-Core",
+    "title": "PagerDuty: batch scorer stalled #5",
+    "severity": "low",
+    "status": "open",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-16",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1013",
+    "application": "TM-Analytics",
+    "title": "APM: feature-store latency #6",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "customer-impact"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-18",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1014",
+    "application": "TM-Core",
+    "title": "Prometheus: scoring_p95 > SLA #7",
+    "severity": "medium",
+    "status": "open",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-20",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1015",
+    "application": "TM-Core",
+    "title": "Vendor status: degraded API",
+    "severity": "high",
+    "status": "resolved",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-15",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1016",
+    "application": "Fraud-Gateway",
+    "title": "Synthetic check: case sync fail",
+    "severity": "high",
+    "status": "open",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-17",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1017",
+    "application": "TM-Core",
+    "title": "Contract monitor: SLA burn",
+    "severity": "high",
+    "status": "open",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-19",
+    "sourceSystem": "Jira"
+  },
+  {
+    "id": "ALT-1018",
+    "application": "Fraud-Gateway",
+    "title": "Vendor status: degraded API #4",
+    "severity": "high",
+    "status": "open",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-21",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1019",
+    "application": "TM-Core",
+    "title": "Synthetic check: case sync fail #5",
+    "severity": "low",
+    "status": "open",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-23",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1020",
+    "application": "Fraud-Gateway",
+    "title": "Contract monitor: SLA burn #6",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "customer-impact"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-25",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1021",
+    "application": "TM-Core",
+    "title": "Vendor status: degraded API #7",
+    "severity": "medium",
+    "status": "open",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-07-27",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1022",
+    "application": "TM-Core",
+    "title": "DQ monitor: null rate spike",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-07-22",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1023",
+    "application": "TM-Analytics",
+    "title": "Feed validator: schema drift",
+    "severity": "low",
+    "status": "open",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-07-24",
+    "sourceSystem": "Jira"
+  },
+  {
+    "id": "ALT-1024",
+    "application": "TM-Core",
+    "title": "Completeness SLA warning",
+    "severity": "medium",
+    "status": "open",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-07-26",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1025",
+    "application": "TM-Analytics",
+    "title": "DQ monitor: null rate spike #4",
+    "severity": "medium",
+    "status": "open",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-07-28",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1026",
+    "application": "TM-Core",
+    "title": "Feed validator: schema drift #5",
+    "severity": "low",
+    "status": "open",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-07-30",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1027",
+    "application": "TM-Analytics",
+    "title": "Completeness SLA warning #6",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness",
+      "customer-impact"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-08-01",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1028",
+    "application": "TM-Core",
+    "title": "Health: secondary unhealthy",
+    "severity": "high",
+    "status": "resolved",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT",
+    "openedAt": "2026-07-29",
+    "sourceSystem": "Jira"
+  },
+  {
+    "id": "ALT-1029",
+    "application": "Mobile-Banking",
+    "title": "Chaos: failover timeout",
+    "severity": "high",
+    "status": "open",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT",
+    "openedAt": "2026-07-31",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1030",
+    "application": "TM-Core",
+    "title": "Replica lag critical",
+    "severity": "high",
+    "status": "open",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT",
+    "openedAt": "2026-08-02",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1031",
+    "application": "Mobile-Banking",
+    "title": "Health: secondary unhealthy #4",
+    "severity": "medium",
+    "status": "open",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps"
+    ],
+    "category": "IT",
+    "openedAt": "2026-08-04",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1032",
+    "application": "TM-Core",
+    "title": "Chaos: failover timeout #5",
+    "severity": "low",
+    "status": "open",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps"
+    ],
+    "category": "IT",
+    "openedAt": "2026-08-06",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1033",
+    "application": "Mobile-Banking",
+    "title": "Replica lag critical #6",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "customer-impact"
+    ],
+    "category": "IT",
+    "openedAt": "2026-08-08",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1034",
+    "application": "TM-Analytics",
+    "title": "Filing calendar: due in 48h",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-08-05",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1035",
+    "application": "Compliance-Hub",
+    "title": "Export job failed",
+    "severity": "low",
+    "status": "open",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-08-07",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1036",
+    "application": "TM-Analytics",
+    "title": "Regulator portal unreachable",
+    "severity": "medium",
+    "status": "open",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-08-09",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1037",
+    "application": "Compliance-Hub",
+    "title": "Filing calendar: due in 48h #4",
+    "severity": "medium",
+    "status": "open",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-08-11",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1038",
+    "application": "TM-Analytics",
+    "title": "Export job failed #5",
+    "severity": "low",
+    "status": "open",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory",
+    "openedAt": "2026-08-13",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1039",
+    "application": "TM-Core",
+    "title": "Queue depth > threshold",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-08-12",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1040",
+    "application": "TM-Core",
+    "title": "Aging ticket SLA breach",
+    "severity": "low",
+    "status": "open",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-08-14",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1041",
+    "application": "TM-Core",
+    "title": "Unassigned cases rising",
+    "severity": "medium",
+    "status": "open",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-08-16",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1042",
+    "application": "TM-Core",
+    "title": "Queue depth > threshold #4",
+    "severity": "medium",
+    "status": "open",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-08-18",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1043",
+    "application": "TM-Core",
+    "title": "Aging ticket SLA breach #5",
+    "severity": "low",
+    "status": "open",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-08-20",
+    "sourceSystem": "Jira"
+  },
+  {
+    "id": "ALT-1044",
+    "application": "TM-Core",
+    "title": "Unassigned cases rising #6",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog",
+      "customer-impact"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-08-22",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1045",
+    "application": "Fraud-Gateway",
+    "title": "Threat intel: vendor IOC match",
+    "severity": "high",
+    "status": "resolved",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-08-19",
+    "sourceSystem": "PagerDuty"
+  },
+  {
+    "id": "ALT-1046",
+    "application": "TM-Core",
+    "title": "EDR: suspicious encrypt pattern",
+    "severity": "high",
+    "status": "open",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-08-21",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1047",
+    "application": "Fraud-Gateway",
+    "title": "SOC: vendor VPN anomaly",
+    "severity": "high",
+    "status": "open",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-08-23",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1048",
+    "application": "TM-Core",
+    "title": "Threat intel: vendor IOC match #4",
+    "severity": "medium",
+    "status": "open",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-08-25",
+    "sourceSystem": "Jira"
+  },
+  {
+    "id": "ALT-1049",
+    "application": "Fraud-Gateway",
+    "title": "EDR: suspicious encrypt pattern #5",
+    "severity": "low",
+    "status": "open",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-08-27",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1050",
+    "application": "TM-Core",
+    "title": "SOC: vendor VPN anomaly #6",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "customer-impact"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-08-29",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1051",
+    "application": "TM-Core",
+    "title": "FP rate anomaly",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-08-26",
+    "sourceSystem": "Datadog"
+  },
+  {
+    "id": "ALT-1052",
+    "application": "TM-Core",
+    "title": "Rule fire-rate spike",
+    "severity": "low",
+    "status": "open",
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-08-28",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1053",
+    "application": "TM-Core",
+    "title": "Shadow rule still active",
+    "severity": "medium",
+    "status": "open",
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-08-30",
+    "sourceSystem": "Jira"
+  },
+  {
+    "id": "ALT-1054",
+    "application": "TM-Core",
+    "title": "FP rate anomaly #4",
+    "severity": "medium",
+    "status": "open",
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational",
+    "openedAt": "2026-09-01",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1055",
+    "application": "TM-Core",
+    "title": "IAM: cert campaign overdue",
+    "severity": "medium",
+    "status": "resolved",
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-09-02",
+    "sourceSystem": "ServiceNow"
+  },
+  {
+    "id": "ALT-1056",
+    "application": "Admin-Console",
+    "title": "Orphan admin detected",
+    "severity": "low",
+    "status": "open",
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-09-04",
+    "sourceSystem": "Jira"
+  },
+  {
+    "id": "ALT-1057",
+    "application": "TM-Core",
+    "title": "SoD violation open",
+    "severity": "medium",
+    "status": "open",
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-09-06",
+    "sourceSystem": "CrowdStrike"
+  },
+  {
+    "id": "ALT-1058",
+    "application": "Admin-Console",
+    "title": "IAM: cert campaign overdue #4",
+    "severity": "medium",
+    "status": "open",
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-09-08",
+    "sourceSystem": "Splunk"
+  },
+  {
+    "id": "ALT-1059",
+    "application": "TM-Core",
+    "title": "Orphan admin detected #5",
+    "severity": "low",
+    "status": "open",
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber",
+    "openedAt": "2026-09-10",
+    "sourceSystem": "PagerDuty"
+  }
+]

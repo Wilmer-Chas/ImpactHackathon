@@ -1,0 +1,402 @@
+[
+  {
+    "id": "CUST-0001",
+    "customerId": "CUS-1000",
+    "channel": "email",
+    "recordedAt": "2026-06-01",
+    "author": "Support L1",
+    "body": "Customer called saying they got an email that looked like our payments team asking them to re-approve a wire. They clicked a link before realizing it felt off."
+  },
+  {
+    "id": "CUST-0002",
+    "customerId": "CUS-1001",
+    "channel": "call",
+    "recordedAt": "2026-06-02",
+    "author": "RM Desk",
+    "body": "Complaint: finance clerk received a spoofed invoice email requesting urgent payment authorization. Wants to know if our mailbox filters are failing."
+  },
+  {
+    "id": "CUST-0003",
+    "customerId": "CUS-1002",
+    "channel": "chat",
+    "recordedAt": "2026-06-03",
+    "author": "Compliance Inbox",
+    "body": "Chat transcript — user reports MFA push fatigue on their payments admin account after a suspicious login attempt yesterday evening."
+  },
+  {
+    "id": "CUST-0004",
+    "customerId": "CUS-1003",
+    "channel": "complaint",
+    "recordedAt": "2026-06-04",
+    "author": "SOC Bridge",
+    "body": "Relationship manager note: treasury contact mentioned credential harvesting attempts targeting staff who approve cross-border payments."
+  },
+  {
+    "id": "CUST-0005",
+    "customerId": "CUS-1004",
+    "channel": "crm_note",
+    "recordedAt": "2026-06-05",
+    "author": "Onboarding",
+    "body": "Email to support: phishing lure used our logo and asked staff to confirm payment limits. Several colleagues saw similar messages."
+  },
+  {
+    "id": "CUST-0006",
+    "customerId": "CUS-1005",
+    "channel": "email",
+    "recordedAt": "2026-06-06",
+    "author": null,
+    "body": "Call log: customer security team reports OAuth consent prompt for a payment tool they never requested. Asking for guidance."
+  },
+  {
+    "id": "CUST-0007",
+    "customerId": "CUS-1006",
+    "channel": "call",
+    "recordedAt": "2026-06-07",
+    "author": "Support L1",
+    "body": "Branch feedback — another spoofed vendor invoice landed in AP. Same pattern as last week. No ticket ID, just narrative."
+  },
+  {
+    "id": "CUST-0008",
+    "customerId": "CUS-1007",
+    "channel": "chat",
+    "recordedAt": "2026-06-08",
+    "author": "RM Desk",
+    "body": "Customer email: someone tried to reset the password on our payment approver mailbox again. This keeps happening."
+  },
+  {
+    "id": "CUST-0009",
+    "customerId": "CUS-1008",
+    "channel": "complaint",
+    "recordedAt": "2026-06-09",
+    "author": "Compliance Inbox",
+    "body": "Notes from KYC refresh call: client mentioned staff almost fell for a fake payment-approval email. They want reassurance."
+  },
+  {
+    "id": "CUST-0010",
+    "customerId": "CUS-1009",
+    "channel": "crm_note",
+    "recordedAt": "2026-06-10",
+    "author": "SOC Bridge",
+    "body": "Voicemail: payments operations lead says phishing emails are getting more convincing and targeting people with authorization limits."
+  },
+  {
+    "id": "CUST-0011",
+    "customerId": "CUS-1010",
+    "channel": "email",
+    "recordedAt": "2026-06-11",
+    "author": "Onboarding",
+    "body": "Customer frustrated that alert scoring for their large batch took nearly an hour this morning. Says this delayed their investigation queue."
+  },
+  {
+    "id": "CUST-0012",
+    "customerId": "CUS-1011",
+    "channel": "call",
+    "recordedAt": "2026-06-12",
+    "author": null,
+    "body": "Support chat: TM scoring feels stuck — our overnight batch still running past SLA. Can you check latency?"
+  },
+  {
+    "id": "CUST-0013",
+    "customerId": "CUS-1012",
+    "channel": "chat",
+    "recordedAt": "2026-06-13",
+    "author": "Support L1",
+    "body": "Email: analysts waiting on model results; p95 latency looks worse after the last deploy according to their internal dashboard."
+  },
+  {
+    "id": "CUST-0014",
+    "customerId": "CUS-1013",
+    "channel": "complaint",
+    "recordedAt": "2026-06-14",
+    "author": "RM Desk",
+    "body": "Call: customer says feature lookups are timing out and case creation is delayed because scoring never finishes."
+  },
+  {
+    "id": "CUST-0015",
+    "customerId": "CUS-1014",
+    "channel": "crm_note",
+    "recordedAt": "2026-06-15",
+    "author": "Compliance Inbox",
+    "body": "Complaint form: scoring delays overnight blocked SAR review window. Free text only, no severity field completed."
+  },
+  {
+    "id": "CUST-0016",
+    "customerId": "CUS-1015",
+    "channel": "email",
+    "recordedAt": "2026-06-16",
+    "author": "SOC Bridge",
+    "body": "RM note — client mentioned the model kept timing out when they tried to rescore a cluster of alerts."
+  },
+  {
+    "id": "CUST-0017",
+    "customerId": "CUS-1016",
+    "channel": "call",
+    "recordedAt": "2026-06-17",
+    "author": "Onboarding",
+    "body": "Chat: why is batch scoring so slow again? Same issue as earlier this month."
+  },
+  {
+    "id": "CUST-0018",
+    "customerId": "CUS-1017",
+    "channel": "chat",
+    "recordedAt": "2026-06-18",
+    "author": null,
+    "body": "Customer says the fraud enrichment vendor was down and their case sync failed for half a day. Want escalation path documented."
+  },
+  {
+    "id": "CUST-0019",
+    "customerId": "CUS-1018",
+    "channel": "complaint",
+    "recordedAt": "2026-06-19",
+    "author": "Support L1",
+    "body": "Email complaint about third-party API timeouts affecting how fast alerts get enriched before analyst review."
+  },
+  {
+    "id": "CUST-0020",
+    "customerId": "CUS-1019",
+    "channel": "crm_note",
+    "recordedAt": "2026-06-20",
+    "author": "RM Desk",
+    "body": "Call transcript: partner webhook deliveries keep failing; customer asks if we track vendor SLA burn somewhere."
+  },
+  {
+    "id": "CUST-0021",
+    "customerId": "CUS-1020",
+    "channel": "email",
+    "recordedAt": "2026-06-21",
+    "author": "Compliance Inbox",
+    "body": "Support note: client reports maintenance window from the case vendor overran and investigations piled up."
+  },
+  {
+    "id": "CUST-0022",
+    "customerId": "CUS-1021",
+    "channel": "call",
+    "recordedAt": "2026-06-22",
+    "author": "SOC Bridge",
+    "body": "Chat: enrichment service from the vendor feels degraded — missing fields on half of new cases today."
+  },
+  {
+    "id": "CUST-0023",
+    "customerId": "CUS-1022",
+    "channel": "chat",
+    "recordedAt": "2026-06-23",
+    "author": "Onboarding",
+    "body": "Free-text feedback: vendor SLA breach again on case sync. We keep seeing this."
+  },
+  {
+    "id": "CUST-0024",
+    "customerId": "CUS-1023",
+    "channel": "complaint",
+    "recordedAt": "2026-06-24",
+    "author": null,
+    "body": "Customer noticed beneficiary country missing on several wire alerts and analysts cannot complete disposition without it."
+  },
+  {
+    "id": "CUST-0025",
+    "customerId": "CUS-1024",
+    "channel": "crm_note",
+    "recordedAt": "2026-06-25",
+    "author": "Support L1",
+    "body": "Email: KYC batch arrived with blank account_type fields; customer asking which feed owns completeness."
+  },
+  {
+    "id": "CUST-0026",
+    "customerId": "CUS-1025",
+    "channel": "email",
+    "recordedAt": "2026-06-26",
+    "author": "RM Desk",
+    "body": "Call: risk scores showing blank for a cohort of customers after weekend load. Unstructured report only."
+  },
+  {
+    "id": "CUST-0027",
+    "customerId": "CUS-1026",
+    "channel": "call",
+    "recordedAt": "2026-06-27",
+    "author": "Compliance Inbox",
+    "body": "Chat support: SAR export narratives truncated mid-sentence — compliance worried about incomplete filings."
+  },
+  {
+    "id": "CUST-0028",
+    "customerId": "CUS-1027",
+    "channel": "chat",
+    "recordedAt": "2026-06-28",
+    "author": "SOC Bridge",
+    "body": "RM note: client keeps finding nulls in wire feed fields that used to be populated."
+  },
+  {
+    "id": "CUST-0029",
+    "customerId": "CUS-1000",
+    "channel": "complaint",
+    "recordedAt": "2026-06-29",
+    "author": "Onboarding",
+    "body": "Customer IT asked whether secondary region is actually ready after their DR drill failed to promote standby."
+  },
+  {
+    "id": "CUST-0030",
+    "customerId": "CUS-1001",
+    "channel": "crm_note",
+    "recordedAt": "2026-06-30",
+    "author": null,
+    "body": "Email: health checks on region B flapping during their failover test. Seeking status."
+  },
+  {
+    "id": "CUST-0031",
+    "customerId": "CUS-1002",
+    "channel": "email",
+    "recordedAt": "2026-07-01",
+    "author": "Support L1",
+    "body": "Call log — cold standby never came up cleanly; customer wants clarity on residual failover risk."
+  },
+  {
+    "id": "CUST-0032",
+    "customerId": "CUS-1003",
+    "channel": "call",
+    "recordedAt": "2026-07-02",
+    "author": "RM Desk",
+    "body": "Chat: DNS cutover dry-run incomplete on their side; asking how our TM stack behaves if primary dies."
+  },
+  {
+    "id": "CUST-0033",
+    "customerId": "CUS-1004",
+    "channel": "chat",
+    "recordedAt": "2026-07-03",
+    "author": "Compliance Inbox",
+    "body": "Security contact shared a vendor ransomware advisory and asked whether we saw related IOCs on our side."
+  },
+  {
+    "id": "CUST-0034",
+    "customerId": "CUS-1005",
+    "channel": "complaint",
+    "recordedAt": "2026-07-04",
+    "author": "SOC Bridge",
+    "body": "Email: MSP lateral movement concern after a vendor VPN anomaly — customer wants a joint review."
+  },
+  {
+    "id": "CUST-0035",
+    "customerId": "CUS-1006",
+    "channel": "crm_note",
+    "recordedAt": "2026-07-05",
+    "author": "Onboarding",
+    "body": "Call: encrypted share reported on a vendor connection; free-form note from their SOC."
+  },
+  {
+    "id": "CUST-0036",
+    "customerId": "CUS-1007",
+    "channel": "email",
+    "recordedAt": "2026-07-06",
+    "author": null,
+    "body": "Chat: heard about ransomware via a payments vendor — anything we should watch in TM?"
+  },
+  {
+    "id": "CUST-0037",
+    "customerId": "CUS-1008",
+    "channel": "call",
+    "recordedAt": "2026-07-07",
+    "author": "Support L1",
+    "body": "Customer says investigation queue is aging past 48 hours and cases sit unassigned over weekends."
+  },
+  {
+    "id": "CUST-0038",
+    "customerId": "CUS-1009",
+    "channel": "chat",
+    "recordedAt": "2026-07-08",
+    "author": "RM Desk",
+    "body": "Email: backlog surge after threshold change; analysts cannot keep up. Narrative complaint only."
+  },
+  {
+    "id": "CUST-0039",
+    "customerId": "CUS-1010",
+    "channel": "complaint",
+    "recordedAt": "2026-07-09",
+    "author": "Compliance Inbox",
+    "body": "Call: capacity shortfall — too many open alerts, not enough investigators this week."
+  },
+  {
+    "id": "CUST-0040",
+    "customerId": "CUS-1011",
+    "channel": "crm_note",
+    "recordedAt": "2026-07-10",
+    "author": "SOC Bridge",
+    "body": "Support chat: aging tickets keep breaching their internal SLA for alert review."
+  },
+  {
+    "id": "CUST-0041",
+    "customerId": "CUS-1012",
+    "channel": "email",
+    "recordedAt": "2026-07-11",
+    "author": "Onboarding",
+    "body": "Compliance officer notes CTR filing window nearly missed last month due to export delays. Captured as CRM comment."
+  },
+  {
+    "id": "CUST-0042",
+    "customerId": "CUS-1013",
+    "channel": "call",
+    "recordedAt": "2026-07-12",
+    "author": null,
+    "body": "Email: SAR export to regulator portal delayed again; asking for status in plain language."
+  },
+  {
+    "id": "CUST-0043",
+    "customerId": "CUS-1014",
+    "channel": "chat",
+    "recordedAt": "2026-07-13",
+    "author": "Support L1",
+    "body": "Call: monthly AML report dependency outage blocked their audit pack assembly."
+  },
+  {
+    "id": "CUST-0044",
+    "customerId": "CUS-1015",
+    "channel": "complaint",
+    "recordedAt": "2026-07-14",
+    "author": "RM Desk",
+    "body": "Customer IAM team mentioned privileged access certification is overdue for TM config roles."
+  },
+  {
+    "id": "CUST-0045",
+    "customerId": "CUS-1016",
+    "channel": "crm_note",
+    "recordedAt": "2026-07-15",
+    "author": "Compliance Inbox",
+    "body": "Chat: orphaned admin account found during review; they want us aware, no formal ticket yet."
+  },
+  {
+    "id": "CUST-0046",
+    "customerId": "CUS-1017",
+    "channel": "email",
+    "recordedAt": "2026-07-16",
+    "author": "SOC Bridge",
+    "body": "Email: SoD conflict on who can change monitoring rules — noted in CRM free text."
+  },
+  {
+    "id": "CUST-0047",
+    "customerId": "CUS-1018",
+    "channel": "call",
+    "recordedAt": "2026-07-17",
+    "author": "Onboarding",
+    "body": "Customer thanked the onboarding team for a smooth kickoff workshop last Thursday."
+  },
+  {
+    "id": "CUST-0048",
+    "customerId": "CUS-1019",
+    "channel": "chat",
+    "recordedAt": "2026-07-18",
+    "author": null,
+    "body": "General inquiry about documentation links for the self-service portal. No issue described."
+  },
+  {
+    "id": "CUST-0049",
+    "customerId": "CUS-1020",
+    "channel": "complaint",
+    "recordedAt": "2026-07-19",
+    "author": "Support L1",
+    "body": "Feedback: UI colors on the dashboard feel hard to read on projectors. Cosmetic only."
+  },
+  {
+    "id": "CUST-0050",
+    "customerId": "CUS-1021",
+    "channel": "crm_note",
+    "recordedAt": "2026-07-20",
+    "author": "RM Desk",
+    "body": "Call transferred incorrectly; customer hung up before describing any problem."
+  }
+]

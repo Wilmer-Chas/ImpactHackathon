@@ -34,7 +34,7 @@ routes → controllers → services → repository → db
 3. Always keep critical anchors (change, matching risk/release) even if similarity ranks them low.
 4. Never invent evidence IDs or numeric risk scores; citations must resolve to real rows.
 
-Primary UI surfaces: Employee Home (chat), Admin Dashboard, Monthly Report View.
+Primary UI surfaces: Employee Home (chat), Fraud Report (monthly deck), Risk Report (enterprise risk analysis).
 MOC briefing / per-change decision brief APIs remain mounted under `/api/moc` and `/api/reports/:changeId`.
 
 ## AI providers

@@ -1,16 +1,494 @@
 [
   {
-    "source": "incidents",
-    "field": "rootCause",
-    "missingRate": 0.33,
-    "severity": "medium",
-    "notes": "One of the related incidents does not say what caused it."
+    "source": "incidents-phishi",
+    "field": "rootCause_phis0",
+    "missingRate": 0.05,
+    "severity": "high",
+    "notes": "Targeted Phishing (Payments): incomplete rootCause_phis0 impacting oversight quality.",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
   },
   {
-    "source": "process-metrics",
-    "field": "backlogCount",
-    "missingRate": 0,
+    "source": "wire-feed-phishi",
+    "field": "beneficiaryCountry_phis1",
+    "missingRate": 0.12,
+    "severity": "high",
+    "notes": "Targeted Phishing (Payments): incomplete beneficiaryCountry_phis1 impacting oversight quality.",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "kyc-batch-phishi",
+    "field": "accountType_phis2",
+    "missingRate": 0.19,
+    "severity": "high",
+    "notes": "Targeted Phishing (Payments): incomplete accountType_phis2 impacting oversight quality.",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "process-metrics-phishi",
+    "field": "riskScore_phis3",
+    "missingRate": 0.26,
     "severity": "low",
-    "notes": "Backlog numbers look complete."
+    "notes": "Targeted Phishing (Payments): incomplete riskScore_phis3 impacting oversight quality.",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "sar-export-phishi",
+    "field": "narrative_phis4",
+    "missingRate": 0.33,
+    "severity": "medium",
+    "notes": "Targeted Phishing (Payments): incomplete narrative_phis4 impacting oversight quality.",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "case-system-phishi",
+    "field": "openedAt_phis5",
+    "missingRate": 0.4,
+    "severity": "low",
+    "notes": "Targeted Phishing (Payments): incomplete openedAt_phis5 impacting oversight quality.",
+    "theme": "phishing-payments",
+    "tags": [
+      "phishing-payments"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "wire-feed-model-",
+    "field": "accountType_mode0",
+    "missingRate": 0.05,
+    "severity": "high",
+    "notes": "Model Scoring Latency: incomplete accountType_mode0 impacting oversight quality.",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "kyc-batch-model-",
+    "field": "riskScore_mode1",
+    "missingRate": 0.12,
+    "severity": "high",
+    "notes": "Model Scoring Latency: incomplete riskScore_mode1 impacting oversight quality.",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "process-metrics-model-",
+    "field": "narrative_mode2",
+    "missingRate": 0.19,
+    "severity": "high",
+    "notes": "Model Scoring Latency: incomplete narrative_mode2 impacting oversight quality.",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "sar-export-model-",
+    "field": "openedAt_mode3",
+    "missingRate": 0.26,
+    "severity": "low",
+    "notes": "Model Scoring Latency: incomplete openedAt_mode3 impacting oversight quality.",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "case-system-model-",
+    "field": "owner_mode4",
+    "missingRate": 0.33,
+    "severity": "medium",
+    "notes": "Model Scoring Latency: incomplete owner_mode4 impacting oversight quality.",
+    "theme": "model-latency",
+    "tags": [
+      "model-latency"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "kyc-batch-vendor",
+    "field": "narrative_vend0",
+    "missingRate": 0.05,
+    "severity": "high",
+    "notes": "Vendor SLA Breach: incomplete narrative_vend0 impacting oversight quality.",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "process-metrics-vendor",
+    "field": "openedAt_vend1",
+    "missingRate": 0.12,
+    "severity": "high",
+    "notes": "Vendor SLA Breach: incomplete openedAt_vend1 impacting oversight quality.",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla",
+      "high-risk"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "sar-export-vendor",
+    "field": "owner_vend2",
+    "missingRate": 0.19,
+    "severity": "medium",
+    "notes": "Vendor SLA Breach: incomplete owner_vend2 impacting oversight quality.",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "case-system-vendor",
+    "field": "caseId_vend3",
+    "missingRate": 0.26,
+    "severity": "low",
+    "notes": "Vendor SLA Breach: incomplete caseId_vend3 impacting oversight quality.",
+    "theme": "vendor-sla",
+    "tags": [
+      "vendor-sla"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "process-metrics-data-c",
+    "field": "owner_data0",
+    "missingRate": 0.05,
+    "severity": "medium",
+    "notes": "Transaction Data Completeness: incomplete owner_data0 impacting oversight quality.",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "sar-export-data-c",
+    "field": "caseId_data1",
+    "missingRate": 0.12,
+    "severity": "low",
+    "notes": "Transaction Data Completeness: incomplete caseId_data1 impacting oversight quality.",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "case-system-data-c",
+    "field": "amount_data2",
+    "missingRate": 0.19,
+    "severity": "medium",
+    "notes": "Transaction Data Completeness: incomplete amount_data2 impacting oversight quality.",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "customer-master-data-c",
+    "field": "currency_data3",
+    "missingRate": 0.26,
+    "severity": "low",
+    "notes": "Transaction Data Completeness: incomplete currency_data3 impacting oversight quality.",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "alert-stream-data-c",
+    "field": "rootCause_data4",
+    "missingRate": 0.33,
+    "severity": "medium",
+    "notes": "Transaction Data Completeness: incomplete rootCause_data4 impacting oversight quality.",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "incidents-data-c",
+    "field": "beneficiaryCountry_data5",
+    "missingRate": 0.4,
+    "severity": "low",
+    "notes": "Transaction Data Completeness: incomplete beneficiaryCountry_data5 impacting oversight quality.",
+    "theme": "data-completeness",
+    "tags": [
+      "data-completeness"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "sar-export-failov",
+    "field": "amount_fail0",
+    "missingRate": 0.05,
+    "severity": "high",
+    "notes": "Legacy Failover Gaps: incomplete amount_fail0 impacting oversight quality.",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT"
+  },
+  {
+    "source": "case-system-failov",
+    "field": "currency_fail1",
+    "missingRate": 0.12,
+    "severity": "high",
+    "notes": "Legacy Failover Gaps: incomplete currency_fail1 impacting oversight quality.",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps",
+      "high-risk"
+    ],
+    "category": "IT"
+  },
+  {
+    "source": "customer-master-failov",
+    "field": "rootCause_fail2",
+    "missingRate": 0.19,
+    "severity": "medium",
+    "notes": "Legacy Failover Gaps: incomplete rootCause_fail2 impacting oversight quality.",
+    "theme": "failover-gaps",
+    "tags": [
+      "failover-gaps"
+    ],
+    "category": "IT"
+  },
+  {
+    "source": "case-system-regula",
+    "field": "rootCause_regu0",
+    "missingRate": 0.05,
+    "severity": "medium",
+    "notes": "Regulatory Reporting Dependency: incomplete rootCause_regu0 impacting oversight quality.",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "customer-master-regula",
+    "field": "beneficiaryCountry_regu1",
+    "missingRate": 0.12,
+    "severity": "low",
+    "notes": "Regulatory Reporting Dependency: incomplete beneficiaryCountry_regu1 impacting oversight quality.",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "alert-stream-regula",
+    "field": "accountType_regu2",
+    "missingRate": 0.19,
+    "severity": "medium",
+    "notes": "Regulatory Reporting Dependency: incomplete accountType_regu2 impacting oversight quality.",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "incidents-regula",
+    "field": "riskScore_regu3",
+    "missingRate": 0.26,
+    "severity": "low",
+    "notes": "Regulatory Reporting Dependency: incomplete riskScore_regu3 impacting oversight quality.",
+    "theme": "regulatory-filing",
+    "tags": [
+      "regulatory-filing"
+    ],
+    "category": "Regulatory"
+  },
+  {
+    "source": "customer-master-alert-",
+    "field": "accountType_aler0",
+    "missingRate": 0.05,
+    "severity": "medium",
+    "notes": "Investigation Alert Backlog: incomplete accountType_aler0 impacting oversight quality.",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "alert-stream-alert-",
+    "field": "riskScore_aler1",
+    "missingRate": 0.12,
+    "severity": "low",
+    "notes": "Investigation Alert Backlog: incomplete riskScore_aler1 impacting oversight quality.",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "incidents-alert-",
+    "field": "narrative_aler2",
+    "missingRate": 0.19,
+    "severity": "medium",
+    "notes": "Investigation Alert Backlog: incomplete narrative_aler2 impacting oversight quality.",
+    "theme": "alert-backlog",
+    "tags": [
+      "alert-backlog"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "alert-stream-ransom",
+    "field": "narrative_rans0",
+    "missingRate": 0.05,
+    "severity": "high",
+    "notes": "Ransomware via Vendor: incomplete narrative_rans0 impacting oversight quality.",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "incidents-ransom",
+    "field": "openedAt_rans1",
+    "missingRate": 0.12,
+    "severity": "high",
+    "notes": "Ransomware via Vendor: incomplete openedAt_rans1 impacting oversight quality.",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor",
+      "high-risk"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "wire-feed-ransom",
+    "field": "owner_rans2",
+    "missingRate": 0.19,
+    "severity": "medium",
+    "notes": "Ransomware via Vendor: incomplete owner_rans2 impacting oversight quality.",
+    "theme": "ransomware-vendor",
+    "tags": [
+      "ransomware-vendor"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "incidents-rule-t",
+    "field": "owner_rule0",
+    "missingRate": 0.05,
+    "severity": "medium",
+    "notes": "Rule Tuning Noise: incomplete owner_rule0 impacting oversight quality.",
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "wire-feed-rule-t",
+    "field": "caseId_rule1",
+    "missingRate": 0.12,
+    "severity": "low",
+    "notes": "Rule Tuning Noise: incomplete caseId_rule1 impacting oversight quality.",
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "kyc-batch-rule-t",
+    "field": "amount_rule2",
+    "missingRate": 0.19,
+    "severity": "medium",
+    "notes": "Rule Tuning Noise: incomplete amount_rule2 impacting oversight quality.",
+    "theme": "rule-tuning-noise",
+    "tags": [
+      "rule-tuning-noise"
+    ],
+    "category": "Operational"
+  },
+  {
+    "source": "wire-feed-access",
+    "field": "amount_acce0",
+    "missingRate": 0.05,
+    "severity": "medium",
+    "notes": "Privileged Access Review Lag: incomplete amount_acce0 impacting oversight quality.",
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "kyc-batch-access",
+    "field": "currency_acce1",
+    "missingRate": 0.12,
+    "severity": "low",
+    "notes": "Privileged Access Review Lag: incomplete currency_acce1 impacting oversight quality.",
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
+  },
+  {
+    "source": "process-metrics-access",
+    "field": "rootCause_acce2",
+    "missingRate": 0.19,
+    "severity": "medium",
+    "notes": "Privileged Access Review Lag: incomplete rootCause_acce2 impacting oversight quality.",
+    "theme": "access-review",
+    "tags": [
+      "access-review"
+    ],
+    "category": "Cyber"
   }
 ]

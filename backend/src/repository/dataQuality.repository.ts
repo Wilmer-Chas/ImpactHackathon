@@ -7,7 +7,20 @@ type DataQualityRow = {
   missing_rate: number;
   severity: string;
   notes: string;
+  theme: string | null;
+  tags_json: string | null;
+  category: string | null;
 };
+
+function parseTags(raw: string | null): string[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed) ? parsed.filter((t): t is string => typeof t === "string") : [];
+  } catch {
+    return [];
+  }
+}
 
 function mapDataQuality(row: DataQualityRow): DataQualityIssue {
   return {
@@ -16,6 +29,9 @@ function mapDataQuality(row: DataQualityRow): DataQualityIssue {
     missingRate: row.missing_rate,
     severity: row.severity as DataQualityIssue["severity"],
     notes: row.notes,
+    theme: row.theme,
+    tags: parseTags(row.tags_json),
+    category: row.category,
   };
 }
 

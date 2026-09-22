@@ -5,7 +5,9 @@ export type EntityType =
   | "performance_metric"
   | "risk"
   | "release"
-  | "data_quality";
+  | "data_quality"
+  | "ops_alert"
+  | "customer_note";
 
 export type EvidenceChunkRecord = {
   id: string;

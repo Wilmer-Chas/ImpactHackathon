@@ -10,4 +10,7 @@ export type Incident = {
   rootCause: string | null;
   openedAt: string;
   resolvedAt: string | null;
+  theme?: string | null;
+  tags?: string[];
+  category?: string | null;
 };
