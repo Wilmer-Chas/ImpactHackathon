@@ -4,7 +4,7 @@ import type {
   OrgRiskPosture,
   PostureSignal,
 } from "../../domain/index.js";
-import { chatJson, OllamaResponseError } from "./ollama.client.js";
+import { AiResponseError, chatJson } from "./ollama.client.js";
 import { MocIntelligenceValidationError } from "./mocIntelligence.service.js";
 
 export type PortfolioEvidencePack = {
@@ -185,7 +185,7 @@ export async function authorBriefingNarrative(
     if (err instanceof MocIntelligenceValidationError) {
       throw err;
     }
-    throw new OllamaResponseError("Failed to interpret Ollama briefing JSON output", {
+    throw new AiResponseError("Failed to interpret briefing JSON output", {
       cause: err,
     });
   }

@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 import { MocIntelligenceValidationError } from "../../services/ai/mocIntelligence.service.js";
 import {
-  OllamaResponseError,
-  OllamaUnavailableError,
+  AiResponseError,
+  AiUnavailableError,
 } from "../../services/ai/ollama.client.js";
 import { mocBriefingService } from "../../services/moc/briefing.service.js";
 
@@ -11,11 +11,11 @@ export async function getMocBriefing(_req: Request, res: Response): Promise<void
     const briefing = await mocBriefingService.getBriefing();
     res.json(briefing);
   } catch (err: unknown) {
-    if (err instanceof OllamaUnavailableError) {
+    if (err instanceof AiUnavailableError) {
       res.status(503).json({ error: err.message });
       return;
     }
-    if (err instanceof MocIntelligenceValidationError || err instanceof OllamaResponseError) {
+    if (err instanceof MocIntelligenceValidationError || err instanceof AiResponseError) {
       res.status(502).json({ error: err.message });
       return;
     }

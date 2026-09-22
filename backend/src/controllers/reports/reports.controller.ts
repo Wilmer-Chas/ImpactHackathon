@@ -3,8 +3,8 @@ import {
   MocIntelligenceValidationError,
 } from "../../services/ai/mocIntelligence.service.js";
 import {
-  OllamaResponseError,
-  OllamaUnavailableError,
+  AiResponseError,
+  AiUnavailableError,
 } from "../../services/ai/ollama.client.js";
 import { mocReportService } from "../../services/reports/mocReport.service.js";
 
@@ -24,11 +24,11 @@ export async function getReportByChangeId(req: Request, res: Response): Promise<
 
     res.json(report);
   } catch (err: unknown) {
-    if (err instanceof OllamaUnavailableError) {
+    if (err instanceof AiUnavailableError) {
       res.status(503).json({ error: err.message });
       return;
     }
-    if (err instanceof MocIntelligenceValidationError || err instanceof OllamaResponseError) {
+    if (err instanceof MocIntelligenceValidationError || err instanceof AiResponseError) {
       res.status(502).json({ error: err.message });
       return;
     }

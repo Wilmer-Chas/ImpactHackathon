@@ -10,7 +10,7 @@ import type {
   ReleasePlan,
   RiskRecord,
 } from "../../domain/index.js";
-import { chatJson, OllamaResponseError } from "./ollama.client.js";
+import { AiResponseError, chatJson } from "./ollama.client.js";
 
 export class MocIntelligenceValidationError extends Error {
   readonly code = "MOC_INTELLIGENCE_INVALID" as const;
@@ -184,6 +184,6 @@ export async function concludeFromEvidence(
     if (err instanceof MocIntelligenceValidationError) {
       throw err;
     }
-    throw new OllamaResponseError("Failed to interpret Ollama JSON output", { cause: err });
+    throw new AiResponseError("Failed to interpret JSON output", { cause: err });
   }
 }
