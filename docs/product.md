@@ -15,11 +15,12 @@ Legacy **Management Oversight Committee (MOC)** briefing and per-change decision
 ## What the product does
 
 1. Assembles a **portfolio evidence pack** from change, incident, risk, workload, performance, release, data-quality, and ops-alert signals (seeded from `mock-data/` into SQLite today).
-2. Offers a **General Assistant** that answers questions with hybrid RAG citations (never inventing evidence IDs).
+2. Offers a **General Assistant** that answers questions with hybrid RAG citations (never inventing evidence IDs) — on Home and via report ChatWidget.
 3. Generates a **monthly Fraud Detection report** from performance series + risk month-over-month snapshots + LLM narrative.
 4. Surfaces an **Enterprise Risk Analysis** deck scoped to a **user timeframe**: the AI flags incidents/alerts still open at period end (resolution comes from the issue layer / Jira later — e.g. resolved after the window still flags; resolved inside the window does not). Changing from/to compiles a new report.
 5. Supports **Trend Watch** anomaly counts on Employee Home (links into the monthly deck).
-6. Keeps MOC briefing / decision-brief endpoints for committee-style deep dives.
+6. Supports a **General report** path that builds KPIs/charts from an uploaded file snippet via chat.
+7. Surfaces **MOC briefing** and **per-change decision briefs** for committee-style deep dives.
 
 The model must not invent evidence IDs or numeric risk scores. Narrative copy can come from the LLM; numbers and IDs must come from the evidence pack.
 
@@ -27,12 +28,13 @@ The model must not invent evidence IDs or numeric risk scores. Narrative copy ca
 
 | Output | Purpose | Status |
 | --- | --- | --- |
-| **Assistant chat + history** | Evidence-grounded Q&A | In current demo |
+| **Assistant chat + history** | Evidence-grounded Q&A (home sidebar + report ChatWidget) | In current demo |
 | **Monthly compliance deck** | Performance, narrative, risk MoM | In current demo |
-| **Enterprise risk analysis** | Category drill-down + PPT export | In current demo |
+| **General report** | Upload snippet → LLM KPIs/charts | In current demo |
+| **Enterprise risk analysis** | Category drill-down + approve/reject + PPT | In current demo |
 | **Trend Watch** | Anomaly badge → monthly report | In current demo |
-| **MOC briefing pack** | Org risk posture + agenda | API available |
-| **Decision brief (per change)** | Authorize / with conditions / Hold | API available |
+| **MOC briefing pack** | Org risk posture + agenda | In current demo |
+| **Decision brief (per change)** | Authorize / with conditions / Hold | In current demo |
 
 ## Inputs (evidence types)
 

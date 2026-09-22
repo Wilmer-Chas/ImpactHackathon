@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Bar,
   BarChart,
@@ -8,12 +8,12 @@ import {
   ResponsiveContainer,
   XAxis,
 } from "recharts";
-import { useAppFilters } from "../../context/AppFilterContext";
-import {
-  chartMonthPeriod,
-  filterByAppFilters,
-} from "../../lib/applyFilters";
+import pptxgen from "pptxgenjs";
+import { Download } from "lucide-react";
+import { ChatWidget } from "../../components/chat/ChatWidget";
 import { FilterStatusBanner } from "../../components/filters/FilterStatusBanner";
+import { useAppFilters } from "../../context/AppFilterContext";
+import { chartMonthPeriod, filterByAppFilters } from "../../lib/applyFilters";
 import {
   fetchLatestMonthlyReport,
   fetchMonthlyReport,
@@ -28,17 +28,25 @@ const SOURCE_LABELS = [
   "risk_matrix.csv",
 ];
 
+type LocationState = {
+  sources?: string[];
+  reportTitle?: string;
+};
+
 export function ReportViewPage() {
   const { period } = useParams<{ period?: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = (location.state as LocationState | null) ?? null;
   const { filters } = useAppFilters();
   const [report, setReport] = useState<MonthlyReport | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
-    if (period === "risk") return;
+    if (period === "risk" || period === "general") return;
     let cancelled = false;
     async function load() {
       setLoading(true);
@@ -72,9 +80,11 @@ export function ReportViewPage() {
     setGenerating(true);
     setError(null);
     try {
-      const data = await generateMonthlyReport(period === "risk" ? undefined : period);
+      const data = await generateMonthlyReport(
+        period === "risk" || period === "general" ? undefined : period,
+      );
       setReport(data);
-      navigate(`/report/${data.period}`, { replace: true });
+      navigate(`/report/${data.period}`, { replace: true, state });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not generate report");
     } finally {
@@ -82,7 +92,59 @@ export function ReportViewPage() {
     }
   }
 
-  if (period === "risk") {
+  function exportToPPT() {
+    if (!report) return;
+    setIsExporting(true);
+    const pres = new pptxgen();
+
+    const slide1 = pres.addSlide();
+    slide1.addText(report.title, {
+      x: 0.5,
+      y: 0.5,
+      w: "90%",
+      h: 0.8,
+      fontSize: 24,
+      bold: true,
+      color: "1E293B",
+    });
+    slide1.addText(report.subtitle, {
+      x: 0.5,
+      y: 1.3,
+      w: "90%",
+      h: 0.4,
+      fontSize: 14,
+      color: "64748B",
+    });
+
+    const slide2 = pres.addSlide();
+    slide2.addText("What happened", {
+      x: 0.5,
+      y: 0.5,
+      w: "90%",
+      fontSize: 20,
+      bold: true,
+      color: "1E293B",
+    });
+    slide2.addText(
+      report.narrative.bullets.map((b) => ({ text: b, options: { bullet: true } })),
+      { x: 0.5, y: 1.2, w: "90%", h: 3, fontSize: 14, color: "334155" },
+    );
+    slide2.addText(report.narrative.momSummary, {
+      x: 0.5,
+      y: 4.5,
+      w: "90%",
+      h: 0.5,
+      fontSize: 12,
+      color: "0F766E",
+    });
+
+    void pres
+      .writeFile({ fileName: `Fraud_Report_${report.period}.pptx` })
+      .then(() => setIsExporting(false))
+      .catch(() => setIsExporting(false));
+  }
+
+  if (period === "risk" || period === "general") {
     return null;
   }
 
@@ -97,7 +159,9 @@ export function ReportViewPage() {
   if (!report) {
     return (
       <div className="max-w-6xl mx-auto p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Fraud Detection — Monthly Report</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          Fraud Detection — Monthly Report
+        </h1>
         <p className="text-sm text-gray-500 mb-4">
           {error ?? "No monthly report yet. Generate one from evidence."}
         </p>
@@ -112,6 +176,8 @@ export function ReportViewPage() {
       </div>
     );
   }
+
+  const sources = state?.sources?.length ? state.sources : SOURCE_LABELS;
 
   const filteredPerformance = filterByAppFilters(
     report.performance,
@@ -143,8 +209,20 @@ export function ReportViewPage() {
   const anomaly = filteredPerformance.find((p) => p.isAnomaly);
   const anomalyDelta = anomaly ? anomaly.target - anomaly.value : 0;
 
+  const reportContext = JSON.stringify({
+    reportType: report.title,
+    period: report.period,
+    narrative: report.narrative,
+    performance: filteredPerformance,
+    riskRegister: {
+      new: filteredNew,
+      resolved: filteredResolved,
+      unchangedCount: report.riskRegister.unchangedCount,
+    },
+  });
+
   return (
-    <div className="max-w-6xl mx-auto p-8">
+    <div className="max-w-6xl mx-auto p-8 pb-20">
       <FilterStatusBanner
         noun="risk entries"
         shown={riskShown}
@@ -163,24 +241,46 @@ export function ReportViewPage() {
       )}
 
       <div className="bg-brand-blue text-white rounded-xl p-6 mb-8 shadow-sm">
-        <div className="flex justify-between items-start gap-4">
+        <div className="flex justify-between items-start gap-4 flex-wrap">
           <div>
             <h1 className="text-2xl font-bold mb-1">{report.title}</h1>
             <p className="text-sm text-white/80 mb-3">{report.subtitle}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => void onGenerate()}
-            disabled={generating}
-            className="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg disabled:opacity-60"
-          >
-            {generating ? "Refreshing…" : "Regenerate"}
-          </button>
+          <div className="flex gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="text-xs bg-blue-800 hover:bg-blue-900 border border-blue-700 px-3 py-1.5 rounded-lg"
+            >
+              Back to Home
+            </button>
+            <button
+              type="button"
+              onClick={() => void onGenerate()}
+              disabled={generating}
+              className="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg disabled:opacity-60"
+            >
+              {generating ? "Refreshing…" : "Regenerate"}
+            </button>
+            <button
+              type="button"
+              onClick={exportToPPT}
+              disabled={isExporting}
+              className="flex items-center gap-2 text-xs bg-white text-brand-blue hover:bg-gray-100 px-3 py-1.5 rounded-lg font-medium"
+            >
+              {isExporting ? (
+                <div className="w-3.5 h-3.5 border-2 border-brand-blue border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Download size={14} />
+              )}
+              {isExporting ? "Generating…" : "Export to PPT"}
+            </button>
+          </div>
         </div>
         <div className="bg-white/10 rounded-lg p-3 inline-block mt-2 border border-white/20">
           <p className="text-xs font-medium text-white flex flex-wrap items-center gap-2">
             <span className="uppercase tracking-wider opacity-70">Source Data:</span>
-            {SOURCE_LABELS.map((label) => (
+            {sources.map((label) => (
               <span key={label} className="bg-white/20 px-2 py-1 rounded">
                 {label}
               </span>
@@ -202,7 +302,9 @@ export function ReportViewPage() {
             </div>
             <div className="h-64 mt-4">
               {chartData.length === 0 ? (
-                <p className="text-sm text-gray-500">No performance points match the active filters.</p>
+                <p className="text-sm text-gray-500">
+                  No performance points match the active filters.
+                </p>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
@@ -217,7 +319,12 @@ export function ReportViewPage() {
                       y={target}
                       stroke="#9CA3AF"
                       strokeDasharray="3 3"
-                      label={{ position: "right", value: "target", fill: "#6B7280", fontSize: 12 }}
+                      label={{
+                        position: "right",
+                        value: "target",
+                        fill: "#6B7280",
+                        fontSize: 12,
+                      }}
                     />
                     <Bar dataKey="value" fill="#6366F1" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -265,7 +372,9 @@ export function ReportViewPage() {
             <div className="space-y-3">
               {filteredNew.map((r) => (
                 <div key={r.id} className="border border-gray-200 rounded p-3 shadow-sm">
-                  <span className="text-xs font-semibold text-gray-500 block mb-1">{r.riskId}</span>
+                  <span className="text-xs font-semibold text-gray-500 block mb-1">
+                    {r.riskId}
+                  </span>
                   <p className="text-sm text-gray-800">{r.summary}</p>
                 </div>
               ))}
@@ -283,7 +392,9 @@ export function ReportViewPage() {
                   key={r.id}
                   className="border border-gray-200 rounded p-3 shadow-sm opacity-60"
                 >
-                  <span className="text-xs font-semibold text-gray-500 block mb-1">{r.riskId}</span>
+                  <span className="text-xs font-semibold text-gray-500 block mb-1">
+                    {r.riskId}
+                  </span>
                   <p className="text-sm text-gray-800 line-through">{r.summary}</p>
                 </div>
               ))}
@@ -304,6 +415,8 @@ export function ReportViewPage() {
           </div>
         </div>
       </div>
+
+      <ChatWidget context={reportContext} title="Fraud Report Assistant" />
     </div>
   );
 }

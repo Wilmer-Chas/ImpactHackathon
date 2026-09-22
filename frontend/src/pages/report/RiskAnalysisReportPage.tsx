@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Cell,
   Legend,
@@ -8,10 +9,12 @@ import {
   Tooltip as RechartsTooltip,
 } from "recharts";
 import pptxgen from "pptxgenjs";
-import { Download } from "lucide-react";
+import { Download, Sparkles } from "lucide-react";
+import { ChatWidget } from "../../components/chat/ChatWidget";
+import { FilterStatusBanner } from "../../components/filters/FilterStatusBanner";
 import { useAppFilters } from "../../context/AppFilterContext";
 import { filterByAppFilters } from "../../lib/applyFilters";
-import { FilterStatusBanner } from "../../components/filters/FilterStatusBanner";
+import { sendChatMessage } from "../../services/api/chat.api";
 import { fetchRiskAnalysisReport } from "../../services/api/ops.api";
 import type { EnterpriseRiskItem, RiskAnalysisReport, RiskCategorySlice } from "../../types/ops";
 
@@ -19,16 +22,49 @@ const FALLBACK_COLORS = ["#6366F1", "#14B8A6", "#F59E0B", "#EF4444", "#8B5CF6", 
 const DEFAULT_FROM = "2026-06-01";
 const DEFAULT_TO = "2026-09-30";
 
+type LocationState = {
+  sources?: string[];
+};
+
+/** Shell filters use YYYY-MM; risk API requires YYYY-MM-DD. */
+function toRiskApiDate(value: string | undefined, bound: "start" | "end"): string | undefined {
+  const trimmed = value?.trim();
+  if (!trimmed) return undefined;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+  if (!/^\d{4}-\d{2}$/.test(trimmed)) return undefined;
+  if (bound === "start") return `${trimmed}-01`;
+  const [y, m] = trimmed.split("-").map(Number);
+  const lastDay = new Date(y, m, 0).getDate();
+  return `${trimmed}-${String(lastDay).padStart(2, "0")}`;
+}
+
+/** When only one bound is set, mirror it so we don't blend with the default window. */
+function resolveRiskApiPeriod(from?: string, to?: string): { from: string; to: string } {
+  const start = toRiskApiDate(from, "start");
+  const end = toRiskApiDate(to, "end");
+  if (start && end) return { from: start, to: end };
+  if (start && !end) return { from: start, to: toRiskApiDate(from, "end")! };
+  if (!start && end) return { from: toRiskApiDate(to, "start")!, to: end };
+  return { from: DEFAULT_FROM, to: DEFAULT_TO };
+}
+
 export function RiskAnalysisReportPage() {
   const { filters } = useAppFilters();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const state = (location.state as LocationState | null) ?? null;
   const [report, setReport] = useState<RiskAnalysisReport | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [approvals, setApprovals] = useState<Record<string, "approved" | "rejected" | "unhandled">>(
+    {},
+  );
+  const [aiSuggestion, setAiSuggestion] = useState("");
+  const [loadingSuggestion, setLoadingSuggestion] = useState(false);
 
-  const periodFrom = filters.from?.trim() || DEFAULT_FROM;
-  const periodTo = filters.to?.trim() || DEFAULT_TO;
+  const { from: periodFrom, to: periodTo } = resolveRiskApiPeriod(filters.from, filters.to);
 
   useEffect(() => {
     let cancelled = false;
@@ -36,7 +72,6 @@ export function RiskAnalysisReportPage() {
       setLoading(true);
       setError(null);
       try {
-        // GET returns cached report for this from/to, or compiles a new one.
         const data = await fetchRiskAnalysisReport(periodFrom, periodTo);
         if (!cancelled) setReport(data);
       } catch (err) {
@@ -110,18 +145,52 @@ export function RiskAnalysisReportPage() {
           (rank(a.impact) * 10 + rank(a.likelihood) * 5 + a.evidenceCount);
         return score || a.name.localeCompare(b.name);
       })
-      .slice(0, 5);
+      .slice(0, 10);
   }, [filteredView]);
 
   useEffect(() => {
-    if (
-      selectedCategory &&
-      filteredView &&
-      !filteredView.itemsByCategory[selectedCategory]
-    ) {
+    if (selectedCategory && filteredView && !filteredView.itemsByCategory[selectedCategory]) {
       setSelectedCategory(null);
     }
   }, [filteredView, selectedCategory]);
+
+  useEffect(() => {
+    if (!selectedCategory || !filteredView) return;
+    const items = filteredView.itemsByCategory[selectedCategory] ?? [];
+    let cancelled = false;
+    setLoadingSuggestion(true);
+    setAiSuggestion("");
+
+    void sendChatMessage({
+      message: `Analyze this risk data for the ${selectedCategory} category: ${JSON.stringify(
+        items.map((i) => ({
+          id: i.id,
+          name: i.name,
+          likelihood: i.likelihood,
+          impact: i.impact,
+          owner: i.owner,
+          description: i.description,
+        })),
+      )}. Provide a single, short paragraph (under 40 words) suggesting exactly one actionable overarching mitigation strategy to reduce this category's risk. Do not invent evidence IDs.`,
+    })
+      .then((data) => {
+        if (!cancelled) setAiSuggestion(data.reply);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setAiSuggestion(
+            "Conduct a comprehensive gap analysis and mandate quarterly awareness training for the affected departments.",
+          );
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingSuggestion(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedCategory, filteredView]);
 
   function handleCategorySelect(name: string | undefined) {
     if (!name) return;
@@ -130,6 +199,13 @@ export function RiskAnalysisReportPage() {
 
   function handlePieClick(data: { name?: string }) {
     handleCategorySelect(data.name);
+  }
+
+  function handleApproval(id: string, status: "approved" | "rejected") {
+    setApprovals((prev) => ({
+      ...prev,
+      [id]: prev[id] === status ? "unhandled" : status,
+    }));
   }
 
   function exportToPPT() {
@@ -175,11 +251,11 @@ export function RiskAnalysisReportPage() {
 
     const criticalBullets = criticalRisks.flatMap((r) => [
       {
-        text: `${r.name} — L:${r.likelihood} / I:${r.impact} · ${r.evidenceCount} signals`,
+        text: `[${r.id}] ${r.name} — L:${r.likelihood} / I:${r.impact}`,
         options: { bullet: true, color: "7F1D1D", bold: true },
       },
       {
-        text: `Owner: ${r.owner} · ${r.category}`,
+        text: `Owner: ${r.owner} · ${r.description}`,
         options: { indentLevel: 1, color: "7F1D1D" },
       },
     ]);
@@ -240,6 +316,16 @@ export function RiskAnalysisReportPage() {
 
   const totalItems = Object.values(report.itemsByCategory).flat().length;
   const shownItems = Object.values(filteredView.itemsByCategory).flat().length;
+  const sources = state?.sources?.length ? state.sources : report.sourceLabels;
+
+  const reportContext = JSON.stringify({
+    reportType: report.title,
+    period: report.period,
+    summary: filteredView.categories,
+    details: filteredView.itemsByCategory,
+    approvals,
+    summaryBullets: report.summaryBullets,
+  });
 
   return (
     <div className="max-w-6xl mx-auto p-8 pb-20">
@@ -251,29 +337,38 @@ export function RiskAnalysisReportPage() {
       />
 
       <div className="bg-slate-800 text-white rounded-xl p-6 mb-8 shadow-sm">
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start flex-wrap gap-3">
           <div>
             <h1 className="text-2xl font-bold mb-1">{report.title}</h1>
             <p className="text-sm text-slate-300 mb-3">{report.subtitle}</p>
           </div>
-          <button
-            type="button"
-            onClick={exportToPPT}
-            disabled={isExporting}
-            className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 border border-slate-500 px-4 py-2 rounded transition text-sm font-medium"
-          >
-            {isExporting ? (
-              <div className="w-4 h-4 border-2 border-slate-300 border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <Download size={16} />
-            )}
-            {isExporting ? "Generating PPT..." : "Export to PPT"}
-          </button>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 border border-slate-500 px-4 py-2 rounded transition text-sm font-medium"
+            >
+              Back to Home
+            </button>
+            <button
+              type="button"
+              onClick={exportToPPT}
+              disabled={isExporting}
+              className="flex items-center gap-2 bg-brand-blue hover:bg-blue-700 border border-blue-600 px-4 py-2 rounded transition text-sm font-medium"
+            >
+              {isExporting ? (
+                <div className="w-4 h-4 border-2 border-slate-300 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Download size={16} />
+              )}
+              {isExporting ? "Generating PPT..." : "Export to PPT"}
+            </button>
+          </div>
         </div>
         <div className="bg-slate-700/50 rounded-lg p-3 inline-block mt-2 border border-slate-600">
           <p className="text-xs font-medium text-white flex flex-wrap items-center gap-2">
             <span className="uppercase tracking-wider text-slate-400">Source Data:</span>
-            {report.sourceLabels.map((label) => (
+            {sources.map((label) => (
               <span
                 key={label}
                 className="bg-slate-800 px-2 py-1 rounded border border-slate-600"
@@ -336,46 +431,64 @@ export function RiskAnalysisReportPage() {
             <div className="lg:col-span-2">
               <h3 className="text-sm font-semibold text-gray-800 mb-1">Top open risks</h3>
               <p className="text-xs text-gray-500 mb-4">
-                Highest likelihood and impact first. Click a chart slice for the full category list.
+                Highest likelihood and impact first. Click a row (or a chart slice) to open the
+                category breakdown.
               </p>
-              <ul className="divide-y divide-gray-100 border border-gray-100 rounded-lg overflow-hidden">
+              <ul className="divide-y divide-gray-100 border border-gray-100 rounded-lg overflow-hidden mb-4">
                 {topRisks.map((item) => (
-                  <li
-                    key={item.id}
-                    className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-white"
-                  >
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-gray-900">{item.name}</p>
-                      <p className="text-xs text-gray-500">
-                        {item.category} · {item.owner} · {item.evidenceCount} signals
-                      </p>
-                    </div>
-                    <div className="flex gap-2 shrink-0">
-                      <span
-                        className={`text-xs px-2 py-1 rounded ${
-                          item.likelihood === "High"
-                            ? "bg-orange-100 text-orange-800"
-                            : "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        L {item.likelihood}
-                      </span>
-                      <span
-                        className={`text-xs px-2 py-1 rounded ${
-                          item.impact === "High"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        I {item.impact}
-                      </span>
-                    </div>
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      onClick={() => handleCategorySelect(item.category)}
+                      className="w-full text-left flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-white hover:bg-gray-50 transition"
+                    >
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-gray-900">{item.name}</p>
+                        <p className="text-xs text-gray-500">
+                          {item.category} · {item.owner} · {item.evidenceCount} signals
+                        </p>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        <span
+                          className={`text-xs px-2 py-1 rounded ${
+                            item.likelihood === "High"
+                              ? "bg-orange-100 text-orange-800"
+                              : "bg-gray-100 text-gray-600"
+                          }`}
+                        >
+                          L {item.likelihood}
+                        </span>
+                        <span
+                          className={`text-xs px-2 py-1 rounded ${
+                            item.impact === "High"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-gray-100 text-gray-600"
+                          }`}
+                        >
+                          I {item.impact}
+                        </span>
+                      </div>
+                    </button>
                   </li>
                 ))}
                 {topRisks.length === 0 && (
-                  <li className="px-4 py-6 text-sm text-gray-500">No risks match the active filter.</li>
+                  <li className="px-4 py-6 text-sm text-gray-500">
+                    No risks match the active filter.
+                  </li>
                 )}
               </ul>
+              {report.summaryBullets.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                    Highlights
+                  </h4>
+                  <ul className="space-y-2 text-sm text-gray-700 list-disc pl-4 marker:text-slate-400">
+                    {report.summaryBullets.slice(0, 3).map((bullet) => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
@@ -394,8 +507,8 @@ export function RiskAnalysisReportPage() {
       )}
 
       {selectedCategory && (
-        <div className="bg-white rounded-xl border border-brand-blue shadow-lg p-8 mb-6">
-          <div className="flex justify-between items-center mb-6">
+        <div className="bg-white rounded-xl border border-brand-blue shadow-lg p-8 mb-6 flex flex-col gap-6">
+          <div className="flex justify-between items-center">
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-1">
                 {selectedCategory} Risks Breakdown
@@ -415,24 +528,52 @@ export function RiskAnalysisReportPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {currentDrillDown.map((item) => (
+            {currentDrillDown.map((item) => {
+              const status = approvals[item.id] || "unhandled";
+              return (
                 <div
                   key={item.id}
-                  className="border rounded-lg p-5 border-gray-200 bg-gray-50/50"
+                  className={`border rounded-xl p-5 transition relative overflow-hidden ${
+                    status === "approved"
+                      ? "border-green-300 bg-green-50/50"
+                      : status === "rejected"
+                        ? "border-red-300 bg-red-50/50"
+                        : "border-gray-200 bg-gray-50/50"
+                  }`}
                 >
                   <div className="flex justify-between items-start mb-2">
-                    <span className="text-xs font-bold text-slate-700 bg-slate-200 px-2 py-1 rounded">
-                      {item.id}
-                    </span>
-                    <span className="text-xs font-medium text-gray-500">Owner: {item.owner}</span>
+                    <div>
+                      <span className="text-xs font-bold text-slate-700 bg-slate-200 px-2 py-1 rounded mr-2">
+                        {item.id}
+                      </span>
+                      <span className="text-xs font-medium text-gray-500">
+                        Owner: {item.owner}
+                      </span>
+                    </div>
+                    <div>
+                      {status === "approved" && (
+                        <span className="bg-green-100 text-green-700 border border-green-200 px-2 py-1 rounded text-xs font-bold uppercase tracking-wide">
+                          Approved
+                        </span>
+                      )}
+                      {status === "rejected" && (
+                        <span className="bg-red-100 text-red-700 border border-red-200 px-2 py-1 rounded text-xs font-bold uppercase tracking-wide">
+                          Rejected
+                        </span>
+                      )}
+                      {status === "unhandled" && (
+                        <span className="bg-slate-100 text-slate-500 border border-slate-200 px-2 py-1 rounded text-xs font-bold uppercase tracking-wide">
+                          Unhandled
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <h3 className="font-semibold text-gray-900 mt-2 mb-3">{item.name}</h3>
-                  <p className="text-xs text-gray-500 mb-4">
-                    {item.evidenceCount} signals · {item.category}
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
+                  <h3 className="font-semibold text-gray-900 mt-1 mb-2">{item.name}</h3>
+                  <p className="text-sm text-gray-700 mb-5">{item.description}</p>
+                  <div className="flex justify-between items-end flex-wrap gap-3">
+                    <div className="flex gap-2 flex-wrap">
                       <span
-                        className={`text-xs px-2 py-1 rounded ${
+                        className={`text-xs px-2 py-1 rounded font-medium ${
                           item.likelihood === "High"
                             ? "bg-orange-100 text-orange-700"
                             : "bg-gray-100 text-gray-600"
@@ -441,7 +582,7 @@ export function RiskAnalysisReportPage() {
                         Likelihood: {item.likelihood}
                       </span>
                       <span
-                        className={`text-xs px-2 py-1 rounded ${
+                        className={`text-xs px-2 py-1 rounded font-medium ${
                           item.impact === "High"
                             ? "bg-red-100 text-red-700"
                             : "bg-gray-100 text-gray-600"
@@ -449,12 +590,59 @@ export function RiskAnalysisReportPage() {
                       >
                         Impact: {item.impact}
                       </span>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleApproval(item.id, "approved")}
+                        className={`text-xs px-3 py-1.5 rounded transition font-medium ${
+                          status === "approved"
+                            ? "bg-green-600 text-white shadow-inner"
+                            : "bg-green-100 text-green-700 hover:bg-green-200"
+                        }`}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleApproval(item.id, "rejected")}
+                        className={`text-xs px-3 py-1.5 rounded transition font-medium ${
+                          status === "rejected"
+                            ? "bg-red-600 text-white shadow-inner"
+                            : "bg-red-100 text-red-700 hover:bg-red-200"
+                        }`}
+                      >
+                        Reject
+                      </button>
+                    </div>
                   </div>
                 </div>
-            ))}
+              );
+            })}
+          </div>
+
+          <div className="bg-gradient-to-r from-slate-50 to-gray-100 border border-slate-200 rounded-xl p-5 flex gap-4 items-start mt-2">
+            <div className="bg-white p-2 text-slate-700 rounded-full shadow-sm border border-slate-200">
+              <Sparkles size={20} />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-800 text-sm mb-1">
+                AI Mitigation Strategy Suggestion
+              </h3>
+              {loadingSuggestion ? (
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="w-3 h-3 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                  Analyzing patterns...
+                </div>
+              ) : (
+                <p className="text-sm text-gray-600 leading-relaxed">{aiSuggestion}</p>
+              )}
+            </div>
           </div>
         </div>
       )}
+
+      <ChatWidget context={reportContext} title="Risk Report Assistant" />
     </div>
   );
 }

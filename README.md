@@ -4,10 +4,11 @@ Presentation Generator demo for a Transaction Monitoring product owner: evidence
 
 ## What the demo does
 
-1. **Employee Home** — chat with a RAG-grounded assistant; persist session history; quick actions for monthly reports, risk analysis, and trend watch; optional file chips → Generate Deck
-2. **Fraud Report** — generate a monthly Fraud Detection deck from performance series + risk MoM snapshots + LLM narrative
-3. **Risk Report** — AI rollup for a selected timeframe; flags issues still open at period end; changing from/to compiles a new report
-4. Legacy MOC APIs remain available (`GET /api/moc/briefing`, `GET /api/reports/:changeId`) for decision briefs
+1. **Employee Home** — template cards + upload → generate decks; RAG-grounded assistant sidebar with session history; Trend Watch
+2. **Fraud Report** — generate a monthly Fraud Detection deck from performance series + risk MoM snapshots + LLM narrative; PPT + report chat
+3. **General Report** — LLM dashboard from an uploaded file snippet (`POST /api/chat`)
+4. **Risk Report** — AI rollup for a selected timeframe; flags issues still open at period end; approve/reject + PPT
+5. **MOC** — briefing pack (`GET /api/moc/briefing`) and per-change decision briefs (`GET /api/reports/:changeId`)
 
 If the AI provider is down or returns invalid structured output, chat / monthly-report / MOC narrative APIs fail (no template fallback for LLM copy). Chart numbers and IDs always come from SQLite.
 
@@ -97,5 +98,7 @@ npm run dev:frontend
 - Monthly report: `POST /api/reports/monthly` · `GET /api/reports/monthly/:period`
 - Risk analysis: `GET /api/reports/risk`
 - Trends: `GET /api/ops/trends`
+- MOC briefing: `GET /api/moc/briefing`
+- Decision brief: `GET /api/reports/:changeId` (e.g. `1001`)
 - Schedules: `GET/POST /api/schedules` (API retained; not in current UI)
 - Backend tests: `npm run test`

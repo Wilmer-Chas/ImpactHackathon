@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Impact — Pitch (live demo cues)</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="deck-switch">
+      <a href="index.html">Self-contained version →</a>
+    </nav>
+
+    <main class="deck" id="deck" aria-live="polite">
+      <!-- 0 Title -->
+      <section class="slide is-active" data-slide>
+        <div class="slide-inner">
+          <p class="subbrand">Nordea Hackathon</p>
+          <p class="brand-mark">Impact</p>
+          <hr class="rule" />
+          <p class="lede">
+            Evidence-grounded presentation generator for a Transaction Monitoring
+            product owner — five minutes, four moves.
+          </p>
+        </div>
+      </section>
+
+      <!-- 1 Agenda -->
+      <section class="slide" data-slide>
+        <div class="slide-inner">
+          <p class="eyebrow">Roadmap</p>
+          <h2>Five minutes, four moves.</h2>
+          <hr class="rule" />
+          <div class="moves">
+            <article class="move-card">
+              <span class="num">01</span>
+              <h3>The Case</h3>
+              <p>Why this matters. Vivid, concrete, and short.</p>
+            </article>
+            <article class="move-card">
+              <span class="num">02</span>
+              <h3>The Promise</h3>
+              <p>Say exactly what you are about to demonstrate.</p>
+            </article>
+            <article class="move-card">
+              <span class="num">03</span>
+              <h3>The Proof</h3>
+              <p>Show it working, against the criteria you named.</p>
+            </article>
+            <article class="move-card">
+              <span class="num">04</span>
+              <h3>The Insight</h3>
+              <p>What you learned, and what you just showed them.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 THE CASE -->
+      <section class="slide" data-slide>
+        <div class="slide-inner">
+          <p class="eyebrow"><span class="num">01</span> The Case</p>
+          <h2>Oversight without an evidence trail is a risk.</h2>
+          <hr class="rule" />
+          <p class="lede">
+            A TM product owner must brief the Management Oversight Committee —
+            with scattered signals and little time.
+          </p>
+          <ul class="bullets">
+            <li>
+              Evidence lives across <strong>changes, incidents, risk, performance,
+              and releases</strong> — not in one brief.
+            </li>
+            <li>
+              Upper org needs a clear stance:
+              <strong>Authorize / with conditions / Hold</strong>.
+            </li>
+            <li>
+              Concrete tension: <strong>Change #1001</strong> on TM-Core while
+              open severity and elevated backlog remain.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 3 THE PROMISE -->
+      <section class="slide" data-slide>
+        <div class="slide-inner">
+          <p class="eyebrow"><span class="num">02</span> The Promise</p>
+          <h2>What we will show you.</h2>
+          <hr class="rule" />
+          <div class="promise-list">
+            <div class="promise-item">
+              <span class="tag">01</span>
+              <p>
+                An assistant that answers with <strong>cited evidence IDs</strong>
+                <span>Hybrid RAG over seeded portfolio data — no invented refs.</span>
+              </p>
+            </div>
+            <div class="promise-item">
+              <span class="tag">02</span>
+              <p>
+                A <strong>monthly Fraud Detection deck</strong> you can export to PPT
+                <span>Numbers from SQLite. Narrative from the model.</span>
+              </p>
+            </div>
+            <div class="promise-item">
+              <span class="tag">03</span>
+              <p>
+                An <strong>enterprise Risk Report</strong> with approve / reject
+                <span>Flags issues still open at period end — for a timeframe you pick.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 PROOF 1 — Live cue: Chat -->
+      <section class="slide" data-slide>
+        <div class="slide-inner">
+          <p class="eyebrow"><span class="num">03</span> The Proof · 1/3</p>
+          <h2>Live: assistant with real citations.</h2>
+          <hr class="rule" />
+          <p class="lede">
+            On Home, ask about August performance and open risks. Point at the
+            evidence IDs — they resolve to seeded rows, not freeform guesses.
+          </p>
+          <div class="cue-box">
+            Switch to the app → Employee Home → Assistant sidebar
+          </div>
+          <p class="speaker-note">
+            Suggested prompt: “What drove August performance, and which risks are still open?”
+          </p>
+        </div>
+      </section>
+
+      <!-- 5 PROOF 2 — Live cue: Fraud -->
+      <section class="slide" data-slide>
+        <div class="slide-inner">
+          <p class="eyebrow"><span class="num">03</span> The Proof · 2/3</p>
+          <h2>Live: Fraud Report → PPT.</h2>
+          <hr class="rule" />
+          <p class="lede">
+            Open the monthly Fraud Detection deck (Trend Watch is a fast entry).
+            Show the anomaly on the chart, then export the compliance pack.
+          </p>
+          <div class="cue-box">
+            App → Trend Watch or Fraud Report → Export PPT
+          </div>
+          <p class="speaker-note">
+            Call out: chart numbers from SQLite; narrative from the model.
+          </p>
+        </div>
+      </section>
+
+      <!-- 6 PROOF 3 — Live cue: Risk -->
+      <section class="slide" data-slide>
+        <div class="slide-inner">
+          <p class="eyebrow"><span class="num">03</span> The Proof · 3/3</p>
+          <h2>Live: Risk Report — open at period end.</h2>
+          <hr class="rule" />
+          <p class="lede">
+            Set timeframe Jun–Sep 2026. Show issues still open at period end,
+            then approve or reject a category with mitigation.
+          </p>
+          <div class="cue-box">
+            App → Risk Report → set from/to → approve / reject → optional PPT
+          </div>
+          <p class="speaker-note">
+            Optional deeper beat: MOC → Change #1001 decision brief if time allows.
+          </p>
+        </div>
+      </section>
+
+      <!-- 7 THE INSIGHT -->
+      <section class="slide" data-slide>
+        <div class="slide-inner">
+          <p class="eyebrow"><span class="num">04</span> The Insight</p>
+          <h2>AI that briefs — without inventing the evidence.</h2>
+          <hr class="rule" />
+          <div class="insight-grid">
+            <article class="insight-card">
+              <h3>Bound to the pack</h3>
+              <p>
+                Citations and numeric scores resolve to real rows. The model
+                narrates; the database owns the facts.
+              </p>
+            </article>
+            <article class="insight-card">
+              <h3>Fail closed</h3>
+              <p>
+                If the model is down or structured output breaks, narrative APIs
+                fail — we do not fabricate oversight copy.
+              </p>
+            </article>
+            <article class="insight-card">
+              <h3>Humans decide</h3>
+              <p>
+                Impact recommends. The product owner and MOC authorize, condition,
+                or hold — accountability stays with people.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8 Close -->
+      <section class="slide" data-slide>
+        <div class="slide-inner">
+          <p class="subbrand">Thank you</p>
+          <p class="brand-mark">Impact</p>
+          <hr class="rule" />
+          <p class="lede">
+            Evidence-grounded decks and answers for Transaction Monitoring oversight.
+          </p>
+          <p class="speaker-note" style="margin-top: 2rem; font-style: normal; color: var(--nordea-blue); font-weight: 600">
+            Questions?
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <p class="hint">← → or Space · click to advance</p>
+
+    <script>
+      (function () {
+        const slides = Array.from(document.querySelectorAll("[data-slide]"));
+        const progress = document.getElementById("progress");
+        let i = 0;
+
+        slides.forEach((_, idx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.setAttribute("aria-label", "Go to slide " + (idx + 1));
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            go(idx);
+          });
+          progress.appendChild(btn);
+        });
+
+        const dots = Array.from(progress.children);
+
+        function go(n) {
+          i = (n + slides.length) % slides.length;
+          slides.forEach((s, idx) => s.classList.toggle("is-active", idx === i));
+          dots.forEach((d, idx) => d.classList.toggle("is-active", idx === i));
+        }
+
+        function next() {
+          go(i + 1);
+        }
+        function prev() {
+          go(i - 1);
+        }
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+            e.preventDefault();
+            next();
+          } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+            e.preventDefault();
+            prev();
+          } else if (e.key === "Home") {
+            e.preventDefault();
+            go(0);
+          } else if (e.key === "End") {
+            e.preventDefault();
+            go(slides.length - 1);
+          }
+        });
+
+        document.getElementById("deck").addEventListener("click", (e) => {
+          if (e.target.closest("a, button")) return;
+          const mid = window.innerWidth / 2;
+          if (e.clientX < mid) prev();
+          else next();
+        });
+
+        go(0);
+      })();
+    </script>
+  </body>
+</html>

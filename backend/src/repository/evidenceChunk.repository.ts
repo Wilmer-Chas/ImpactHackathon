@@ -12,11 +12,8 @@ type ChunkRow = {
   updated_at: string;
 };
 
-export function listEmbeddedChunks(): EvidenceChunkRecord[] {
-  const rows = getDb()
-    .prepare("SELECT * FROM evidence_chunks WHERE embedding IS NOT NULL")
-    .all() as ChunkRow[];
-  return rows.map((row) => ({
+function mapChunkRow(row: ChunkRow): EvidenceChunkRecord {
+  return {
     id: row.id,
     entityType: row.entity_type as EntityType,
     entityId: row.entity_id,
@@ -24,5 +21,24 @@ export function listEmbeddedChunks(): EvidenceChunkRecord[] {
     contentHash: row.content_hash,
     embedding: parseEmbedding(row.embedding),
     updatedAt: row.updated_at,
-  }));
+  };
+}
+
+/** All embedded chunks, optionally restricted to the given entity types. */
+export function listEmbeddedChunks(entityTypes?: readonly EntityType[]): EvidenceChunkRecord[] {
+  if (!entityTypes || entityTypes.length === 0) {
+    const rows = getDb()
+      .prepare("SELECT * FROM evidence_chunks WHERE embedding IS NOT NULL")
+      .all() as ChunkRow[];
+    return rows.map(mapChunkRow);
+  }
+
+  const placeholders = entityTypes.map(() => "?").join(", ");
+  const rows = getDb()
+    .prepare(
+      `SELECT * FROM evidence_chunks
+       WHERE embedding IS NOT NULL AND entity_type IN (${placeholders})`,
+    )
+    .all(...entityTypes) as ChunkRow[];
+  return rows.map(mapChunkRow);
 }

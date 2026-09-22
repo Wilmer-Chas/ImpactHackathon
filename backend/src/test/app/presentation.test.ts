@@ -199,15 +199,33 @@ describe("new presentation APIs", () => {
 
   it("surfaces filterAction from structured chat replies", async () => {
     const { chatJson } = await import("../../services/ai/ollama.client.js");
-    vi.mocked(chatJson).mockImplementationOnce(async () =>
-      JSON.stringify({
-        reply: "Showing phishing-related items for Q3 2026.",
-        filterAction: {
-          type: "set_filters",
-          filters: { from: "2026-07", to: "2026-09", wording: "phishing" },
-        },
-      }),
-    );
+    vi.mocked(chatJson).mockImplementation(async (messages: Array<{ role: string; content: string }>) => {
+      const system = messages[0]?.content ?? "";
+      if (system.includes("General Assistant")) {
+        return JSON.stringify({
+          reply: "Showing phishing-related items for Q3 2026.",
+          filterAction: {
+            type: "set_filters",
+            filters: { from: "2026-07", to: "2026-09", wording: "phishing" },
+          },
+        });
+      }
+      if (system.includes("risk intelligence engine")) {
+        return JSON.stringify({
+          summaries: {
+            "RSK-phishing-payments":
+              "Elevated phishing attempts (INC-9001) targeting payments staff remain critical.",
+            "RSK-batch-scoring":
+              "Batch scoring instability remains elevated (INC-4402).",
+          },
+        });
+      }
+      return JSON.stringify({
+        bullets: ["Performance dropped in August.", "Incident INC-4402 is open."],
+        momSummary: "Since July: +3 new risks · 2 resolved",
+        auditId: "RUN-202608-014",
+      });
+    });
 
     seedPresentationTables();
     const app = createApp();

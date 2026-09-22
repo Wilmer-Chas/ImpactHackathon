@@ -2,21 +2,34 @@ import type { ChangeRequest } from "../../domain/change/changeRequest.js";
 import type {
   DataQualityIssue,
   Incident,
+  OpsAlert,
   PerformanceMetric,
   ProcessMetric,
   ReleasePlan,
   RiskRecord,
 } from "../../domain/index.js";
+import type { EnterpriseRiskItem } from "../../domain/ops/riskAnalysis.js";
 import type { EvidencePack } from "../ai/mocIntelligence.service.js";
 import type { PortfolioEvidencePack } from "../ai/briefingIntelligence.service.js";
 import { cosineSimilarity, embedTexts } from "../ai/embeddings.client.js";
 import type { EntityType } from "../../db/types.js";
 import * as evidenceRepo from "../../repository/index.js";
+import { DEFAULT_RISK_PERIOD } from "../reports/riskAnalysis.service.js";
+import { listUnifiedRisks } from "../risk/riskIntelligence.service.js";
 
 function getTopK(): number {
   const raw = Number(process.env.RAG_TOP_K ?? 12);
   return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 12;
 }
+
+/** Entity types chat RAG may retrieve — structured risk signals only (no customer notes). */
+export const CHAT_EVIDENCE_ENTITY_TYPES = [
+  "incident",
+  "ops_alert",
+  "data_quality",
+] as const satisfies readonly EntityType[];
+
+type ChatEvidenceEntityType = (typeof CHAT_EVIDENCE_ENTITY_TYPES)[number];
 
 type RetrievedRef = {
   entityType: EntityType;
@@ -24,13 +37,17 @@ type RetrievedRef = {
   score: number;
 };
 
-async function retrieveTopRefs(query: string, topK: number): Promise<RetrievedRef[]> {
+async function retrieveTopRefs(
+  query: string,
+  topK: number,
+  entityTypes?: readonly EntityType[],
+): Promise<RetrievedRef[]> {
   const [queryEmbedding] = await embedTexts([query]);
   if (!queryEmbedding) {
     return [];
   }
 
-  const chunks = evidenceRepo.listEmbeddedChunks();
+  const chunks = evidenceRepo.listEmbeddedChunks(entityTypes);
   const scored: RetrievedRef[] = [];
 
   for (const chunk of chunks) {
@@ -366,105 +383,281 @@ export type ChatEvidenceContext = {
   evidenceText: string;
 };
 
-/** Free-form RAG context for assistant chat — top-K chunks only; IDs come from real rows. */
+const INC_ID_RE = /\bINC-[A-Za-z0-9-]+\b/g;
+const ALT_ID_RE = /\bALT-[A-Za-z0-9-]+\b/g;
+const RSK_ID_RE = /\bRSK-[A-Za-z0-9_-]+\b/g;
+const DQ_ENTITY_RE = /\b([a-z][a-z0-9_]*)\|([a-zA-Z][a-zA-Z0-9_]*)\b/g;
+
+function uniqueStrings(values: string[]): string[] {
+  return [...new Set(values)];
+}
+
+function formatTags(tags: string[] | undefined): string {
+  return tags && tags.length > 0 ? tags.join(", ") : "none";
+}
+
+function formatIncidentLine(incident: Incident): string {
+  const citation = `incident:${incident.id}`;
+  return [
+    `[${citation}] Incident ${incident.id}: ${incident.title}`,
+    `(${incident.severity}, ${incident.status}, app=${incident.application}`,
+    `theme=${incident.theme ?? "none"}, category=${incident.category ?? "none"}`,
+    `tags=${formatTags(incident.tags)}, rootCause=${incident.rootCause ?? "unknown"}`,
+    `openedAt=${incident.openedAt}, resolvedAt=${incident.resolvedAt ?? "open"})`,
+  ].join(" ");
+}
+
+function formatOpsAlertLine(alert: OpsAlert): string {
+  const citation = `ops_alert:${alert.id}`;
+  return [
+    `[${citation}] Ops alert ${alert.id}: ${alert.title}`,
+    `(${alert.severity}, ${alert.status}, ${alert.sourceSystem}, app=${alert.application}`,
+    `theme=${alert.theme}, category=${alert.category}`,
+    `tags=${formatTags(alert.tags)}, openedAt=${alert.openedAt})`,
+  ].join(" ");
+}
+
+function formatDataQualityLine(issue: DataQualityIssue): string {
+  const entityId = `${issue.source}|${issue.field}`;
+  const citation = `data_quality:${entityId}`;
+  return [
+    `[${citation}] Data quality ${issue.source}.${issue.field}: missingRate ${issue.missingRate}`,
+    `(${issue.severity}, theme=${issue.theme ?? "none"}, category=${issue.category ?? "none"}`,
+    `tags=${formatTags(issue.tags)}, notes=${issue.notes})`,
+  ].join(" ");
+}
+
+function formatRiskRationale(risk: EnterpriseRiskItem): string {
+  const sources = risk.sourceTypes.filter((t) => t !== "customer_note").join(", ") || "none";
+  const refs = risk.evidenceRefs
+    .filter((id) => {
+      if (evidenceRepo.getIncidentById(id)) return true;
+      if (evidenceRepo.getOpsAlertById(id)) return true;
+      if (id.includes("|") && evidenceRepo.getDataQualityByEntityId(id)) return true;
+      return false;
+    })
+    .slice(0, 12)
+    .join(", ");
+  return [
+    `[enterprise_risk:${risk.id}] ${risk.name} (${risk.id})`,
+    `likelihood=${risk.likelihood}, impact=${risk.impact}, evidenceCount=${risk.evidenceCount}`,
+    `sourceTypes=${sources}`,
+    `description=${risk.description}`,
+    `evidenceRefs=${refs || "none"}`,
+  ].join(" — ");
+}
+
+function parseMentionedIds(query: string): {
+  incidentIds: string[];
+  alertIds: string[];
+  riskIds: string[];
+  dataQualityEntityIds: string[];
+} {
+  return {
+    incidentIds: uniqueStrings(query.match(INC_ID_RE) ?? []),
+    alertIds: uniqueStrings(query.match(ALT_ID_RE) ?? []),
+    riskIds: uniqueStrings(query.match(RSK_ID_RE) ?? []),
+    dataQualityEntityIds: uniqueStrings(
+      [...query.matchAll(DQ_ENTITY_RE)].map((m) => `${m[1]}|${m[2]}`),
+    ),
+  };
+}
+
+function isChatEvidenceType(type: EntityType): type is ChatEvidenceEntityType {
+  return (CHAT_EVIDENCE_ENTITY_TYPES as readonly string[]).includes(type);
+}
+
+function appendEvidenceLine(
+  lines: string[],
+  citations: string[],
+  seen: Set<string>,
+  citation: string,
+  line: string | null,
+): void {
+  if (!line || seen.has(citation)) return;
+  seen.add(citation);
+  citations.push(citation);
+  lines.push(line);
+}
+
+function packChatSignalRef(
+  ref: RetrievedRef,
+  lines: string[],
+  citations: string[],
+  seen: Set<string>,
+  themes: Set<string>,
+): void {
+  if (!isChatEvidenceType(ref.entityType)) return;
+
+  switch (ref.entityType) {
+    case "incident": {
+      const incident = evidenceRepo.getIncidentById(ref.entityId);
+      if (!incident) return;
+      if (incident.theme?.trim()) themes.add(incident.theme.trim());
+      appendEvidenceLine(
+        lines,
+        citations,
+        seen,
+        `incident:${incident.id}`,
+        formatIncidentLine(incident),
+      );
+      break;
+    }
+    case "ops_alert": {
+      const alert = evidenceRepo.getOpsAlertById(ref.entityId);
+      if (!alert) return;
+      if (alert.theme?.trim()) themes.add(alert.theme.trim());
+      appendEvidenceLine(
+        lines,
+        citations,
+        seen,
+        `ops_alert:${alert.id}`,
+        formatOpsAlertLine(alert),
+      );
+      break;
+    }
+    case "data_quality": {
+      const issue = evidenceRepo.getDataQualityByEntityId(ref.entityId);
+      if (!issue) return;
+      if (issue.theme?.trim()) themes.add(issue.theme.trim());
+      appendEvidenceLine(
+        lines,
+        citations,
+        seen,
+        `data_quality:${issue.source}|${issue.field}`,
+        formatDataQualityLine(issue),
+      );
+      break;
+    }
+    default:
+      break;
+  }
+}
+
+function expandRiskEvidenceRefs(
+  risk: EnterpriseRiskItem,
+  lines: string[],
+  citations: string[],
+  seen: Set<string>,
+  themes: Set<string>,
+): void {
+  for (const refId of risk.evidenceRefs) {
+    const incident = evidenceRepo.getIncidentById(refId);
+    if (incident) {
+      if (incident.theme?.trim()) themes.add(incident.theme.trim());
+      appendEvidenceLine(
+        lines,
+        citations,
+        seen,
+        `incident:${incident.id}`,
+        formatIncidentLine(incident),
+      );
+      continue;
+    }
+
+    const alert = evidenceRepo.getOpsAlertById(refId);
+    if (alert) {
+      if (alert.theme?.trim()) themes.add(alert.theme.trim());
+      appendEvidenceLine(
+        lines,
+        citations,
+        seen,
+        `ops_alert:${alert.id}`,
+        formatOpsAlertLine(alert),
+      );
+      continue;
+    }
+
+    // Data-quality refs use source|field; skip customer-note and unknown IDs.
+    if (refId.includes("|")) {
+      const issue = evidenceRepo.getDataQualityByEntityId(refId);
+      if (issue) {
+        if (issue.theme?.trim()) themes.add(issue.theme.trim());
+        appendEvidenceLine(
+          lines,
+          citations,
+          seen,
+          `data_quality:${issue.source}|${issue.field}`,
+          formatDataQualityLine(issue),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Free-form RAG context for assistant chat.
+ * Restricted to incident / ops_alert / data_quality; anchors mentioned IDs;
+ * injects enterprise risk flag rationale for matching themes.
+ */
 export async function retrieveEvidenceContextForQuery(
   query: string,
 ): Promise<ChatEvidenceContext> {
-  const refs = await retrieveTopRefs(query, getTopK());
-  const unique = uniqueRefs(refs);
+  const mentioned = parseMentionedIds(query);
+  const refs = await retrieveTopRefs(query, getTopK(), CHAT_EVIDENCE_ENTITY_TYPES);
+
   const citations: string[] = [];
   const lines: string[] = [];
+  const seen = new Set<string>();
+  const themes = new Set<string>();
 
-  for (const ref of unique) {
-    const citation = `${ref.entityType}:${ref.entityId}`;
-    citations.push(citation);
+  for (const id of mentioned.incidentIds) {
+    packChatSignalRef(
+      { entityType: "incident", entityId: id, score: 1 },
+      lines,
+      citations,
+      seen,
+      themes,
+    );
+  }
+  for (const id of mentioned.alertIds) {
+    packChatSignalRef(
+      { entityType: "ops_alert", entityId: id, score: 1 },
+      lines,
+      citations,
+      seen,
+      themes,
+    );
+  }
+  for (const entityId of mentioned.dataQualityEntityIds) {
+    packChatSignalRef(
+      { entityType: "data_quality", entityId, score: 1 },
+      lines,
+      citations,
+      seen,
+      themes,
+    );
+  }
 
-    switch (ref.entityType) {
-      case "change": {
-        const change = evidenceRepo.getChangeById(ref.entityId);
-        if (change) {
-          lines.push(
-            `[${citation}] Change ${change.id}: ${change.title} (${change.application}, ${change.changeType}, ${change.status})`,
-          );
+  for (const ref of uniqueRefs(refs)) {
+    packChatSignalRef(ref, lines, citations, seen, themes);
+  }
+
+  for (const riskId of mentioned.riskIds) {
+    const theme = riskId.replace(/^RSK-/i, "");
+    if (theme) themes.add(theme);
+  }
+
+  if (themes.size > 0 || mentioned.riskIds.length > 0) {
+    const risks = await listUnifiedRisks(DEFAULT_RISK_PERIOD);
+    const mentionedRiskSet = new Set(mentioned.riskIds.map((id) => id.toUpperCase()));
+    const matched = risks.filter((risk) => {
+      if (mentionedRiskSet.has(risk.id.toUpperCase())) return true;
+      const theme = risk.id.replace(/^RSK-/i, "");
+      return themes.has(theme);
+    });
+
+    if (matched.length > 0) {
+      lines.push("Risk flag rationale (deterministic theme clusters; cite only IDs below):");
+      for (const risk of matched) {
+        const citation = `enterprise_risk:${risk.id}`;
+        if (!seen.has(citation)) {
+          seen.add(citation);
+          citations.push(citation);
+          lines.push(formatRiskRationale(risk));
         }
-        break;
+        expandRiskEvidenceRefs(risk, lines, citations, seen, themes);
       }
-      case "incident": {
-        const incident = evidenceRepo.getIncidentById(ref.entityId);
-        if (incident) {
-          lines.push(
-            `[${citation}] Incident ${incident.id}: ${incident.title} (${incident.severity}, ${incident.status})`,
-          );
-        }
-        break;
-      }
-      case "risk": {
-        const risk = evidenceRepo.getRiskByChangeType(ref.entityId);
-        if (risk) {
-          lines.push(
-            `[${citation}] Risk ${risk.changeType}: residual ${risk.residualRisk} — ${risk.notes}`,
-          );
-        }
-        break;
-      }
-      case "release": {
-        const release = evidenceRepo.getReleaseById(ref.entityId);
-        if (release) {
-          lines.push(
-            `[${citation}] Release ${release.id}: ${release.name} (freeze=${release.freezeActive}, audit=${release.auditPeriodActive})`,
-          );
-        }
-        break;
-      }
-      case "process_metric": {
-        const metric = evidenceRepo.getProcessMetricByEntityId(ref.entityId);
-        if (metric) {
-          lines.push(
-            `[${citation}] Process ${metric.processName} on ${metric.application}: backlog ${metric.backlogCount}, delay ${metric.delayHours}h`,
-          );
-        }
-        break;
-      }
-      case "performance_metric": {
-        const metric = evidenceRepo.getPerformanceMetricByEntityId(ref.entityId);
-        if (metric) {
-          lines.push(
-            `[${citation}] Performance ${metric.metricName} on ${metric.application}: ${metric.value} ${metric.unit} (SLA ${metric.slaTarget})`,
-          );
-        }
-        break;
-      }
-      case "data_quality": {
-        const issue = evidenceRepo.getDataQualityByEntityId(ref.entityId);
-        if (issue) {
-          lines.push(
-            `[${citation}] Data quality ${issue.source}.${issue.field}: missingRate ${issue.missingRate} (${issue.severity})`,
-          );
-        }
-        break;
-      }
-      case "ops_alert": {
-        const alert = evidenceRepo.getOpsAlertById(ref.entityId);
-        if (alert) {
-          lines.push(
-            `[${citation}] Ops alert ${alert.id}: ${alert.title} (${alert.severity}, ${alert.status}, ${alert.sourceSystem})`,
-          );
-        }
-        break;
-      }
-      case "customer_note": {
-        const note = evidenceRepo.getCustomerNoteById(ref.entityId);
-        if (note) {
-          const preview =
-            note.body.length > 160 ? `${note.body.slice(0, 157)}...` : note.body;
-          lines.push(
-            `[${citation}] Customer note ${note.id} (${note.customerId}, ${note.channel}): ${preview}`,
-          );
-        }
-        break;
-      }
-      default:
-        break;
     }
   }
 

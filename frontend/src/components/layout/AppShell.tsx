@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Filter, X } from "lucide-react";
 import { useAppFilters } from "../../context/AppFilterContext";
 import { normalizePeriod } from "../../lib/applyFilters";
@@ -27,24 +27,32 @@ const PRESETS = [
   },
 ] as const;
 
+function isFraudReportPath(pathname: string): boolean {
+  if (pathname === "/report") return true;
+  if (pathname === "/report/risk" || pathname === "/report/general") return false;
+  return /^\/report\/[^/]+$/.test(pathname);
+}
+
 export function AppShell() {
-  const { filters, setFilters, clearFilters, isActive } = useAppFilters();
-  const [fromDraft, setFromDraft] = useState(filters.from ?? "");
-  const [toDraft, setToDraft] = useState(filters.to ?? "");
+  const location = useLocation();
+  const { filters, setFilters, patchFilters, clearFilters, isActive } = useAppFilters();
+  // Wording keeps a draft so spaces can be typed; periods apply immediately.
   const [wordingDraft, setWordingDraft] = useState(filters.wording ?? "");
 
   useEffect(() => {
-    setFromDraft(filters.from ?? "");
-    setToDraft(filters.to ?? "");
-    setWordingDraft(filters.wording ?? "");
-  }, [filters]);
-
-  function applyManualFilters() {
-    setFilters({
-      from: normalizePeriod(fromDraft),
-      to: normalizePeriod(toDraft),
-      wording: wordingDraft.trim() || undefined,
+    setWordingDraft((prev) => {
+      if ((filters.wording ?? "") === prev.trim()) return prev;
+      return filters.wording ?? "";
     });
+  }, [filters.wording]);
+
+  function setPeriod(bound: "from" | "to", value: string) {
+    patchFilters({ [bound]: normalizePeriod(value) });
+  }
+
+  function applyWording(raw: string) {
+    setWordingDraft(raw);
+    patchFilters({ wording: raw.trim() || undefined });
   }
 
   const timeframeLabel =
@@ -57,7 +65,9 @@ export function AppShell() {
       <header className="bg-white border-b px-6 py-3 flex items-center justify-between shadow-sm z-10 relative">
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 rounded-full bg-brand-blue" />
-          <span className="font-semibold text-gray-800">Presentation Generator</span>
+          <span className="font-semibold text-gray-800 tracking-wide uppercase text-sm">
+            AI Presentation Generator
+          </span>
         </div>
         <nav className="flex space-x-6 text-sm text-gray-600">
           <NavLink
@@ -67,13 +77,14 @@ export function AppShell() {
               active ? "text-brand-blue font-medium" : "hover:text-brand-blue"
             }
           >
-            Employee Home
+            Home
           </NavLink>
           <NavLink
             to="/report"
-            end
-            className={({ isActive: active }) =>
-              active ? "text-brand-blue font-medium" : "hover:text-brand-blue"
+            className={() =>
+              isFraudReportPath(location.pathname)
+                ? "text-brand-blue font-medium"
+                : "hover:text-brand-blue"
             }
           >
             Fraud Report
@@ -85,6 +96,14 @@ export function AppShell() {
             }
           >
             Risk Report
+          </NavLink>
+          <NavLink
+            to="/moc"
+            className={({ isActive: active }) =>
+              active ? "text-brand-blue font-medium" : "hover:text-brand-blue"
+            }
+          >
+            MOC
           </NavLink>
         </nav>
       </header>
@@ -100,7 +119,7 @@ export function AppShell() {
             Display filters
           </span>
           <span className="text-xs text-gray-400">
-            Applied here instantly — chat can also set them, but is not required
+            Changes apply instantly — chat can also set them, but is not required
           </span>
           {isActive && (
             <button
@@ -118,8 +137,8 @@ export function AppShell() {
             From
             <input
               type="month"
-              value={fromDraft}
-              onChange={(e) => setFromDraft(e.target.value)}
+              value={filters.from ?? ""}
+              onChange={(e) => setPeriod("from", e.target.value)}
               className="border border-gray-200 rounded-md px-2 py-1.5 text-sm text-gray-800 bg-white min-w-[9rem]"
             />
           </label>
@@ -127,8 +146,8 @@ export function AppShell() {
             To
             <input
               type="month"
-              value={toDraft}
-              onChange={(e) => setToDraft(e.target.value)}
+              value={filters.to ?? ""}
+              onChange={(e) => setPeriod("to", e.target.value)}
               className="border border-gray-200 rounded-md px-2 py-1.5 text-sm text-gray-800 bg-white min-w-[9rem]"
             />
           </label>
@@ -137,21 +156,11 @@ export function AppShell() {
             <input
               type="text"
               value={wordingDraft}
-              onChange={(e) => setWordingDraft(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") applyManualFilters();
-              }}
+              onChange={(e) => applyWording(e.target.value)}
               placeholder="e.g. phishing, scoring, fraud"
               className="border border-gray-200 rounded-md px-2 py-1.5 text-sm text-gray-800 bg-white"
             />
           </label>
-          <button
-            type="button"
-            onClick={applyManualFilters}
-            className="bg-brand-blue text-white text-xs font-medium px-4 py-2 rounded-md hover:bg-indigo-700"
-          >
-            Apply filters
-          </button>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
