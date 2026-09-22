@@ -1,0 +1,26 @@
+[
+  {
+    "id": "INC-0009",
+    "description": "Case escalated by customer [name masked] (account [account masked]) after duplicate charge in Loan Origination.",
+    "score": 68,
+    "factors": ["name", "account number"],
+    "status": "pending",
+    "createdAt": "2026-08-28T10:00:00.000Z"
+  },
+  {
+    "id": "INC-0018",
+    "description": "Support ticket referenced customer [name masked], national ID [ID masked], complaining about Payment Processing delay.",
+    "score": 74,
+    "factors": ["name", "national ID"],
+    "status": "pending",
+    "createdAt": "2026-08-29T11:30:00.000Z"
+  },
+  {
+    "id": "INC-0027",
+    "description": "Support ticket referenced customer [name masked], national ID [ID masked], complaining about Mobile Banking App delay.",
+    "score": 71,
+    "factors": ["name", "national ID"],
+    "status": "pending",
+    "createdAt": "2026-08-30T09:15:00.000Z"
+  }
+]

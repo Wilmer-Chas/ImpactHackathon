@@ -1,0 +1,8 @@
+[
+  { "monthLabel": "Mar", "monthKey": "2026-03", "runs": 16, "flags": 2 },
+  { "monthLabel": "Apr", "monthKey": "2026-04", "runs": 18, "flags": 3 },
+  { "monthLabel": "May", "monthKey": "2026-05", "runs": 20, "flags": 4 },
+  { "monthLabel": "Jun", "monthKey": "2026-06", "runs": 19, "flags": 2 },
+  { "monthLabel": "Jul", "monthKey": "2026-07", "runs": 22, "flags": 5 },
+  { "monthLabel": "Aug", "monthKey": "2026-08", "runs": 24, "flags": 3 }
+]

@@ -93,5 +93,89 @@ export function applySchema(db: Database.Database): void {
 
     CREATE INDEX IF NOT EXISTS idx_evidence_chunks_entity
       ON evidence_chunks (entity_type, entity_id);
+
+    CREATE TABLE IF NOT EXISTS chat_sessions (
+      id TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS chat_messages (
+      id TEXT PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      role TEXT NOT NULL,
+      content TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      FOREIGN KEY (session_id) REFERENCES chat_sessions(id) ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_chat_messages_session
+      ON chat_messages (session_id, created_at);
+
+    CREATE TABLE IF NOT EXISTS pipeline_runs (
+      month_label TEXT PRIMARY KEY,
+      month_key TEXT NOT NULL,
+      runs INTEGER NOT NULL,
+      flags INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS ai_models (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      share_percent REAL NOT NULL,
+      enabled INTEGER NOT NULL,
+      sort_order INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS pii_flags (
+      id TEXT PRIMARY KEY,
+      description TEXT NOT NULL,
+      score INTEGER NOT NULL,
+      factors_json TEXT NOT NULL,
+      status TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS risk_snapshots (
+      id TEXT PRIMARY KEY,
+      risk_id TEXT NOT NULL,
+      period TEXT NOT NULL,
+      summary TEXT NOT NULL,
+      state TEXT NOT NULL
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_risk_snapshots_period
+      ON risk_snapshots (period, state);
+
+    CREATE TABLE IF NOT EXISTS performance_series (
+      period TEXT NOT NULL,
+      month_label TEXT NOT NULL,
+      value REAL NOT NULL,
+      target REAL NOT NULL,
+      is_anomaly INTEGER NOT NULL,
+      PRIMARY KEY (period, month_label)
+    );
+
+    CREATE TABLE IF NOT EXISTS monthly_reports (
+      period TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      subtitle TEXT NOT NULL,
+      payload_json TEXT NOT NULL,
+      generated_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS report_schedules (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      cadence TEXT NOT NULL,
+      next_run TEXT NOT NULL,
+      enabled INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS admin_meta (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
   `);
 }

@@ -1,17 +1,15 @@
 # ImpactHackathon
 
-MOC-first demo: help a Transaction Monitoring product owner prepare **Management Oversight Committee** material for upper organization.
+Presentation Generator demo for a Transaction Monitoring product owner: evidence-grounded assistant chat, admin governance (usage + PII review), and monthly compliance decks — all backed by SQLite seed data and hybrid RAG.
 
 ## What the demo does
 
-1. Open the TM portfolio MOC briefing pack — **authored by the configured LLM** (OpenRouter or local Ollama) from portfolio evidence retrieved via hybrid RAG from SQLite
-2. Review org risk posture signals and agenda notes (LLM-prioritized, with evidence citations)
-3. Open a decision brief (e.g. Change #1001): Authorize, Authorize with conditions, or Hold — also LLM-authored
-4. See why, grounded in sample incidents, workload, health, risk, release, and data-quality evidence
+1. **Employee Home** — chat with a RAG-grounded assistant; persist session history; quick actions for monthly reports, trend watch, and schedules
+2. **Admin Dashboard** — KPIs, pipeline runs chart, model usage, and Approve / Redact / Reject on seeded PII flags
+3. **Report View** — generate a monthly Fraud Detection deck from performance series + risk MoM snapshots + LLM narrative
+4. Legacy MOC APIs remain available (`GET /api/moc/briefing`, `GET /api/reports/:changeId`) for decision briefs
 
-Operational alerts and a full org dashboard are out of scope for this demo.
-
-If the AI provider is down or returns invalid structured output, the briefing and report APIs fail (no template fallback for narrative).
+If the AI provider is down or returns invalid structured output, chat / monthly-report / MOC narrative APIs fail (no template fallback for LLM copy). Chart numbers and IDs always come from SQLite.
 
 ## Structure
 
@@ -34,9 +32,8 @@ frontend/src/
   components/<area>/
   pages/<feature>/
   services/api/
-  types/<feature>/
-  styles/
-  assets/
+  types/
+ui-prototype/              # visual reference only (not a workspace)
 ```
 
 ## Domain
@@ -84,8 +81,6 @@ npm run seed:mock
 
 Canonical JSON lives in [`mock-data/`](mock-data/). Re-running seed does not duplicate existing entities; embeddings are only recomputed when chunk text changes.
 
-If the AI provider is unreachable or returns invalid structured output, the briefing/report APIs fail (no template fallback for narrative).
-
 ## Run
 
 ```bash
@@ -97,6 +92,10 @@ npm run dev:frontend
 ```
 
 - App: http://localhost:5173
-- Briefing API: http://localhost:3001/api/moc/briefing
-- Decision brief API: http://localhost:3001/api/reports/1001
+- Health: http://localhost:3001/api/health
+- Chat: `POST /api/chat`
+- Admin: `GET /api/admin/overview`
+- Monthly report: `POST /api/reports/monthly` · `GET /api/reports/monthly/:period`
+- Trends: `GET /api/ops/trends`
+- Schedules: `GET/POST /api/schedules`
 - Backend tests: `npm run test`

@@ -34,6 +34,13 @@ export function getChangeById(changeId: string): ChangeRequest | null {
   return row ? mapChange(row) : null;
 }
 
+export function listAllChanges(): ChangeRequest[] {
+  const rows = getDb()
+    .prepare("SELECT * FROM changes ORDER BY requested_at ASC")
+    .all() as ChangeRow[];
+  return rows.map(mapChange);
+}
+
 export function listChangesByIds(changeIds: string[]): ChangeRequest[] {
   if (changeIds.length === 0) {
     return [];

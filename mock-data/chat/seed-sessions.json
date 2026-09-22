@@ -1,0 +1,42 @@
+[
+  {
+    "id": "sess-fraud-root",
+    "title": "Fraud Detection root cause",
+    "createdAt": "2026-08-22T14:14:00.000Z",
+    "updatedAt": "2026-08-22T14:14:00.000Z",
+    "messages": [
+      {
+        "id": "msg-fraud-1",
+        "role": "user",
+        "content": "What drove the August Fraud Detection performance drop?",
+        "createdAt": "2026-08-22T14:14:00.000Z"
+      },
+      {
+        "id": "msg-fraud-2",
+        "role": "assistant",
+        "content": "August performance fell to 65 against a 90 target. Related open risk RSK-0011 and change work on the rule engine are the primary evidence anchors — ask for a monthly report for the full narrative.",
+        "createdAt": "2026-08-22T14:14:30.000Z"
+      }
+    ]
+  },
+  {
+    "id": "sess-expense",
+    "title": "Expense policy question",
+    "createdAt": "2026-08-22T11:02:00.000Z",
+    "updatedAt": "2026-08-22T11:02:00.000Z",
+    "messages": [
+      {
+        "id": "msg-exp-1",
+        "role": "user",
+        "content": "What's our policy on expense reporting for client visits?",
+        "createdAt": "2026-08-22T11:02:00.000Z"
+      },
+      {
+        "id": "msg-exp-2",
+        "role": "assistant",
+        "content": "Client visit expenses go under Travel & Entertainment, submitted within 5 business days with itemized receipts over 500 SEK. For TM portfolio evidence questions, I can also pull incidents, risks, and change requests from the seeded store.",
+        "createdAt": "2026-08-22T11:02:20.000Z"
+      }
+    ]
+  }
+]

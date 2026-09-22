@@ -360,3 +360,96 @@ export async function retrievePortfolioEvidenceForBriefing(): Promise<{
     agendaChanges,
   };
 }
+
+export type ChatEvidenceContext = {
+  citations: string[];
+  evidenceText: string;
+};
+
+/** Free-form RAG context for assistant chat — top-K chunks only; IDs come from real rows. */
+export async function retrieveEvidenceContextForQuery(
+  query: string,
+): Promise<ChatEvidenceContext> {
+  const refs = await retrieveTopRefs(query, getTopK());
+  const unique = uniqueRefs(refs);
+  const citations: string[] = [];
+  const lines: string[] = [];
+
+  for (const ref of unique) {
+    const citation = `${ref.entityType}:${ref.entityId}`;
+    citations.push(citation);
+
+    switch (ref.entityType) {
+      case "change": {
+        const change = evidenceRepo.getChangeById(ref.entityId);
+        if (change) {
+          lines.push(
+            `[${citation}] Change ${change.id}: ${change.title} (${change.application}, ${change.changeType}, ${change.status})`,
+          );
+        }
+        break;
+      }
+      case "incident": {
+        const incident = evidenceRepo.getIncidentById(ref.entityId);
+        if (incident) {
+          lines.push(
+            `[${citation}] Incident ${incident.id}: ${incident.title} (${incident.severity}, ${incident.status})`,
+          );
+        }
+        break;
+      }
+      case "risk": {
+        const risk = evidenceRepo.getRiskByChangeType(ref.entityId);
+        if (risk) {
+          lines.push(
+            `[${citation}] Risk ${risk.changeType}: residual ${risk.residualRisk} — ${risk.notes}`,
+          );
+        }
+        break;
+      }
+      case "release": {
+        const release = evidenceRepo.getReleaseById(ref.entityId);
+        if (release) {
+          lines.push(
+            `[${citation}] Release ${release.id}: ${release.name} (freeze=${release.freezeActive}, audit=${release.auditPeriodActive})`,
+          );
+        }
+        break;
+      }
+      case "process_metric": {
+        const metric = evidenceRepo.getProcessMetricByEntityId(ref.entityId);
+        if (metric) {
+          lines.push(
+            `[${citation}] Process ${metric.processName} on ${metric.application}: backlog ${metric.backlogCount}, delay ${metric.delayHours}h`,
+          );
+        }
+        break;
+      }
+      case "performance_metric": {
+        const metric = evidenceRepo.getPerformanceMetricByEntityId(ref.entityId);
+        if (metric) {
+          lines.push(
+            `[${citation}] Performance ${metric.metricName} on ${metric.application}: ${metric.value} ${metric.unit} (SLA ${metric.slaTarget})`,
+          );
+        }
+        break;
+      }
+      case "data_quality": {
+        const issue = evidenceRepo.getDataQualityByEntityId(ref.entityId);
+        if (issue) {
+          lines.push(
+            `[${citation}] Data quality ${issue.source}.${issue.field}: missingRate ${issue.missingRate} (${issue.severity})`,
+          );
+        }
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  return {
+    citations,
+    evidenceText: lines.length > 0 ? lines.join("\n") : "No matching evidence chunks found.",
+  };
+}

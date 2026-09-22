@@ -204,8 +204,133 @@ async function chatJsonOpenRouter(messages: AiChatMessage[]): Promise<string> {
   }
 }
 
+async function chatTextOllama(messages: AiChatMessage[]): Promise<string> {
+  const url = `${getOllamaBaseUrl()}/api/chat`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: getOllamaModel(),
+        messages,
+        stream: false,
+      }),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      throw new AiUnavailableError(
+        `Ollama returned ${response.status}${body ? `: ${body.slice(0, 200)}` : ""}`,
+      );
+    }
+
+    const data = (await response.json()) as OllamaChatResponse;
+    if (data.error) {
+      throw new AiUnavailableError(`Ollama error: ${data.error}`);
+    }
+
+    const content = data.message?.content?.trim();
+    if (!content) {
+      throw new AiResponseError("Ollama returned an empty message");
+    }
+
+    return content;
+  } catch (err: unknown) {
+    if (err instanceof AiUnavailableError || err instanceof AiResponseError) {
+      throw err;
+    }
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new AiUnavailableError(
+        `Ollama timed out after ${DEFAULT_TIMEOUT_MS / 1000}s. Is ${getOllamaModel()} running?`,
+        { cause: err },
+      );
+    }
+    const message = err instanceof Error ? err.message : "Unknown Ollama failure";
+    throw new AiUnavailableError(
+      `Cannot reach Ollama at ${getOllamaBaseUrl()}. Start it with \`ollama serve\` and ensure model \`${getOllamaModel()}\` is available. (${message})`,
+      { cause: err },
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function chatTextOpenRouter(messages: AiChatMessage[]): Promise<string> {
+  const url = `${getOpenRouterBaseUrl()}/chat/completions`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
+
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${getOpenRouterApiKey()}`,
+    "Content-Type": "application/json",
+  };
+  const referer = process.env.OPENROUTER_HTTP_REFERER?.trim();
+  const title = process.env.OPENROUTER_APP_TITLE?.trim();
+  if (referer) headers["HTTP-Referer"] = referer;
+  if (title) headers["X-OpenRouter-Title"] = title;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        model: getOpenRouterModel(),
+        messages,
+        stream: false,
+      }),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      throw new AiUnavailableError(
+        `OpenRouter returned ${response.status}${body ? `: ${body.slice(0, 200)}` : ""}`,
+      );
+    }
+
+    const data = (await response.json()) as OpenRouterChatResponse;
+    if (data.error) {
+      const errMsg = typeof data.error === "string" ? data.error : data.error.message;
+      throw new AiUnavailableError(`OpenRouter error: ${errMsg ?? "unknown"}`);
+    }
+
+    const content = data.choices?.[0]?.message?.content?.trim();
+    if (!content) {
+      throw new AiResponseError("OpenRouter returned an empty message");
+    }
+
+    return content;
+  } catch (err: unknown) {
+    if (err instanceof AiUnavailableError || err instanceof AiResponseError) {
+      throw err;
+    }
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new AiUnavailableError(
+        `OpenRouter timed out after ${DEFAULT_TIMEOUT_MS / 1000}s (model: ${getOpenRouterModel()}).`,
+        { cause: err },
+      );
+    }
+    const message = err instanceof Error ? err.message : "Unknown OpenRouter failure";
+    throw new AiUnavailableError(
+      `Cannot reach OpenRouter at ${getOpenRouterBaseUrl()}. Check OPENROUTER_API_KEY and network. (${message})`,
+      { cause: err },
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function chatJson(messages: AiChatMessage[]): Promise<string> {
   return getProvider() === "openrouter"
     ? chatJsonOpenRouter(messages)
     : chatJsonOllama(messages);
+}
+
+/** Free-text chat (no forced JSON mode). */
+export async function chat(messages: AiChatMessage[]): Promise<string> {
+  return getProvider() === "openrouter" ? chatTextOpenRouter(messages) : chatTextOllama(messages);
 }

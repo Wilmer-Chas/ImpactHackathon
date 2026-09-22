@@ -1,0 +1,23 @@
+[
+  {
+    "id": "sched-monthly-fraud",
+    "name": "Fraud Detection — Monthly",
+    "cadence": "monthly",
+    "nextRun": "2026-09-01",
+    "enabled": true
+  },
+  {
+    "id": "sched-moc-pack",
+    "name": "MOC portfolio pack",
+    "cadence": "monthly",
+    "nextRun": "2026-09-15",
+    "enabled": true
+  },
+  {
+    "id": "sched-trend-digest",
+    "name": "Trend Watch digest",
+    "cadence": "weekly",
+    "nextRun": "2026-09-08",
+    "enabled": false
+  }
+]

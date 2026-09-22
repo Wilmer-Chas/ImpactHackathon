@@ -2,6 +2,10 @@ import cors from "cors";
 import express from "express";
 import { mocRouter } from "./routes/moc/moc.routes.js";
 import { reportsRouter } from "./routes/reports/reports.routes.js";
+import { chatRouter } from "./routes/chat/chat.routes.js";
+import { adminRouter } from "./routes/admin/admin.routes.js";
+import { opsRouter } from "./routes/ops/ops.routes.js";
+import { schedulesRouter } from "./routes/schedules/schedules.routes.js";
 
 export function createApp() {
   const app = express();
@@ -15,6 +19,10 @@ export function createApp() {
 
   app.use("/api/moc", mocRouter);
   app.use("/api/reports", reportsRouter);
+  app.use("/api/chat", chatRouter);
+  app.use("/api/admin", adminRouter);
+  app.use("/api/ops", opsRouter);
+  app.use("/api/schedules", schedulesRouter);
 
   return app;
 }

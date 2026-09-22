@@ -1,0 +1,5 @@
+[
+  { "id": "claude-sonnet-5", "name": "Claude Sonnet 5", "sharePercent": 62, "enabled": true, "sortOrder": 1 },
+  { "id": "claude-opus-5", "name": "Claude Opus 5", "sharePercent": 23, "enabled": true, "sortOrder": 2 },
+  { "id": "claude-haiku-4.5", "name": "Claude Haiku 4.5", "sharePercent": 15, "enabled": true, "sortOrder": 3 }
+]

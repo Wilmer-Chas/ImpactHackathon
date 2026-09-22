@@ -14,3 +14,26 @@ export type {
   OrgRiskPosture,
   PostureSignal,
 } from "./moc/briefing.js";
+export type { ChatMessage, ChatRole, ChatSession, ChatSessionSummary } from "./chat/chat.js";
+export type {
+  AdminKpis,
+  AdminOverview,
+  AiModel,
+  PipelineRun,
+  PiiFlag,
+  PiiFlagAction,
+  PiiFlagStatus,
+} from "./admin/admin.js";
+export type { ReportSchedule } from "./ops/schedule.js";
+export type {
+  PerformanceSeriesPoint,
+  RiskSnapshot,
+  RiskSnapshotState,
+  TrendAnomaly,
+  TrendsResponse,
+} from "./ops/trends.js";
+export type {
+  MonthlyReport,
+  MonthlyReportNarrative,
+  MonthlyReportRiskColumns,
+} from "./ops/monthlyReport.js";

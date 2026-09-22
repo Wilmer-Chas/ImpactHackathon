@@ -7,6 +7,10 @@ import {
   AiUnavailableError,
 } from "../../services/ai/ollama.client.js";
 import { mocReportService } from "../../services/reports/mocReport.service.js";
+import {
+  monthlyReportService,
+  MonthlyReportValidationError,
+} from "../../services/reports/monthlyReport.service.js";
 
 export async function getReportByChangeId(req: Request, res: Response): Promise<void> {
   const changeId = req.params.changeId;
@@ -34,6 +38,48 @@ export async function getReportByChangeId(req: Request, res: Response): Promise<
     }
 
     const message = err instanceof Error ? err.message : "Unexpected error generating report";
+    res.status(500).json({ error: message });
+  }
+}
+
+export async function getMonthlyReport(req: Request, res: Response): Promise<void> {
+  const period = req.params.period;
+  if (!period) {
+    res.status(400).json({ error: "period is required" });
+    return;
+  }
+  const report = monthlyReportService.getByPeriod(period);
+  if (!report) {
+    res.status(404).json({ error: `No monthly report for ${period}` });
+    return;
+  }
+  res.json(report);
+}
+
+export async function getLatestMonthlyReport(_req: Request, res: Response): Promise<void> {
+  const report = monthlyReportService.getLatest();
+  if (!report) {
+    res.status(404).json({ error: "No monthly reports generated yet" });
+    return;
+  }
+  res.json(report);
+}
+
+export async function postMonthlyReport(req: Request, res: Response): Promise<void> {
+  const period = typeof req.body?.period === "string" ? req.body.period : undefined;
+  try {
+    const report = await monthlyReportService.generate(period);
+    res.status(201).json(report);
+  } catch (err: unknown) {
+    if (err instanceof AiUnavailableError) {
+      res.status(503).json({ error: err.message });
+      return;
+    }
+    if (err instanceof MonthlyReportValidationError || err instanceof AiResponseError) {
+      res.status(502).json({ error: err.message });
+      return;
+    }
+    const message = err instanceof Error ? err.message : "Unexpected error generating monthly report";
     res.status(500).json({ error: message });
   }
 }

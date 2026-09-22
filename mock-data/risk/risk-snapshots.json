@@ -1,0 +1,51 @@
+[
+  {
+    "id": "2026-08:RSK-0015",
+    "riskId": "RSK-0015",
+    "period": "2026-08",
+    "summary": "Elevated phishing attempts targeting Payments staff.",
+    "state": "new"
+  },
+  {
+    "id": "2026-08:RSK-0016",
+    "riskId": "RSK-0016",
+    "period": "2026-08",
+    "summary": "Vendor SLA breach risk for Fraud Detection service.",
+    "state": "new"
+  },
+  {
+    "id": "2026-08:RSK-0017",
+    "riskId": "RSK-0017",
+    "period": "2026-08",
+    "summary": "Rule-engine misfire delaying transaction reviews.",
+    "state": "new"
+  },
+  {
+    "id": "2026-08:RSK-0009",
+    "riskId": "RSK-0009",
+    "period": "2026-08",
+    "summary": "Manual reconciliation risk in Loan Origination — automated.",
+    "state": "resolved"
+  },
+  {
+    "id": "2026-08:RSK-0010",
+    "riskId": "RSK-0010",
+    "period": "2026-08",
+    "summary": "Stale watchlist feed for TM-Analytics.",
+    "state": "resolved"
+  },
+  {
+    "id": "2026-08:RSK-0001",
+    "riskId": "RSK-0001",
+    "period": "2026-08",
+    "summary": "Baseline residual risk for rule_threshold changes.",
+    "state": "unchanged"
+  },
+  {
+    "id": "2026-08:RSK-0011",
+    "riskId": "RSK-0011",
+    "period": "2026-08",
+    "summary": "Open compliance risk linked to August performance drop.",
+    "state": "unchanged"
+  }
+]

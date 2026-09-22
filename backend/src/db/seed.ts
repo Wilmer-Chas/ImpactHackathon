@@ -10,6 +10,9 @@ import type { DataQualityIssue } from "../domain/ops/dataQuality.js";
 import type { PerformanceMetric, ProcessMetric } from "../domain/ops/metrics.js";
 import type { ReleasePlan } from "../domain/ops/release.js";
 import type { RiskRecord } from "../domain/risk/risk.js";
+import type { AiModel, PipelineRun, PiiFlag } from "../domain/admin/admin.js";
+import type { ReportSchedule } from "../domain/ops/schedule.js";
+import type { PerformanceSeriesPoint, RiskSnapshot } from "../domain/ops/trends.js";
 import { readFileSync, readdirSync } from "node:fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -465,6 +468,234 @@ function upsertDataQuality(issue: DataQualityIssue, stats: SeedStats): void {
   }
 }
 
+function bumpStats(existing: boolean, changed: boolean, stats: SeedStats): void {
+  if (!existing || changed) {
+    stats.entitiesUpserted += 1;
+  } else {
+    stats.entitiesUnchanged += 1;
+  }
+}
+
+function upsertPipelineRun(run: PipelineRun, stats: SeedStats): void {
+  const db = getDb();
+  const existing = db
+    .prepare("SELECT 1 AS ok FROM pipeline_runs WHERE month_label = ?")
+    .get(run.monthLabel) as { ok: number } | undefined;
+  const result = db
+    .prepare(
+      `INSERT INTO pipeline_runs (month_label, month_key, runs, flags)
+       VALUES (@monthLabel, @monthKey, @runs, @flags)
+       ON CONFLICT(month_label) DO UPDATE SET
+         month_key = excluded.month_key,
+         runs = excluded.runs,
+         flags = excluded.flags
+       WHERE pipeline_runs.month_key IS NOT excluded.month_key
+          OR pipeline_runs.runs IS NOT excluded.runs
+          OR pipeline_runs.flags IS NOT excluded.flags`,
+    )
+    .run(run);
+  bumpStats(Boolean(existing), result.changes > 0, stats);
+}
+
+function upsertAiModel(model: AiModel, stats: SeedStats): void {
+  const db = getDb();
+  const existing = db.prepare("SELECT 1 AS ok FROM ai_models WHERE id = ?").get(model.id) as
+    | { ok: number }
+    | undefined;
+  const result = db
+    .prepare(
+      `INSERT INTO ai_models (id, name, share_percent, enabled, sort_order)
+       VALUES (@id, @name, @sharePercent, @enabled, @sortOrder)
+       ON CONFLICT(id) DO UPDATE SET
+         name = excluded.name,
+         share_percent = excluded.share_percent,
+         enabled = excluded.enabled,
+         sort_order = excluded.sort_order
+       WHERE ai_models.name IS NOT excluded.name
+          OR ai_models.share_percent IS NOT excluded.share_percent
+          OR ai_models.enabled IS NOT excluded.enabled
+          OR ai_models.sort_order IS NOT excluded.sort_order`,
+    )
+    .run({
+      id: model.id,
+      name: model.name,
+      sharePercent: model.sharePercent,
+      enabled: model.enabled ? 1 : 0,
+      sortOrder: model.sortOrder,
+    });
+  bumpStats(Boolean(existing), result.changes > 0, stats);
+}
+
+function upsertPiiFlag(flag: PiiFlag, stats: SeedStats): void {
+  const db = getDb();
+  const existing = db.prepare("SELECT status FROM pii_flags WHERE id = ?").get(flag.id) as
+    | { status: string }
+    | undefined;
+  // Do not overwrite status if already reviewed in a running DB.
+  if (existing && existing.status !== "pending" && existing.status !== flag.status) {
+    stats.entitiesUnchanged += 1;
+    return;
+  }
+  const result = db
+    .prepare(
+      `INSERT INTO pii_flags (id, description, score, factors_json, status, created_at)
+       VALUES (@id, @description, @score, @factorsJson, @status, @createdAt)
+       ON CONFLICT(id) DO UPDATE SET
+         description = excluded.description,
+         score = excluded.score,
+         factors_json = excluded.factors_json,
+         status = excluded.status,
+         created_at = excluded.created_at
+       WHERE pii_flags.description IS NOT excluded.description
+          OR pii_flags.score IS NOT excluded.score
+          OR pii_flags.factors_json IS NOT excluded.factors_json
+          OR pii_flags.status IS NOT excluded.status
+          OR pii_flags.created_at IS NOT excluded.created_at`,
+    )
+    .run({
+      id: flag.id,
+      description: flag.description,
+      score: flag.score,
+      factorsJson: JSON.stringify(flag.factors),
+      status: flag.status,
+      createdAt: flag.createdAt,
+    });
+  bumpStats(Boolean(existing), result.changes > 0, stats);
+}
+
+function upsertAdminMeta(key: string, value: string, stats: SeedStats): void {
+  const db = getDb();
+  const existing = db.prepare("SELECT 1 AS ok FROM admin_meta WHERE key = ?").get(key) as
+    | { ok: number }
+    | undefined;
+  const result = db
+    .prepare(
+      `INSERT INTO admin_meta (key, value) VALUES (?, ?)
+       ON CONFLICT(key) DO UPDATE SET value = excluded.value
+       WHERE admin_meta.value IS NOT excluded.value`,
+    )
+    .run(key, value);
+  bumpStats(Boolean(existing), result.changes > 0, stats);
+}
+
+function upsertRiskSnapshot(snapshot: RiskSnapshot, stats: SeedStats): void {
+  const db = getDb();
+  const existing = db.prepare("SELECT 1 AS ok FROM risk_snapshots WHERE id = ?").get(snapshot.id) as
+    | { ok: number }
+    | undefined;
+  const result = db
+    .prepare(
+      `INSERT INTO risk_snapshots (id, risk_id, period, summary, state)
+       VALUES (@id, @riskId, @period, @summary, @state)
+       ON CONFLICT(id) DO UPDATE SET
+         risk_id = excluded.risk_id,
+         period = excluded.period,
+         summary = excluded.summary,
+         state = excluded.state
+       WHERE risk_snapshots.risk_id IS NOT excluded.risk_id
+          OR risk_snapshots.period IS NOT excluded.period
+          OR risk_snapshots.summary IS NOT excluded.summary
+          OR risk_snapshots.state IS NOT excluded.state`,
+    )
+    .run(snapshot);
+  bumpStats(Boolean(existing), result.changes > 0, stats);
+}
+
+function upsertPerformanceSeriesPoint(point: PerformanceSeriesPoint, stats: SeedStats): void {
+  const db = getDb();
+  const existing = db
+    .prepare("SELECT 1 AS ok FROM performance_series WHERE period = ? AND month_label = ?")
+    .get(point.period, point.monthLabel) as { ok: number } | undefined;
+  const result = db
+    .prepare(
+      `INSERT INTO performance_series (period, month_label, value, target, is_anomaly)
+       VALUES (@period, @monthLabel, @value, @target, @isAnomaly)
+       ON CONFLICT(period, month_label) DO UPDATE SET
+         value = excluded.value,
+         target = excluded.target,
+         is_anomaly = excluded.is_anomaly
+       WHERE performance_series.value IS NOT excluded.value
+          OR performance_series.target IS NOT excluded.target
+          OR performance_series.is_anomaly IS NOT excluded.is_anomaly`,
+    )
+    .run({
+      period: point.period,
+      monthLabel: point.monthLabel,
+      value: point.value,
+      target: point.target,
+      isAnomaly: point.isAnomaly ? 1 : 0,
+    });
+  bumpStats(Boolean(existing), result.changes > 0, stats);
+}
+
+function upsertReportSchedule(schedule: ReportSchedule, stats: SeedStats): void {
+  const db = getDb();
+  const existing = db.prepare("SELECT enabled FROM report_schedules WHERE id = ?").get(schedule.id) as
+    | { enabled: number }
+    | undefined;
+  // Preserve runtime toggles: only upsert fields if row is missing.
+  if (existing) {
+    const result = db
+      .prepare(
+        `UPDATE report_schedules
+         SET name = @name, cadence = @cadence, next_run = @nextRun
+         WHERE id = @id
+           AND (name IS NOT @name OR cadence IS NOT @cadence OR next_run IS NOT @nextRun)`,
+      )
+      .run({
+        id: schedule.id,
+        name: schedule.name,
+        cadence: schedule.cadence,
+        nextRun: schedule.nextRun,
+      });
+    bumpStats(true, result.changes > 0, stats);
+    return;
+  }
+  db.prepare(
+    `INSERT INTO report_schedules (id, name, cadence, next_run, enabled)
+     VALUES (@id, @name, @cadence, @nextRun, @enabled)`,
+  ).run({
+    id: schedule.id,
+    name: schedule.name,
+    cadence: schedule.cadence,
+    nextRun: schedule.nextRun,
+    enabled: schedule.enabled ? 1 : 0,
+  });
+  stats.entitiesUpserted += 1;
+}
+
+function upsertChatSessionSeed(
+  session: {
+    id: string;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    messages: Array<{ id: string; role: string; content: string; createdAt: string }>;
+  },
+  stats: SeedStats,
+): void {
+  const db = getDb();
+  const existing = db.prepare("SELECT 1 AS ok FROM chat_sessions WHERE id = ?").get(session.id) as
+    | { ok: number }
+    | undefined;
+  if (existing) {
+    stats.entitiesUnchanged += 1;
+    return;
+  }
+  db.prepare(
+    `INSERT INTO chat_sessions (id, title, created_at, updated_at)
+     VALUES (?, ?, ?, ?)`,
+  ).run(session.id, session.title, session.createdAt, session.updatedAt);
+  const insertMsg = db.prepare(
+    `INSERT INTO chat_messages (id, session_id, role, content, created_at)
+     VALUES (?, ?, ?, ?, ?)`,
+  );
+  for (const msg of session.messages) {
+    insertMsg.run(msg.id, session.id, msg.role, msg.content, msg.createdAt);
+  }
+  stats.entitiesUpserted += 1;
+}
+
 async function upsertChunks(pending: PendingChunk[], stats: SeedStats): Promise<void> {
   const db = getDb();
   const select = db.prepare(
@@ -621,6 +852,50 @@ export async function seedMockData(): Promise<SeedStats> {
       entityId: dataQualityEntityId(issue),
       text: chunkTextForDataQuality(issue),
     });
+  }
+
+  const pipelineRuns = loadJson<PipelineRun[]>(path.join(mockDir, "admin", "pipeline-runs.json"));
+  const aiModels = loadJson<AiModel[]>(path.join(mockDir, "admin", "ai-models.json"));
+  const piiFlags = loadJson<PiiFlag[]>(path.join(mockDir, "admin", "pii-flags.json"));
+  const adminMeta = loadJson<Record<string, string>>(path.join(mockDir, "admin", "meta.json"));
+  const performanceSeries = loadJson<PerformanceSeriesPoint[]>(
+    path.join(mockDir, "ops", "performance-series.json"),
+  );
+  const riskSnapshots = loadJson<RiskSnapshot[]>(path.join(mockDir, "risk", "risk-snapshots.json"));
+  const schedules = loadJson<ReportSchedule[]>(path.join(mockDir, "ops", "report-schedules.json"));
+  const chatSeeds = loadJson<
+    Array<{
+      id: string;
+      title: string;
+      createdAt: string;
+      updatedAt: string;
+      messages: Array<{ id: string; role: string; content: string; createdAt: string }>;
+    }>
+  >(path.join(mockDir, "chat", "seed-sessions.json"));
+
+  for (const run of pipelineRuns) {
+    upsertPipelineRun(run, stats);
+  }
+  for (const model of aiModels) {
+    upsertAiModel(model, stats);
+  }
+  for (const flag of piiFlags) {
+    upsertPiiFlag(flag, stats);
+  }
+  for (const [key, value] of Object.entries(adminMeta)) {
+    upsertAdminMeta(key, value, stats);
+  }
+  for (const point of performanceSeries) {
+    upsertPerformanceSeriesPoint(point, stats);
+  }
+  for (const snapshot of riskSnapshots) {
+    upsertRiskSnapshot(snapshot, stats);
+  }
+  for (const schedule of schedules) {
+    upsertReportSchedule(schedule, stats);
+  }
+  for (const session of chatSeeds) {
+    upsertChatSessionSeed(session, stats);
   }
 
   await upsertChunks(pendingChunks, stats);
