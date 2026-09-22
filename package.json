@@ -9,6 +9,8 @@
     "dev": "npm run dev --workspaces --if-present",
     "dev:backend": "npm run dev -w backend",
     "dev:frontend": "npm run dev -w frontend",
+    "seed:mock": "npm run seed:mock -w backend",
+    "test": "npm run test -w backend",
     "build": "npm run build --workspaces --if-present"
   }
 }

@@ -62,7 +62,7 @@ Prepares **Management Oversight Committee** material so upper organization can m
 - **Authorize with conditions** — Proceed only with monitoring period, rollback plan, wait for an incident to close, or limit scope.
 - **Hold** — Open high-severity on the same app, critical backlog, bad timing, or evidence too incomplete to defend in audit.
 
-In the demo fixtures, Change #1001 is designed to surface real tension (open severity on TM-Core + elevated backlog) so the decision brief recommendation is non-trivial.
+In the demo mock data, Change #1001 is designed to surface real tension (open severity on TM-Core + elevated backlog) so the decision brief recommendation is non-trivial.
 
 ## MOC briefing outline
 
@@ -80,7 +80,7 @@ In the demo fixtures, Change #1001 is designed to surface real tension (open sev
 
 ## How conclusions are produced
 
-**Evidence pack first.** The backend normalizes portfolio (and per-change) facts from demo fixtures — stand-ins for Jira, ServiceNow, risk register, and ops extracts. Fixtures are structured data only; they are not the presentation.
+**Evidence pack first.** The backend normalizes portfolio (and per-change) facts from SQLite (seeded from `mock-data/` — stand-ins for Jira, ServiceNow, risk register, and ops extracts). Hybrid RAG retrieves relevant chunks; structured rows are what the model may cite.
 
 **Then the local Ollama model** (default `mistral`) authors two kinds of structured output:
 

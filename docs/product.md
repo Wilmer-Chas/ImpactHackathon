@@ -17,8 +17,8 @@ The PO prepares briefing material that responds to upper organization — not a 
 
 ## What the product does
 
-1. Assembles a **portfolio evidence pack** from change, incident, risk, workload, performance, release, and data-quality signals (fixtures today; Jira / ServiceNow / etc. later).
-2. Runs a **local intelligence engine** (Ollama / Mistral) that authors the **MOC briefing presentation** — what matters for upper org, risk flags with citations — not a raw dump of source fields.
+1. Assembles a **portfolio evidence pack** from change, incident, risk, workload, performance, release, and data-quality signals (seeded from `mock-data/` into SQLite today; Jira / ServiceNow / etc. later).
+2. Runs an **intelligence engine** (OpenRouter or local Ollama) that authors the **MOC briefing presentation** from hybrid RAG-retrieved evidence — what matters for upper org, risk flags with citations — not a raw dump of source fields.
 3. For each agenda item, runs the same engine on that item’s evidence to produce a **decision brief** (Authorize / with conditions / Hold).
 4. Lets the product owner walk the committee through the deck before production.
 

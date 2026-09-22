@@ -11,6 +11,12 @@ coverage/
 .env.*
 !.env.example
 
+# SQLite data (seeded locally; never commit)
+backend/data/
+*.db
+*.db-wal
+*.db-shm
+
 # Logs & OS
 *.log
 .DS_Store
